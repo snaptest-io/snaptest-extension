@@ -3,5 +3,4 @@
 /.idea/
 *.iml
 *.DS_Store
-/scripts/envs/prod.sh
-/scripts/package.sh
+/scripts/deploy.sh

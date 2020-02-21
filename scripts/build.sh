@@ -20,4 +20,5 @@ fi
 
 cd ../
 
+echo "Building Assets... "
 npx webpack --config ./build/webpack.js
