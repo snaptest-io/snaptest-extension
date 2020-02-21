@@ -1,0 +1,70 @@
+
+<% if (extension) { %>
+function bindShims(chromeless) {
+<% } else { %>
+module.exports.bindShims = function(chromeless) {
+<% } %>
+
+  chromeless.snapRefresh = () => chromeless.evaluate(() => window.location.reload());
+
+  chromeless.snapBack = () => chromeless.evaluate(() => window.history.back());
+
+  chromeless.snapClearTextInput = (selector) => chromeless.type('', selector).press(8, 50);
+
+  chromeless.snapBlur = (selector) => chromeless.evaluate((selector) => {
+    (function(el) {
+      var event = new FocusEvent('blur');
+      el.dispatchEvent(event);
+    })(document.querySelector(selector));
+  }, selector)
+
+  chromeless.snapSubmit = (selector) => chromeless.evaluate((selector) => {
+    (function(el) {
+      var event = new Event('submit');
+      el.dispatchEvent(event);
+    })(document.querySelector(selector));
+  }, selector)
+
+  chromeless.snapGetText = async function (selector) {
+    const result = await this.evaluate((selector) => {
+      var el = document.querySelector(selector);
+      var text = "";
+      for (var i = 0; i < el.childNodes.length; ++i)
+        if (el.childNodes[i].nodeType === 3)
+          if (el.childNodes[i].textContent)
+            text += el.childNodes[i].textContent;
+      text = text.replace(/(\r\n|\n|\r)/gm, "");
+      return text.trim();
+    }, selector);
+
+    return result;
+  };
+
+  chromeless.snapTextIs = async function (selector, text, timeout) {
+
+    var maxAttempts = 5;
+    var currentAttempt = 0;
+    var _this = this;
+
+    async function checkForText(selector, text) {
+      const thisText = await _this.snapGetText(selector);
+
+      if (thisText === text) {
+        return;
+      }
+      else if (currentAttempt < maxAttempts) {
+        console.log(currentAttempt, maxAttempts)
+        currentAttempt++;
+        await _this.wait(1000);
+        await checkForText(selector, text);
+
+      } else {
+        throw new Error("Text doesn't match.")
+      }
+    }
+
+    await checkForText(selector, text)
+
+  };
+
+};

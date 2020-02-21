@@ -1,0 +1,154 @@
+<!doctype html>
+<html style="min-width:100px;">
+  <head>
+    <title>SnapTest</title>
+    <style>
+
+      body {
+        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+        /*font-size: 100%;*/
+        margin: 10px;
+      }
+
+      .execute-btn {
+        font-size: 10px;
+        color: #4eb74e;
+        margin-right: 10px;
+        background: #ebffeb;
+        padding: 0 10px;
+        border-radius: 3px;
+        border: 1px solid #4eb74e;
+        height: 28px;
+        text-transform: uppercase;
+        letter-spacing: .2px;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+      }
+
+      .menu-section-title {
+        font-size: 10px;
+        opacity: .8;
+      }
+
+      .execute-btn svg {
+        width: 16px;
+        stroke: #4eb74e;
+        fill: #4eb74e;
+        padding: 0px;
+        margin-right: 5px;
+      }
+
+      .execute-btn:hover {
+        cursor: pointer;
+      }
+
+      
+      .btn-start, .btn-started {
+        background: rgb(251, 99, 99);
+        color: white;
+        text-transform: uppercase;
+        margin-right: 0px;
+        font-weight: bold;
+        border-radius: 10px;
+        padding: 7px 14px;
+        outline: none;
+        border: none;
+        white-space: nowrap;
+      }
+
+      .btn-primary {
+        background: #4C607A;
+        color: white;
+        text-transform: uppercase;
+        margin-right: 0px;
+        font-weight: bold;
+        border-radius: 10px;
+        padding: 7px 14px;
+        outline: none;
+        border: none;
+        white-space: nowrap;
+      }
+
+      .btn-started {
+        box-shadow: rgb(255, 82, 82) 0px 1px 10px 0px;
+        background: rgb(255, 82, 82);
+      }
+
+      .btn-start:hover, .btn-started:hover, .btn-primary:hover {
+        cursor: pointer;
+      }
+
+      .btn-note {
+        font-size: 10px;
+        font-weight: bold;
+      }
+
+      .alert-message {
+        margin-top: 7px;
+        font-size: 10px;
+        color: red;
+        font-weight: bold;
+      }
+
+      .grid-row {
+        display: flex;
+      }
+
+      .grid-item {
+        flex: 1;
+      }
+
+      .s6 {
+        margin-bottom: 6px;
+      }
+
+      .sr10 {
+        margin-right: 7px;
+      }
+
+      .run-list {
+        margin-top: 14px;
+        padding-top: 7px;
+        border-top: 1px solid #dbdcdd;
+      }
+
+      .run-header {
+        margin-bottom: 7px;
+        font-weight: bold;
+        opacity: .5;
+        font-size: 10px;
+        text-transform: uppercase;
+      }
+
+      .run-item {
+        margin-bottom: 5px;
+      }
+
+      .run-bail {
+        outline: none;
+        border: none;
+        background: #ff8d8d;
+        box-shadow: inset 0px 0px 3px 0px #fc6262;
+        text-align: center;
+        text-transform: uppercase;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        transition: background .1s ease-in;
+        border-radius: 1px;
+        padding: 6px 8px;
+      }
+
+      .run-bail:hover {
+        cursor: pointer;
+      }
+
+    </style>
+  </head>
+  <body style="min-width: 100px;">
+    <div id="react-app"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>
+

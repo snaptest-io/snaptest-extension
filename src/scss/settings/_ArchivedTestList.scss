@@ -1,0 +1,25 @@
+.ArchivedTestList {
+
+  .ArchivedTestListItem {
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px -1px;
+    border: 1px solid #B1C1E3;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+
+    &.component {
+      background: #f3f9ff;
+    }
+
+    .name {
+      font-size: 14px;
+      word-break: break-all;
+      font-weight: 600;
+      line-height: 10px;
+    }
+
+  }
+
+}

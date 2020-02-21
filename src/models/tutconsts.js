@@ -1,0 +1,63 @@
+export const INTRO_START = "INTRO_START";
+export const INTRO_WINDOWS = "INTRO_WINDOWS";
+export const FIRSTTEST_CREATE = "FIRSTTEST_CREATE";
+export const FIRSTTEST_EDIT = "FIRSTTEST_EDIT";
+export const FIRSTTEST_PRETHOUGHT = "FIRSTTEST_PRETHOUGHT";
+export const FIRSTTEST_NAVTOSNAP = "FIRSTTEST_NAVTOSNAP";
+export const FIRSTTEST_PRETEND = "FIRSTTEST_PRETEND";
+export const FIRSTTEST_STOPRECORD = "FIRSTTEST_STOPRECORD";
+export const FIRSTTEST_ASSERT = "FIRSTTEST_ASSERT";
+export const FIRSTTEST_STOPASSERT = "FIRSTTEST_STOPASSERT";
+export const FIRSTTEST_SIMULATE = "FIRSTTEST_SIMULATE";
+export const FIRSTTEST_SIMULATE2 = "FIRSTTEST_SIMULATE2";
+export const FIRSTTEST_NAMESTEP = "FIRSTTEST_NAMESTEP";
+export const FIRSTTEST_ADJUSTSELECTOR = "FIRSTTEST_ADJUSTSELECTOR";
+export const FIRSTTEST_MANUALADD = "FIRSTTEST_MANUALADD";
+export const FIRSTTEST_MANAGE = "FIRSTTEST_MANAGE";
+export const FIRSTTEST_MANAGE2 = "FIRSTTEST_MANAGE2";
+export const FIRSTTEST_MANAGE3 = "FIRSTTEST_MANAGE3";
+export const EXISTTEST_KICKOFF = "EXISTTEST_KICKOFF";
+export const EXISTTEST_FIX = "EXISTTEST_FIX";
+export const SUITE_CODE = "SUITE_CODE";
+export const SUITE_CLI = "SUITE_CLI";
+export const END = "END";
+
+export const ORDER = [
+    INTRO_START,
+    INTRO_WINDOWS,
+    FIRSTTEST_CREATE,
+    FIRSTTEST_EDIT,
+    FIRSTTEST_NAVTOSNAP,
+    FIRSTTEST_PRETEND,
+    FIRSTTEST_STOPRECORD,
+    FIRSTTEST_ASSERT,
+    FIRSTTEST_STOPASSERT,
+    FIRSTTEST_SIMULATE,
+    FIRSTTEST_SIMULATE2,
+    FIRSTTEST_NAMESTEP,
+    FIRSTTEST_ADJUSTSELECTOR,
+    FIRSTTEST_MANUALADD,
+    FIRSTTEST_MANAGE,
+    FIRSTTEST_MANAGE2,
+    FIRSTTEST_MANAGE3,
+    EXISTTEST_KICKOFF,
+    END
+];
+
+export function getStepIndex(name) {
+    return ORDER[ORDER.indexOf(name)];
+}
+
+export function getStepName(idx) {
+    return ORDER[idx];
+}
+
+export function getNextStep(currentStep) {
+    var currentIndex = ORDER.indexOf(step);
+    return ORDER[currentIndex + 1];
+}
+
+export function getLastStep(currentStep) {
+    var currentIndex = ORDER.indexOf(step);
+    return ORDER[currentIndex - 1];
+}
