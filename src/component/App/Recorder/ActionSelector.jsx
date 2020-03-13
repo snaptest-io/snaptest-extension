@@ -108,6 +108,12 @@ class ActionSelector extends React.PureComponent {
       case Actions.EL_NOT_PRESENT_ASSERT:
         newAction = new Actions.ElNotPresentAssertAction();
         break;
+      case Actions.EL_VISIBLE_ASSERT:
+        newAction = new Actions.ElVisibleAssertAction();
+        break;
+      case Actions.EL_NOT_VISIBLE_ASSERT:
+        newAction = new Actions.ElNotVisibleAssertAction();
+        break;
       case Actions.VALUE_ASSERT:
         newAction = new Actions.ValueAssertAction();
         break;

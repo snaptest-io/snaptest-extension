@@ -29,7 +29,9 @@ export const playbackActions = {
   "SCROLL_ELEMENT" : { perform: (tabId, action, state) =>                  scrollElement(tabId, action, state)},
   "SCROLL_WINDOW_ELEMENT" : { perform: (tabId, action, state) =>           scrollWindowtoEl(tabId, action, state)},
   "EL_PRESENT_ASSERT" : { perform: (tabId, action, state) =>               elementIsPresent(tabId, action, state)},
-  "EL_NOT_PRESENT_ASSERT" : { perform: (tabId, action, state) =>           elIsNotPresent(tabId, action, state)},
+  "EL_NOT_PRESENT_ASSERT" : { perform: (tabId, action, state) =>           elementIsNotPresent(tabId, action, state)},
+  "EL_VISIBLE_ASSERT" : { perform: (tabId, action, state) =>               elementIsVisible(tabId, action, state)},
+  "EL_NOT_VISIBLE_ASSERT" : { perform: (tabId, action, state) =>           elementIsNotVisible(tabId, action, state)},
   "TEXT_ASSERT" : { perform: (tabId, action, state) =>                     textAssert(tabId, action, state)},
   "TEXT_REGEX_ASSERT" : { perform: (tabId, action, state) =>               textRegexAssert(tabId, action, state)},
   "VALUE_ASSERT" : { perform: (tabId, action, state) =>                    valueAssert(tabId, action, state)},
@@ -81,6 +83,7 @@ var callExecuteFunction = (name, params) => {
 }
 
 var checkForElement = (tabId, action, state) => executeScript(callExecuteFunction("checkElement", JSON.stringify(action)), tabId);
+var checkForElementVisible = (tabId, action, state) => executeScript(callExecuteFunction("checkElementVisible", JSON.stringify(action)), tabId);
 
 var waitForElementPresent = (tabId, action, state) => new Promise((resolve, reject) => {
 
@@ -134,6 +137,59 @@ var waitForElementNotPresent = (tabId, action, state) => new Promise((resolve, r
   }
 
   _checkElementNotPresent();
+
+});
+
+var waitForElementVisible = (tabId, action, state) => new Promise((resolve, reject) => {
+
+  var timeout = action.timeout || state.userSettings.globalTimeout;
+  var attempts = parseInt(timeout / POLLING_INTERVAL);
+  var currentAttempt = 0;
+
+  function _checkElementVisible() {
+
+    checkForElementVisible(tabId, action, state).then((element) => {
+      if (element && element.success) resolve(true);
+      else if (currentAttempt < attempts) {
+        currentAttempt++;
+        setTimeout(() => _checkElementVisible(), POLLING_INTERVAL)
+      } else {
+        resolve(false);
+      }
+    }).catch((e) => {
+      reject(e)
+    });
+
+  }
+
+  _checkElementVisible();
+
+});
+
+var waitForElementNotVisible = (tabId, action, state) => new Promise((resolve, reject) => {
+
+  var timeout = action.timeout || state.userSettings.globalTimeout;
+  var attempts = parseInt(timeout / POLLING_INTERVAL);
+  var currentAttempt = 0;
+
+  function _checkElementNotVisible() {
+
+    checkForElementVisible(tabId, action, state).then((result) => {
+      if (result && !result.success) {
+        resolve(true);
+      } else if  (currentAttempt < attempts) {
+        currentAttempt++;
+        setTimeout(() => _checkElementNotVisible(), POLLING_INTERVAL)
+      } else {
+        resolve(false);
+      }
+    }).catch((e) => {
+      reject(e)
+    });
+
+  }
+
+  _checkElementNotVisible();
 
 });
 
@@ -222,6 +278,33 @@ var pathAssert = (tabId, action, state) =>
 var elementIsPresent = (tabId, action, state) =>
   waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action)} : { success : true });
 
+var elementIsNotPresent = (tabId, action, state) =>
+  waitForElementNotPresent(tabId, action, state).then((result) => !result ? { success: false, error: "Element was found." } : { success: true });
+
+var elementIsVisible = (tabId, action, state) =>
+  waitForElementVisible(tabId, action, state)
+    .then((result) => {
+
+      if (!result) return {
+        success: false, error: `Element was not visible for the duration of the timeout.`
+      };
+
+      else return { success: true };
+
+    });
+
+var elementIsNotVisible = (tabId, action, state) =>
+  waitForElementNotVisible(tabId, action, state)
+    .then((result) => {
+
+      if (!result) return {
+        success: false, error: `Element was visible for the duration of the timeout.`
+      };
+
+      else return { success: true };
+
+    });
+
 var back = (tabId, action, state) => executeScript(`window.triggerBack(${JSON.stringify(action)})`, tabId).then(() => ({ success: true }));
 
 var forward = (tabId, action, state) => executeScript(`window.triggerForward(${JSON.stringify(action)})`, tabId).then(() => ({ success: true }));
@@ -290,9 +373,6 @@ var scrollElement = (tabId, action, state) =>
 var scrollWindowtoEl = (tabId, action, state) =>
   waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
     executeScript(`window.triggerWindowToElement(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
-
-var elIsNotPresent = (tabId, action, state) =>
-  waitForElementNotPresent(tabId, action, state).then((result) => !result ? { success: false, error: "Element was found." } : { success: true });
 
 var textAssert = (tabId, action, state) =>
   waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
