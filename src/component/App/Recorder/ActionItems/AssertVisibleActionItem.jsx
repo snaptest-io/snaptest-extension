@@ -56,25 +56,25 @@ class AssertVisibleActionItem extends React.PureComponent {
             <div className="details-checkbox-row">
               <label>
                 <input type="checkbox" checked={action.checkDisplay} onChange={(e) => this.onActionChange("checkDisplay", e.currentTarget.checked) }/>
-                <div>Check "display" attribute ( not 'none' is visible )</div>
+                <div>Check "display" attribute (not set to 'none')</div>
               </label>
             </div>
             <div className="details-checkbox-row">
               <label>
                 <input type="checkbox" checked={action.checkVisibility} onChange={(e) => this.onActionChange("checkVisibility", e.currentTarget.checked) }/>
-                <div>Check "visibility" attribute ( not 'hidden' is visible )</div>
+                <div>Check "visibility" attribute (not set to 'hidden')</div>
               </label>
             </div>
             <div className="details-checkbox-row">
               <label>
                 <input type="checkbox" checked={action.checkOpacity} onChange={(e) => this.onActionChange("checkOpacity", e.currentTarget.checked) }/>
-                <div>Check "opacity" attribute ( > 0.1 is visible)</div>
+                <div>Check "opacity" attribute (greater than 0.1)</div>
               </label>
             </div>
             <div className="details-checkbox-row">
               <label>
                 <input type="checkbox" checked={action.checkDimensions} onChange={(e) => this.onActionChange("checkDimensions", e.currentTarget.checked) }/>
-                <div>Check element dimensions area ( > 0 is visible )</div>
+                <div>Check element dimensions area (greater than 0)</div>
               </label>
             </div>
             <div className="details-checkbox-row">
