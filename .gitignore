@@ -4,3 +4,4 @@
 *.iml
 *.DS_Store
 /scripts/deploy.sh
+snaptest-package*

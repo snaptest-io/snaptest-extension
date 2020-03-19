@@ -29,7 +29,7 @@ fi
 mkdir -p $TMP_FOLDER/dist
 cp -r $DIST_FOLDER/ $TMP_FOLDER/dist
 
-zip -r $ZIP_NAME.zip ./$TMP_FOLDER
+zip -r $ZIP_NAME.zip ./$TMP_FOLDER/dist
 
 DIST_SHA256=$(shasum -a 256 $TMP_FOLDER/dist/* | shasum -a 256)
 
