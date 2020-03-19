@@ -498,12 +498,56 @@ const Actions = [
         "description" : "none"
       }
     ],
-    "autodescribe" : "verifies that the \"ELEMENT\" element is visible",
+    "autodescribe" : "verifies that the \"ELEMENT\" element is present",
     "reportResult": true
   },
   {
     "name" : "El isn't present",
     "constant" : "EL_NOT_PRESENT_ASSERT",
+    "category" : CATEGORIES.ASSERTIONS,
+    "description" :null,
+    "supportedBy" :[
+      "snaptest",
+      "nightwatch"
+    ],
+    "tags": ["exists", "visible", "element",  "wait", "for", "present"],
+    "params" :[
+      {
+        "name" : "selector",
+        "description" : "Element to be clicked"
+      }, {
+        "name" : "value",
+        "description" : "none"
+      }
+    ],
+    "autodescribe" : "verifies that the \"ELEMENT\" element isn't present",
+    "reportResult": true
+  },
+  {
+    "name" : "El is visible",
+    "constant" : "EL_VISIBLE_ASSERT",
+    "category" : CATEGORIES.ASSERTIONS,
+    "description" :null,
+    "supportedBy" :[
+      "snaptest",
+      "nightwatch"
+    ],
+    "tags": ["exists", "visible", "element", "wait", "for", "present"],
+    "params" :[
+      {
+        "name" : "selector",
+        "description" : "Element to be clicked"
+      }, {
+        "name" : "value",
+        "description" : "none"
+      }
+    ],
+    "autodescribe" : "verifies that the \"ELEMENT\" element is visible",
+    "reportResult": true
+  },
+  {
+    "name" : "El isn't visible",
+    "constant" : "EL_NOT_VISIBLE_ASSERT",
     "category" : CATEGORIES.ASSERTIONS,
     "description" :null,
     "supportedBy" :[

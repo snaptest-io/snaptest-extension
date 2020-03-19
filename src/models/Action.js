@@ -21,7 +21,9 @@ export const VALUE_ASSERT = "VALUE_ASSERT";
 export const STYLE_ASSERT = "STYLE_ASSERT";
 export const EVAL_ASSERT = "EVAL_ASSERT";
 export const EL_PRESENT_ASSERT = "EL_PRESENT_ASSERT";
+export const EL_VISIBLE_ASSERT = "EL_VISIBLE_ASSERT";
 export const EL_NOT_PRESENT_ASSERT = "EL_NOT_PRESENT_ASSERT";
+export const EL_NOT_VISIBLE_ASSERT = "EL_NOT_VISIBLE_ASSERT";
 export const BACK = "BACK";
 export const FORWARD = "FORWARD";
 export const REFRESH = "REFRESH";
@@ -470,6 +472,30 @@ export class ElNotPresentAssertAction extends Action {
   constructor(selector, warnings, suggestions) {
     super(selector, warnings, suggestions);
     this.type = EL_NOT_PRESENT_ASSERT;
+  }
+}
+
+export class ElVisibleAssertAction extends Action {
+  constructor(selector, warnings, suggestions) {
+    super(selector, warnings, suggestions);
+    this.type = EL_VISIBLE_ASSERT;
+    this.checkDisplay = true;
+    this.checkVisibility = true;
+    this.checkOpacity = true;
+    this.checkDimensions = true;
+    this.checkCenterPoint = true;
+  }
+}
+
+export class ElNotVisibleAssertAction extends Action {
+  constructor(selector, warnings, suggestions) {
+    super(selector, warnings, suggestions);
+    this.type = EL_NOT_VISIBLE_ASSERT;
+    this.checkDisplay = true;
+    this.checkVisibility = true;
+    this.checkOpacity = true;
+    this.checkDimensions = true;
+    this.checkCenterPoint = true;
   }
 }
 

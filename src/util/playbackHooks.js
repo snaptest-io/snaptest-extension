@@ -8,6 +8,61 @@ window.checkElement = function(action) {
   else return {success: false};
 };
 
+window.checkElementVisible = function(action) {
+
+  var elem = getElement(action);
+
+  if (elem) {
+
+    function isVisible(elem) {
+
+      var style = getComputedStyle(elem);
+
+      if (action.checkDisplay && style.display === 'none') return false;
+
+      if (action.checkVisibility && style.visibility !== 'visible') return false;
+
+      if (action.checkOpacity && style.opacity < 0.1) return false;
+
+      if (action.checkDimensions) {
+        if (elem.offsetWidth + elem.offsetHeight + elem.getBoundingClientRect().height +
+          elem.getBoundingClientRect().width === 0) {
+          return false;
+        }
+      }
+
+      if (action.checkCenterPoint) {
+        const elemCenter = {
+          x: elem.getBoundingClientRect().left + elem.offsetWidth / 2,
+          y: elem.getBoundingClientRect().top + elem.offsetHeight / 2
+        };
+        if (elemCenter.x < 0) return false;
+        if (elemCenter.x > (document.documentElement.clientWidth || window.innerWidth)) return false;
+        if (elemCenter.y < 0) return false;
+        if (elemCenter.y > (document.documentElement.clientHeight || window.innerHeight)) return false;
+
+        let pointContainer = document.elementFromPoint(elemCenter.x, elemCenter.y);
+
+        do {
+          if (pointContainer === elem) return true;
+        } while (pointContainer = pointContainer.parentNode);
+        return false;
+      }
+
+      return true;
+
+    }
+
+    return {
+      success: isVisible(elem)
+    }
+
+  }
+
+  return {success: false};
+
+};
+
 window.pathAssert = (action) => {
 
   var value = window.location.pathname;

@@ -8,6 +8,7 @@ export BackActionItem from './BackActionItem.jsx';
 export KeyDownActionItem from './KeyDownActionItem.jsx';
 export ValueAssertActionItem from './ValueAssertActionItem.jsx';
 export ElPresentAssertActionItem from './ElPresentAssertActionItem.jsx';
+export AssertVisibleActionItem from './AssertVisibleActionItem.jsx';
 export ComponentActionItem from './ComponentActionItem.jsx';
 export PauseActionItem from './PauseActionItem.jsx';
 export XYCoordActionItem from './XYCoordActionItem.jsx';

@@ -26,7 +26,8 @@ import {MouseClickActionItem,
   ForeachActionItem,
   WhileAction,
   CSVInsertRowActionItem,
-  RequestActionItem
+  RequestActionItem,
+  AssertVisibleActionItem
 } from './ActionItems/'
 
 class ActionItem extends React.Component {
@@ -59,6 +60,9 @@ class ActionItem extends React.Component {
         action.type === Actions.SCROLL_WINDOW_ELEMENT ||
         action.type === Actions.SUBMIT ) ? (<MouseClickActionItem {...this.props} />)
       : ( action.type === Actions.CHANGE_WINDOW_AUTO ) ? (<AutoChangeWindowAction {...this.props} />)
+      : (
+        action.type === Actions.EL_VISIBLE_ASSERT ||
+        action.type === Actions.EL_NOT_VISIBLE_ASSERT) ? (<AssertVisibleActionItem {...this.props} />)
       : (
         action.type === Actions.POPSTATE ||
         action.type === Actions.BACK ||
