@@ -1021,6 +1021,7 @@ Message.onMessageFor(Message.SESSION, function(message, sender, sendResponse) {
       }
 
       autoSave(test, state);
+
       break;
     case "clearSelectedRows":
       state.selectedRows = [];
@@ -1378,6 +1379,8 @@ Message.onMessageFor(Message.SESSION, function(message, sender, sendResponse) {
 
   if (getShouldGenCode(state)) state.generatedCode = generators[state.selectedFramework][state.selectedStyle].generate(test, state.components);
 
+  updateComponentInstanceSummary(message.action, state);
+
   if (excludeTestsInResponse) {
     Message.toAll("stateChange", {...state, tests: [], cause: message.action, testsExcluded: true});
     sendResponse({...state, ...tempResponse, tests: []});
@@ -1430,7 +1433,52 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   }
 });
 
+function updateComponentInstanceSummary(action, state) {
+
+  var whitelist = [
+    "insertNWAction",
+    "updateNWAction",
+    "removeNWAction",
+    "duplicateNWAction",
+    "repairDirectory"
+  ];
+
+  if (whitelist.indexOf(action) !== -1) {
+
+    var testsAndComps = [...state.tests, ...state.components];
+
+    state.compInstanceSummary = state.components.reduce((prev, next) => {
+
+      if (prev[next.id]) return prev;
+
+      var testCompInstances = testsAndComps.map((test) => {
+        return {
+          id: test.id,
+          name: test.name,
+          type: test.type,
+          instances: test.actions.filter((action) =>
+            action.type === "COMPONENT" &&
+            action.componentId === next.id
+          )
+        }
+      }).filter((test) => test.instances.length > 0);
+
+      prev[next.id] = {
+        count: testCompInstances.reduce((a, b) => a + b.instances.length, 0),
+        tests: testCompInstances
+      };
+
+      return prev;
+
+    } , {});
+
+  }
+}
+
+
 function shouldOptimizeResponse(action) {
+
+  console.log(action);
 
   var optimizeBlackList = [
     "addNewTest",
@@ -1441,7 +1489,11 @@ function shouldOptimizeResponse(action) {
     "setCurrentTestName",
     "setTestName",
     "generateExamples",
-    "setLocalMode"
+    "setLocalMode",
+    "insertNWAction",
+    "updateNWAction",
+    "removeNWAction",
+    "duplicateNWAction",
   ];
 
   if (optimizeBlackList.indexOf(action) === -1) return true;

@@ -39,6 +39,7 @@ class DashboardContent extends React.Component {
       premium: this.props.premium,
       orgAccounts: this.props.orgAccounts,
       selectedTestId: showSelectedTest ? (this.props.activeTest ? this.props.activeTest.id : null) : null,
+      compInstanceSummary: this.props.compInstanceSummary
     };
 
     const accountType = getAccountType(this.props);

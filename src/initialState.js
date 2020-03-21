@@ -32,6 +32,7 @@ export function getInitialState(appWindowId) {
 
     components: [],
     componentDrafts: [],
+    compInstanceSummary: {},
     tests: [],
     archivedTests: [],
     drafts: [],
