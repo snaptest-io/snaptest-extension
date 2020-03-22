@@ -1,0 +1,21 @@
+.snpt {
+
+  .text-pill {
+
+    border-radius: 8px;
+    background: #bbc8d8;
+    padding: 3px 6px 4px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+
+    &.hoverable {
+      &:hover {
+        background: #c9e3ff;
+        cursor: pointer;
+      }
+    }
+
+  }
+
+}

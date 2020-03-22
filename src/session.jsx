@@ -1021,6 +1021,7 @@ Message.onMessageFor(Message.SESSION, function(message, sender, sendResponse) {
       }
 
       autoSave(test, state);
+
       break;
     case "clearSelectedRows":
       state.selectedRows = [];
@@ -1378,6 +1379,8 @@ Message.onMessageFor(Message.SESSION, function(message, sender, sendResponse) {
 
   if (getShouldGenCode(state)) state.generatedCode = generators[state.selectedFramework][state.selectedStyle].generate(test, state.components);
 
+  updateComponentInstanceSummary(message.action, state);
+
   if (excludeTestsInResponse) {
     Message.toAll("stateChange", {...state, tests: [], cause: message.action, testsExcluded: true});
     sendResponse({...state, ...tempResponse, tests: []});
@@ -1430,7 +1433,31 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   }
 });
 
+function updateComponentInstanceSummary(action, state) {
+
+  var whitelist = [
+    "insertNWAction",
+    "updateNWAction",
+    "removeNWAction",
+    "duplicateNWAction",
+    "repairDirectory",
+    "deleteTest",
+    "duplicateTest",
+    "explodeComponent",
+    "redo",
+    "undo"
+  ];
+
+  if (whitelist.indexOf(action) !== -1) {
+    TestActions.buildComponentInstanceSummary({}, state);
+  }
+
+}
+
+
 function shouldOptimizeResponse(action) {
+
+  console.log(action);
 
   var optimizeBlackList = [
     "addNewTest",
@@ -1441,7 +1468,11 @@ function shouldOptimizeResponse(action) {
     "setCurrentTestName",
     "setTestName",
     "generateExamples",
-    "setLocalMode"
+    "setLocalMode",
+    "insertNWAction",
+    "updateNWAction",
+    "removeNWAction",
+    "duplicateNWAction",
   ];
 
   if (optimizeBlackList.indexOf(action) === -1) return true;
