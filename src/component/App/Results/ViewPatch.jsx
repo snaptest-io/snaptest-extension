@@ -72,9 +72,6 @@ class ViewPatch extends React.Component {
       ownerId: result.owner_id,
       contentId: patch.content_id,
     }).then((content) => {
-
-      console.log(content.error_ss);
-
       this.setState({
         loaded: true,
         tests: content.tests,

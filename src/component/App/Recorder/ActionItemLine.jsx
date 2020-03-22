@@ -132,7 +132,9 @@ class ActionItemLine extends React.PureComponent {
             )}
           </div>
           {(isLast && !isIndicator) && (
-            <div className="arrow-down"></div>
+            <div className="arrow-down">
+              <svg viewBox="0 0 132 73" xmlns="http://www.w3.org/2000/svg"><g fill="#6781a5" fill-rule="evenodd"><path d="M66.048 72.352V39.985L132.013.745l-22.847 26.66"/><path d="M66.54 72.352V39.985L.573.745"/><path d="M66.54 72.352s25.63-25.63 25.63-32.367c0-6.736-25.63 0-25.63 0H42.376L66.54 72.352z"/></g></svg>
+            </div>
           )}
         </div>
 
@@ -154,7 +156,9 @@ class ActionItemLine extends React.PureComponent {
       indents.push(
         <div key={i} className={"indent indent-" + action.indent + (lastInBlock ? " last-indent" : "")}>
           {lastInBlock && (
-            <div className="arrow-down-2"></div>
+            <div className="arrow-down-2">
+              <svg viewBox="0 0 132 73" xmlns="http://www.w3.org/2000/svg"><g fill="#6781a5" fill-rule="evenodd"><path d="M66.048 72.352V39.985L132.013.745l-22.847 26.66"/><path d="M66.54 72.352V39.985L.573.745"/><path d="M66.54 72.352s25.63-25.63 25.63-32.367c0-6.736-25.63 0-25.63 0H42.376L66.54 72.352z"/></g></svg>
+            </div>
           )}
         </div>
       )
