@@ -242,7 +242,7 @@ var pageLoad = (tabId, action, state) => new Promise((resolve, reject) => {
       loaded = true;
       state.playbackResult[action.id] = {processing: false, success: true };
       if (action.resize) {
-        chrome.windows.update(state.currentWindowId, {width: action.width, height: action.height}, () => {
+        chrome.windows.update(state.currentWindowId, {width: action.width, height: action.height, state: "normal"}, () => {
           Message.toAll("stateChange", {...state, tests: [], testsExcluded: true});
           resolve({success: true});
         });
