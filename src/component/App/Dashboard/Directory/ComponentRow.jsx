@@ -46,8 +46,8 @@ class ComponentRow extends React.Component {
             <div>
               {instanceSummary.count > 0 ? (
                 <Dropdown classNames="quick-button-dd test-move-dd" button={
-                  <button className="text-pill-hoverable">
-                    {instanceSummary.count} instances
+                  <button className="text-pill hoverable">
+                    {`in ${instanceSummary.tests.length} test${instanceSummary.tests.length > 1 ? "s" : ""}`}
                   </button>
                 }>
                   <div>
@@ -62,7 +62,9 @@ class ComponentRow extends React.Component {
                   </div>
                 </Dropdown>
               ) : (
-                instanceSummary.count + " instances"
+                <button className="text-pill">
+                  {`not used`}
+                </button>
               )}
             </div>
             <div className="dir-row-buttons quick-button-dd" onClick={(e) => e.stopPropagation()}>

@@ -2738,11 +2738,13 @@ export const deleteFolder = (params, state) => {
       if (idxOfTest !== -1) state.components.splice(idxOfTest, 1)
     });
     LocalActions.cacheLocalMode(state);
+    buildComponentInstanceSummary({}, state);
   } else {
     return saveInBatches(state.user.apikey, contextType, contextId, [{ type: "directory", directory: state.directory }])
       .then(() => saveInBatches(state.user.apikey, contextType, contextId, [...testsToRemove, ...componentsToRemove]))
       .then(() => getTestData({}, state))
       .then(() => repairDirectory(state))
+      .then(() => buildComponentInstanceSummary({}, state))
   }
 
 };
@@ -2877,3 +2879,38 @@ export const copyFolderToAccount = (params, state) => {
 
 };
 
+export const buildComponentInstanceSummary = (params, state) => {
+
+  const {} = params;
+  const {tests, components} = state;
+
+  var testsAndComps = [...state.tests, ...state.components];
+
+  state.compInstanceSummary = state.components.reduce((prev, next) => {
+
+    if (prev[next.id]) return prev;
+
+    var testCompInstances = testsAndComps.map((test) => {
+      return {
+        id: test.id,
+        name: test.name,
+        type: test.type,
+        instances: test.actions.filter((action) =>
+          action.type === "COMPONENT" &&
+          action.componentId === next.id
+        )
+      }
+    }).filter((test) => test.instances.length > 0);
+
+    prev[next.id] = {
+      count: testCompInstances.reduce((a, b) => a + b.instances.length, 0),
+      tests: testCompInstances
+    };
+
+    return prev;
+
+  } , {});
+
+  return Promise.resolve();
+
+};
