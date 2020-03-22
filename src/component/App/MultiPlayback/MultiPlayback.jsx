@@ -279,7 +279,6 @@ class MultiPlayback extends React.PureComponent {
     Message.promise("savePendingResult")
       .then(() => setTimeout(() => this.setState({saving: false}), 800))
       .catch((e) => {
-        console.log(e);
         this.setState({saving: false, saveError: e})
       });
 

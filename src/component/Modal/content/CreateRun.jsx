@@ -327,7 +327,6 @@ class CreateDataProfile extends React.Component {
         this.setState({simulateProcessing: false, simulateResponse: result})
       })
       .catch((e) => {
-        console.log(e);
         this.setState({simulateProcessing: false, simulateResponse: e})
       });
 

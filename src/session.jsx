@@ -1457,8 +1457,6 @@ function updateComponentInstanceSummary(action, state) {
 
 function shouldOptimizeResponse(action) {
 
-  console.log(action);
-
   var optimizeBlackList = [
     "addNewTest",
     "addNewComponent",

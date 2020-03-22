@@ -1581,18 +1581,10 @@ html, body {
     }
   }
 
-  .arrow-down {
-    background: url('data:image/svg+xml;utf8,<svg width="132" height="73" viewBox="0 0 132 73" xmlns="http://www.w3.org/2000/svg"><g fill="#384B63" fill-rule="evenodd"><path d="M66.048 72.352V39.985L132.013.745l-22.847 26.66"/><path d="M66.54 72.352V39.985L.573.745"/><path d="M66.54 72.352s25.63-25.63 25.63-32.367c0-6.736-25.63 0-25.63 0H42.376L66.54 72.352z"/></g></svg>');
-    background-size: 100%;
-    width: 80px;
-    height: 23px;
-  }
-
-  .arrow-down-2 {
-    background: url('data:image/svg+xml;utf8,<svg width="132" height="73" viewBox="0 0 132 73" xmlns="http://www.w3.org/2000/svg"><g fill="#a4bbdb" fill-rule="evenodd"><path d="M66.048 72.352V39.985L132.013.745l-22.847 26.66"/><path d="M66.54 72.352V39.985L.573.745"/><path d="M66.54 72.352s25.63-25.63 25.63-32.367c0-6.736-25.63 0-25.63 0H42.376L66.54 72.352z"/></g></svg>');
-    background-size: 100%;
-    width: 80px;
-    height: 23px;
+  .arrow-down, .arrow-down-2 {
+    svg {
+      width: 16px;
+    }
   }
 
   .nw-logo {
@@ -2322,10 +2314,8 @@ html, body {
 
     .arrow-down, .arrow-down-2 {
       position: absolute;
-      bottom: -2px;
+      bottom: -8px;
       left: -9px;
-      height: 8px;
-      width: 16px;
     }
 
     .record-cursor-container {

@@ -2886,30 +2886,36 @@ export const buildComponentInstanceSummary = (params, state) => {
 
   var testsAndComps = [...state.tests, ...state.components];
 
-  state.compInstanceSummary = state.components.reduce((prev, next) => {
+  state.compInstanceSummary = state.components
+    .reduce((prev, next) => {
 
-    if (prev[next.id]) return prev;
+      if (prev[next.id]) return prev;
 
-    var testCompInstances = testsAndComps.map((test) => {
-      return {
-        id: test.id,
-        name: test.name,
-        type: test.type,
-        instances: test.actions.filter((action) =>
+      var testCompInstances = testsAndComps.map((test) => {
+
+        var compInstances = test.actions.filter((action) =>
           action.type === "COMPONENT" &&
           action.componentId === next.id
-        )
-      }
-    }).filter((test) => test.instances.length > 0);
+        );
 
-    prev[next.id] = {
-      count: testCompInstances.reduce((a, b) => a + b.instances.length, 0),
-      tests: testCompInstances
-    };
+        return {
+          id: test.id,
+          name: test.name,
+          type: test.type,
+          instances: compInstances,
+          count: compInstances.length
+        }
+      }).filter((test) => test.instances.length > 0);
 
-    return prev;
+      prev[next.id] = {
+        count: testCompInstances.reduce((a, b) => a + b.instances.length, 0),
+        tests: testCompInstances.sort((a, b) => a.count < b.count ? 1 : -1)    // order by most instances
+      };
 
-  } , {});
+      return prev;
+
+    } , {});
+
 
   return Promise.resolve();
 
