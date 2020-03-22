@@ -55,11 +55,6 @@ class TestRow extends React.Component {
                   <svg className="svg-icon" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M15 4H1c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 14H2V6h12v12zm5-18H5c-.55 0-1 .45-1 1v2h2V2h12v12h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"/></svg>
                   Duplicate
                 </div>
-                <div className="dd-item"
-                     onClick={(e) => {this.onViewCode(test)}} >
-                  <svg className="svg-icon" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M6 6a1.003 1.003 0 0 0-1.71-.71l-4 4C.11 9.47 0 9.72 0 10c0 .28.11.53.29.71l4 4a1.003 1.003 0 0 0 1.42-1.42L2.41 10 5.7 6.71c.19-.18.3-.43.3-.71zm6-4c-.46 0-.83.31-.95.73l-4 14c-.02.09-.05.17-.05.27 0 .55.45 1 1 1 .46 0 .83-.31.95-.73l4-14c.02-.09.05-.17.05-.27 0-.55-.45-1-1-1zm7.71 7.29l-4-4a1.003 1.003 0 0 0-1.42 1.42l3.3 3.29-3.29 3.29c-.19.18-.3.43-.3.71a1.003 1.003 0 0 0 1.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"/></svg>
-                  View Code
-                </div>
                 {premium && (
                   <div className="dd-item"
                        onClick={(e) => {this.onMoveTest(test)}} >
@@ -96,11 +91,6 @@ class TestRow extends React.Component {
     if ((test.actions && test.actions.length === 0) || confirm(`Are you sure you want to archive this ${test.type}?`)) {
       Message.to(Message.SESSION, "deleteTest", test.id);
     }
-  }
-
-  onViewCode(test) {
-    Message.to(Message.SESSION, "setTestActive", test.id);
-    Message.to(Message.SESSION, "pushRoute", new Route("codeviewer") );
   }
 
   onViewTest(test) {
