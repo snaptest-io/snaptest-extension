@@ -224,6 +224,12 @@ class ActionSelector extends React.PureComponent {
         newAction = new Actions.DoWhileAction();
         if (_.isObject(action.value)) newAction.value = deepClone(action.value);
         break;
+      case Actions.CHANGE_FRAME:
+        newAction = new Actions.ChangeFrameAction();
+        break;
+      case Actions.EXIT_FRAME:
+        newAction = new Actions.ExitFrameAction();
+        break;
     }
 
     newAction.id = action.id;

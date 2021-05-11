@@ -27,6 +27,7 @@ export function playbackEngine(state, events, options) {
   var stackErrorSnapshot;
   var initialTabId;
   var tabIdx = 0;
+  var frameStack = [];
 
   events = _.extend({
     onComplete: _.noop,
@@ -163,7 +164,7 @@ export function playbackEngine(state, events, options) {
 
   var actionDefs = Object.assign({}, playbackActions, {
     "IF": {
-      perform: (currentTabId, action, state, subroutine) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine) => new Promise((resolve, reject) => {
 
         var nextScopeAction = getFirstActionOfNextScope(subroutine.testContext, action);
 
@@ -187,7 +188,7 @@ export function playbackEngine(state, events, options) {
       })
     },
     "ELSEIF": {
-      perform: (currentTabId, action, state, subroutine, options) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine, options) => new Promise((resolve, reject) => {
 
         // we need to find all ELSEIFs up to and including the most previous IF.
         // We should check each conditional.  if none were true, and this one is true, then trigger the scope
@@ -232,7 +233,7 @@ export function playbackEngine(state, events, options) {
       })
     },
     "WHILE": {
-      perform: (currentTabId, action, state, subroutine) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine) => new Promise((resolve, reject) => {
 
         var nextScopeAction = getFirstActionOfNextScope(subroutine.testContext, action);
 
@@ -263,7 +264,7 @@ export function playbackEngine(state, events, options) {
       })
     },
     "DOWHILE": {
-      perform: (currentTabId, action, state, subroutine) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine) => new Promise((resolve, reject) => {
 
         var nextScopeAction = getFirstActionOfNextScope(subroutine.testContext, action);
 
@@ -313,7 +314,7 @@ export function playbackEngine(state, events, options) {
       })
     },
     "BREAK": {
-      perform: (currentTabId, action, state, subroutine) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine) => new Promise((resolve, reject) => {
         // find the latest stack with actionCursor on a TRY loop.  pop the stack to this and call stack head.
 
         var subroutineIndex = stack.length - 1;
@@ -343,7 +344,7 @@ export function playbackEngine(state, events, options) {
       })
     },
     "COMPONENT": {
-      perform: (currentTabId, action, state, subroutine) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine) => new Promise((resolve, reject) => {
 
         var compIdx = findIndexById(state.components, action.componentId);
         var comp = state.components[compIdx];
@@ -361,12 +362,12 @@ export function playbackEngine(state, events, options) {
       })
     },
     "CATCH": {
-      perform: (currentTabId, action, state, subroutine) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine) => new Promise((resolve, reject) => {
         return resolve({error: null, returned: true, skipResult: true});
       })
     },
     "GOTO": {
-      perform: (currentTabId, action, state, subroutine) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine) => new Promise((resolve, reject) => {
 
         // we need to find the action in the stack, pop the stack to that window.
 
@@ -394,7 +395,7 @@ export function playbackEngine(state, events, options) {
       })
     },
     "TRY": {
-      perform: (currentTabId, action, state, subroutine) => new Promise((resolve, reject) => {
+      perform: (currentTabId, frameStack, action, state, subroutine) => new Promise((resolve, reject) => {
 
         var idxOfAction = findIndexById(subroutine.testContext, action.id);
 
@@ -708,7 +709,7 @@ export function playbackEngine(state, events, options) {
     if (action.type === "ELSE") actionDef = actionDefs["ELSEIF"];
     else actionDef = actionDefs[action.type];
 
-    if (actionDef) return actionDef.perform(_getCurrentTabId(), action, state, subroutine, {derivedVariables, dynamicVars, dataVars }).then((result) => resolve(result));
+    if (actionDef) return actionDef.perform(_getCurrentTabId(), frameStack, action, state, subroutine, {derivedVariables, dynamicVars, dataVars }).then((result) => resolve(result));
     else resolve({error: null, skipped: true});
 
   })}
