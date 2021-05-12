@@ -48,7 +48,7 @@
     "webpack-cli": "^3.1.2",
     "webpack-config": "7.5.0",
     "axios": "^0.18.1",
-    "chart.js": "^2.7.2",
+    "chart.js": "^2.9.4",
     "csvjson": "^5.0.0",
     "json-format": "^1.0.1",
     "moment": "^2.24.0",
