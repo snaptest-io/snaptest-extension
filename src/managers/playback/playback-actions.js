@@ -237,13 +237,26 @@ var elementNotFoundMessage = (action) => `Couldn't find element '${action.select
 */
 
 var enterFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-  chrome.webNavigation.getAllFrames({tabId}, (frames) => {
-    const frameId = frames.find((frame) => frame.url === action.value).frameId
-    if (frameId) {
-      frameStack.push(frameId)
-      resolve({success: true});
-    }
-  });
+  var timeout = action.timeout || state.userSettings.globalTimeout;
+  var attempts = parseInt(timeout / POLLING_INTERVAL);
+  var currentAttempt = 0;
+
+  function _getFrameIdBySrc() {
+    chrome.webNavigation.getAllFrames({tabId}, (frames) => {
+      const frame = frames.find((frame) => frame.url === action.value)
+      if (frame && frame.frameId) {
+        frameStack.push(frame.frameId)
+        resolve({success: true});
+      } else if (currentAttempt < attempts) {
+        currentAttempt++;
+        setTimeout(() => _getFrameIdBySrc(), POLLING_INTERVAL)
+      } else {
+        resolve({ success: false, error: `No iframe found with a src of '${action.value}'`});
+      }
+    });
+  }
+
+  _getFrameIdBySrc();
 })
 
 var exitFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
