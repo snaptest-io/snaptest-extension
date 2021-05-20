@@ -128,14 +128,14 @@ const Actions = [
   },
   {
     "name" : "Select frame",
-    "constant" : "CHANGE_FRAME",
+    "constant" : "ENTER_FRAME",
     "category" : CATEGORIES.WINDOW,
     "description" :null,
     "supportedBy" :[
       "snaptest",
       "nightwatch"
     ],
-    "tags": ["change", "select", "frame", "iframe", "enter", "push"],
+    "tags": ["enter", "change", "select", "frame", "iframe", "push"],
     "params" :[
       {
         "name" : "value",

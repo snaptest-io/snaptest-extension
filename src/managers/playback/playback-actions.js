@@ -38,7 +38,7 @@ export const playbackActions = {
   "STYLE_ASSERT" : { perform: (tabId, frameStack, action, state) =>                    styleAssert(tabId, frameStack, action, state)},
   "SCREENSHOT" : { perform: (tabId, frameStack, action, state) =>                      screenshot(tabId, frameStack, action, state)},
   "REQUEST" : { perform: (tabId, frameStack, action, state) =>                         request(tabId, frameStack, action, state)},
-  "CHANGE_FRAME" : { perform: (tabId, frameStack, action, state) =>                    changeFrame(tabId, frameStack, action, state)},
+  "ENTER_FRAME" : { perform: (tabId, frameStack, action, state) =>                     enterFrame(tabId, frameStack, action, state)},
   "EXIT_FRAME" : { perform: (tabId, frameStack, action, state) =>                      exitFrame(tabId, frameStack, action, state)},
   "EVAL" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
     evalAmbiguous(tabId, frameStack, action, state, subroutine, other.derivedVariables, other.dynamicVars)},
@@ -236,7 +236,7 @@ var elementNotFoundMessage = (action) => `Couldn't find element '${action.select
   Actions:
 */
 
-var changeFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
+var enterFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
   chrome.webNavigation.getAllFrames({tabId}, (frames) => {
     const frameId = frames.find((frame) => frame.url === action.value).frameId
     if (frameId) {

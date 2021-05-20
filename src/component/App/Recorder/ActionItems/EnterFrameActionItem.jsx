@@ -9,7 +9,7 @@ import ValueSelector from '../ValueSelector'
 import DescriptionSelector from '../DescriptionSelector'
 import ActDesToggle from '../ActDesToggle'
 
-class ChangeFrameActionItem extends React.PureComponent {
+class EnterFrameActionItem extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -60,4 +60,4 @@ class ChangeFrameActionItem extends React.PureComponent {
 }
 
 
-export default ChangeFrameActionItem;
+export default EnterFrameActionItem;

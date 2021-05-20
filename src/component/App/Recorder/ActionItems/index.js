@@ -28,7 +28,7 @@ export ForeachActionItem from './ForeachActionItem.jsx';
 export WhileAction from './WhileAction.jsx';
 export CSVInsertRowActionItem from './CSVInsertRowActionItem.jsx';
 export RequestActionItem from './RequestActionItem.jsx';
-export ChangeFrameActionItem from './ChangeFrameActionItem.jsx';
+export EnterFrameActionItem from './EnterFrameActionItem.jsx';
 
 
 
