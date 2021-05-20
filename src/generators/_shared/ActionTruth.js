@@ -127,7 +127,7 @@ const Actions = [
     "reportResult": true
   },
   {
-    "name" : "Select frame",
+    "name" : "Enter frame",
     "constant" : "ENTER_FRAME",
     "category" : CATEGORIES.WINDOW,
     "description" :null,
