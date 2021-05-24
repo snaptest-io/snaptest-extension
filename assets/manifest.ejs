@@ -20,7 +20,8 @@
   "permissions": [
     "<all_urls>",
     "storage",
-    "cookies"
+    "cookies",
+    "webNavigation"
   ],
   "web_accessible_resources": [
     "injected.js",
@@ -29,6 +30,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
+      "all_frames": true,
       "css": [
         "tab.css"
       ],

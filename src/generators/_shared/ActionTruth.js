@@ -127,6 +127,39 @@ const Actions = [
     "reportResult": true
   },
   {
+    "name" : "Enter frame",
+    "constant" : "ENTER_FRAME",
+    "category" : CATEGORIES.WINDOW,
+    "description" :null,
+    "supportedBy" :[
+      "snaptest",
+      "nightwatch"
+    ],
+    "tags": ["enter", "change", "select", "frame", "iframe", "push"],
+    "params" :[
+      {
+        "name" : "value",
+        "description" : "none"
+      }
+    ],
+    "autodescribe" : "none",
+    "reportResult": true
+  },
+  {
+    "name" : "Exit frame",
+    "constant" : "EXIT_FRAME",
+    "category" : CATEGORIES.WINDOW,
+    "description" :null,
+    "supportedBy" :[
+      "snaptest",
+      "nightwatch"
+    ],
+    "tags": ["frame", "iframe", "exit", "pop", "back"],
+    "params" :[],
+    "autodescribe" : "none",
+    "reportResult": true
+  },
+  {
     "name" : "Click element",
     "constant" : "MOUSEDOWN",
     "category" : CATEGORIES.MOUSE_KEYBOARD,

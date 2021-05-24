@@ -13,6 +13,8 @@ export const PUSHSTATE = "PUSHSTATE";
 export const FULL_PAGELOAD = "FULL_PAGELOAD";
 export const CHANGE_WINDOW = "CHANGE_WINDOW";
 export const CHANGE_WINDOW_AUTO = "CHANGE_WINDOW_AUTO";
+export const ENTER_FRAME = "ENTER_FRAME";
+export const EXIT_FRAME = "EXIT_FRAME";
 export const PAGELOAD = "PAGELOAD";
 export const TEXT_ASSERT = "TEXT_ASSERT";
 export const PATH_ASSERT = "PATH_ASSERT";
@@ -309,6 +311,25 @@ export class AutoChangeWindowAction extends Action {
     this.type = CHANGE_WINDOW_AUTO;
   }
 
+}
+
+export class EnterFrameAction extends Action {
+
+  value = 'https://www.iframe.url/';
+
+  constructor(value = 'https://www.iframe.url/') {
+    super();
+    this.value = value;
+    this.type = ENTER_FRAME;
+  }
+
+}
+
+export class ExitFrameAction extends Action {
+  constructor() {
+    super();
+    this.type = EXIT_FRAME;
+  }
 }
 
 export class FullPageloadAction extends Action {

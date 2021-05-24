@@ -6,68 +6,71 @@ import {saveScreenshot} from "../ScreenshotManager";
 const uuidv4 = require('uuid/v4');
 
 export const playbackActions = {
-  "FULL_PAGELOAD" : { perform: (tabId, action, state) =>                   pageLoad(tabId, action, state)},
-  "PAGELOAD" : { perform: (tabId, action, state) =>                        pageLoad(tabId, action, state)},
-  "PATH_ASSERT" : { perform: (tabId, action, state) =>                     pathAssert(tabId, action, state)},
-  "BACK" : { perform: (tabId, action, state) =>                            back(tabId, action, state)},
-  "REFRESH" : { perform: (tabId, action, state) =>                         refresh(tabId, action, state)},
-  "FORWARD" : { perform: (tabId, action, state) =>                         forward(tabId, action, state)},
-  "CLEAR_COOKIES" : { perform: (tabId, action, state) =>                   clearCookies(tabId, action, state)},
-  "CLEAR_CACHES" : { perform: (tabId, action, state) =>                    clearCaches(tabId, action, state)},
-  "DYNAMIC_VAR" : { perform: (tabId, action, state, subroutine, other) =>
-    dynamicVar(tabId, action, state, subroutine, other.derivedVariables, other.dynamicVars)},
-  "INPUT" : { perform: (tabId, action, state) =>                           changeInput(tabId, action, state)},
-  "DIALOG" : { perform: (tabId, action, state) =>                          setDialogs(tabId, action, state)},
-  "MOUSEDOWN" : { perform: (tabId, action, state) =>                       click(tabId, action, state)},
-  "DOUBLECLICK" : { perform: (tabId, action, state) =>                     doubleClick(tabId, action, state)},
-  "FOCUS" : { perform: (tabId, action, state) =>                           focus(tabId, action, state)},
-  "BLUR" : { perform: (tabId, action, state) =>                            blur(tabId, action, state)},
-  "PAUSE" : { perform: (tabId, action, state) =>                           pauseTime(tabId, action, state)},
-  "SUBMIT" : { perform: (tabId, action, state) =>                          submit(tabId, action, state)},
-  "EXECUTE_SCRIPT" : { perform: (tabId, action, state) =>                  executeCustomScript(tabId, action, state)},
-  "SCROLL_WINDOW" : { perform: (tabId, action, state) =>                   scrollWindow(tabId, action, state)},
-  "SCROLL_ELEMENT" : { perform: (tabId, action, state) =>                  scrollElement(tabId, action, state)},
-  "SCROLL_WINDOW_ELEMENT" : { perform: (tabId, action, state) =>           scrollWindowtoEl(tabId, action, state)},
-  "EL_PRESENT_ASSERT" : { perform: (tabId, action, state) =>               elementIsPresent(tabId, action, state)},
-  "EL_NOT_PRESENT_ASSERT" : { perform: (tabId, action, state) =>           elementIsNotPresent(tabId, action, state)},
-  "EL_VISIBLE_ASSERT" : { perform: (tabId, action, state) =>               elementIsVisible(tabId, action, state)},
-  "EL_NOT_VISIBLE_ASSERT" : { perform: (tabId, action, state) =>           elementIsNotVisible(tabId, action, state)},
-  "TEXT_ASSERT" : { perform: (tabId, action, state) =>                     textAssert(tabId, action, state)},
-  "TEXT_REGEX_ASSERT" : { perform: (tabId, action, state) =>               textRegexAssert(tabId, action, state)},
-  "VALUE_ASSERT" : { perform: (tabId, action, state) =>                    valueAssert(tabId, action, state)},
-  "STYLE_ASSERT" : { perform: (tabId, action, state) =>                    styleAssert(tabId, action, state)},
-  "SCREENSHOT" : { perform: (tabId, action, state) =>                      screenshot(tabId, action, state)},
-  "REQUEST" : { perform: (tabId, action, state) =>                         request(tabId, action, state)},
-  "EVAL" : { perform: (tabId, action, state, subroutine, other) =>
-    evalAmbiguous(tabId, action, state, subroutine, other.derivedVariables, other.dynamicVars)},
-  "CSV_INSERT" : { perform: (tabId, action, state, subroutine, other) =>
-    insertCsvRow(tabId, action, state, subroutine, other.derivedVariables, other.dataVars)},
+  "FULL_PAGELOAD" : { perform: (tabId, frameStack, action, state) =>                   pageLoad(tabId, frameStack, action, state)},
+  "PAGELOAD" : { perform: (tabId, frameStack, action, state) =>                        pageLoad(tabId, frameStack, action, state)},
+  "PATH_ASSERT" : { perform: (tabId, frameStack, action, state) =>                     pathAssert(tabId, frameStack, action, state)},
+  "BACK" : { perform: (tabId, frameStack, action, state) =>                            back(tabId, frameStack, action, state)},
+  "REFRESH" : { perform: (tabId, frameStack, action, state) =>                         refresh(tabId, frameStack, action, state)},
+  "FORWARD" : { perform: (tabId, frameStack, action, state) =>                         forward(tabId, frameStack, action, state)},
+  "CLEAR_COOKIES" : { perform: (tabId, frameStack, action, state) =>                   clearCookies(tabId, frameStack, action, state)},
+  "CLEAR_CACHES" : { perform: (tabId, frameStack, action, state) =>                    clearCaches(tabId, frameStack, action, state)},
+  "DYNAMIC_VAR" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
+    dynamicVar(tabId, frameStack, action, state, subroutine, other.derivedVariables, other.dynamicVars)},
+  "INPUT" : { perform: (tabId, frameStack, action, state) =>                           changeInput(tabId, frameStack, action, state)},
+  "DIALOG" : { perform: (tabId, frameStack, action, state) =>                          setDialogs(tabId, frameStack, action, state)},
+  "MOUSEDOWN" : { perform: (tabId, frameStack, action, state) =>                       click(tabId, frameStack, action, state)},
+  "DOUBLECLICK" : { perform: (tabId, frameStack, action, state) =>                     doubleClick(tabId, frameStack, action, state)},
+  "FOCUS" : { perform: (tabId, frameStack, action, state) =>                           focus(tabId, frameStack, action, state)},
+  "BLUR" : { perform: (tabId, frameStack, action, state) =>                            blur(tabId, frameStack, action, state)},
+  "PAUSE" : { perform: (tabId, frameStack, action, state) =>                           pauseTime(tabId, frameStack, action, state)},
+  "SUBMIT" : { perform: (tabId, frameStack, action, state) =>                          submit(tabId, frameStack, action, state)},
+  "EXECUTE_SCRIPT" : { perform: (tabId, frameStack, action, state) =>                  executeCustomScript(tabId, frameStack, action, state)},
+  "SCROLL_WINDOW" : { perform: (tabId, frameStack, action, state) =>                   scrollWindow(tabId, frameStack, action, state)},
+  "SCROLL_ELEMENT" : { perform: (tabId, frameStack, action, state) =>                  scrollElement(tabId, frameStack, action, state)},
+  "SCROLL_WINDOW_ELEMENT" : { perform: (tabId, frameStack, action, state) =>           scrollWindowtoEl(tabId, frameStack, action, state)},
+  "EL_PRESENT_ASSERT" : { perform: (tabId, frameStack, action, state) =>               elementIsPresent(tabId, frameStack, action, state)},
+  "EL_NOT_PRESENT_ASSERT" : { perform: (tabId, frameStack, action, state) =>           elementIsNotPresent(tabId, frameStack, action, state)},
+  "EL_VISIBLE_ASSERT" : { perform: (tabId, frameStack, action, state) =>               elementIsVisible(tabId, frameStack, action, state)},
+  "EL_NOT_VISIBLE_ASSERT" : { perform: (tabId, frameStack, action, state) =>           elementIsNotVisible(tabId, frameStack, action, state)},
+  "TEXT_ASSERT" : { perform: (tabId, frameStack, action, state) =>                     textAssert(tabId, frameStack, action, state)},
+  "TEXT_REGEX_ASSERT" : { perform: (tabId, frameStack, action, state) =>               textRegexAssert(tabId, frameStack, action, state)},
+  "VALUE_ASSERT" : { perform: (tabId, frameStack, action, state) =>                    valueAssert(tabId, frameStack, action, state)},
+  "STYLE_ASSERT" : { perform: (tabId, frameStack, action, state) =>                    styleAssert(tabId, frameStack, action, state)},
+  "SCREENSHOT" : { perform: (tabId, frameStack, action, state) =>                      screenshot(tabId, frameStack, action, state)},
+  "REQUEST" : { perform: (tabId, frameStack, action, state) =>                         request(tabId, frameStack, action, state)},
+  "ENTER_FRAME" : { perform: (tabId, frameStack, action, state) =>                     enterFrame(tabId, frameStack, action, state)},
+  "EXIT_FRAME" : { perform: (tabId, frameStack, action, state) =>                      exitFrame(tabId, frameStack, action, state)},
+  "EVAL" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
+    evalAmbiguous(tabId, frameStack, action, state, subroutine, other.derivedVariables, other.dynamicVars)},
+  "CSV_INSERT" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
+    insertCsvRow(tabId, frameStack, action, state, subroutine, other.derivedVariables, other.dataVars)},
 };
 
 /*
   Helper methods:
 */
 
-var executeScript = (code, tabId) => new Promise((resolve, reject) => {
-  chrome.tabs.executeScript(tabId, {code}, (result, error) => {
+var executeScript = (code, tabId, frameStack, state) => new Promise((resolve, reject) => {
+  const frameId = frameStack.length > 0 ? frameStack[frameStack.length - 1] : 0
+  chrome.tabs.executeScript(tabId, { code, frameId }, (result, error) => {
     if (typeof result === "undefined") return resolve({success: false});
     else if (error) return reject(error);
     else return resolve(...result);
   });
 });
 
-var waitOnExecuteScriptSuccess = (tabId, action, state, execute) => new Promise((resolve, reject) => {
+var waitOnExecuteScriptSuccess = (tabId, frameStack, action, state, execute) => new Promise((resolve, reject) => {
 
   var timeout = action.timeout || state.userSettings.globalTimeout;
   var attempts = parseInt(timeout / POLLING_INTERVAL);
   var currentAttempt = 0;
 
   function _execute() {
-    execute(tabId, action, state).then((result) => {
+    execute(tabId, frameStack, action, state).then((result) => {
       if (result && result.success) resolve(result);
       else if (currentAttempt < attempts) {
         currentAttempt++;
-        setTimeout(() => _execute(tabId, action, state), POLLING_INTERVAL)
+        setTimeout(() => _execute(tabId, frameStack, action, state), POLLING_INTERVAL)
       } else {
         resolve(result);
       }
@@ -82,10 +85,10 @@ var callExecuteFunction = (name, params) => {
   return `if (typeof window.${name} !== "undefined") window.${name}(${params})`;
 }
 
-var checkForElement = (tabId, action, state) => executeScript(callExecuteFunction("checkElement", JSON.stringify(action)), tabId);
-var checkForElementVisible = (tabId, action, state) => executeScript(callExecuteFunction("checkElementVisible", JSON.stringify(action)), tabId);
+var checkForElement = (tabId, frameStack, action, state) => executeScript(callExecuteFunction("checkElement", JSON.stringify(action)), tabId, frameStack, state, state.frameStack);
+var checkForElementVisible = (tabId, frameStack, action, state) => executeScript(callExecuteFunction("checkElementVisible", JSON.stringify(action)), tabId, frameStack, state);
 
-var waitForElementPresent = (tabId, action, state) => new Promise((resolve, reject) => {
+var waitForElementPresent = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
 
   var timeout = action.timeout || state.userSettings.globalTimeout;
   var attempts = parseInt(timeout / POLLING_INTERVAL);
@@ -93,7 +96,7 @@ var waitForElementPresent = (tabId, action, state) => new Promise((resolve, reje
 
   function _checkElementPresent() {
 
-    checkForElement(tabId, action, state).then((element) => {
+    checkForElement(tabId, frameStack, action, state).then((element) => {
       if (element && element.success) resolve(true);
       else if (currentAttempt < attempts) {
         currentAttempt++;
@@ -111,7 +114,7 @@ var waitForElementPresent = (tabId, action, state) => new Promise((resolve, reje
 
 });
 
-var waitForElementNotPresent = (tabId, action, state) => new Promise((resolve, reject) => {
+var waitForElementNotPresent = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
 
   var timeout = action.timeout || state.userSettings.globalTimeout;
   var attempts = parseInt(timeout / POLLING_INTERVAL);
@@ -119,7 +122,7 @@ var waitForElementNotPresent = (tabId, action, state) => new Promise((resolve, r
 
   function _checkElementNotPresent() {
 
-    checkForElement(tabId, action, state).then((result) => {
+    checkForElement(tabId, frameStack, action, state).then((result) => {
 
       if (!result || !result.success) {
         resolve(true);
@@ -140,7 +143,7 @@ var waitForElementNotPresent = (tabId, action, state) => new Promise((resolve, r
 
 });
 
-var waitForElementVisible = (tabId, action, state) => new Promise((resolve, reject) => {
+var waitForElementVisible = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
 
   var timeout = action.timeout || state.userSettings.globalTimeout;
   var attempts = parseInt(timeout / POLLING_INTERVAL);
@@ -148,7 +151,7 @@ var waitForElementVisible = (tabId, action, state) => new Promise((resolve, reje
 
   function _checkElementVisible() {
 
-    checkForElementVisible(tabId, action, state).then((element) => {
+    checkForElementVisible(tabId, frameStack, action, state).then((element) => {
       if (element && element.success) resolve(true);
       else if (currentAttempt < attempts) {
         currentAttempt++;
@@ -166,7 +169,7 @@ var waitForElementVisible = (tabId, action, state) => new Promise((resolve, reje
 
 });
 
-var waitForElementNotVisible = (tabId, action, state) => new Promise((resolve, reject) => {
+var waitForElementNotVisible = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
 
   var timeout = action.timeout || state.userSettings.globalTimeout;
   var attempts = parseInt(timeout / POLLING_INTERVAL);
@@ -174,7 +177,7 @@ var waitForElementNotVisible = (tabId, action, state) => new Promise((resolve, r
 
   function _checkElementNotVisible() {
 
-    checkForElementVisible(tabId, action, state).then((result) => {
+    checkForElementVisible(tabId, frameStack, action, state).then((result) => {
       if (result && !result.success) {
         resolve(true);
       } else if  (currentAttempt < attempts) {
@@ -233,7 +236,35 @@ var elementNotFoundMessage = (action) => `Couldn't find element '${action.select
   Actions:
 */
 
-var pageLoad = (tabId, action, state) => new Promise((resolve, reject) => {
+var enterFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
+  var timeout = action.timeout || state.userSettings.globalTimeout;
+  var attempts = parseInt(timeout / POLLING_INTERVAL);
+  var currentAttempt = 0;
+
+  function _getFrameIdBySrc() {
+    chrome.webNavigation.getAllFrames({tabId}, (frames) => {
+      const frame = frames.find((frame) => frame.url === action.value)
+      if (frame && frame.frameId) {
+        frameStack.push(frame.frameId)
+        resolve({success: true});
+      } else if (currentAttempt < attempts) {
+        currentAttempt++;
+        setTimeout(() => _getFrameIdBySrc(), POLLING_INTERVAL)
+      } else {
+        resolve({ success: false, error: `No iframe found with a src of '${action.value}'`});
+      }
+    });
+  }
+
+  _getFrameIdBySrc();
+})
+
+var exitFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
+  frameStack.pop()
+  resolve({success: true});
+})
+
+var pageLoad = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
 
   var loaded = false;
 
@@ -268,21 +299,21 @@ var pageLoad = (tabId, action, state) => new Promise((resolve, reject) => {
   });
 })
 
-var pathAssert = (tabId, action, state) =>
-  waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) => executeScript(callExecuteFunction("pathAssert", JSON.stringify(action)), tabId))
+var pathAssert = (tabId, frameStack, action, state) =>
+  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => executeScript(callExecuteFunction("pathAssert", JSON.stringify(action)), tabId, frameStack, state))
     .then((result) => {
       if (!result || !result.success) return { success: false, error: `Expected path to be "${action.value}" but was "${result.value}"` };
       else return { success: true };
     });
 
-var elementIsPresent = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action)} : { success : true });
+var elementIsPresent = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action)} : { success : true });
 
-var elementIsNotPresent = (tabId, action, state) =>
-  waitForElementNotPresent(tabId, action, state).then((result) => !result ? { success: false, error: "Element was found." } : { success: true });
+var elementIsNotPresent = (tabId, frameStack, action, state) =>
+  waitForElementNotPresent(tabId, frameStack, action, state).then((result) => !result ? { success: false, error: "Element was found." } : { success: true });
 
-var elementIsVisible = (tabId, action, state) =>
-  waitForElementVisible(tabId, action, state)
+var elementIsVisible = (tabId, frameStack, action, state) =>
+  waitForElementVisible(tabId, frameStack, action, state)
     .then((result) => {
 
       if (!result) return {
@@ -293,8 +324,8 @@ var elementIsVisible = (tabId, action, state) =>
 
     });
 
-var elementIsNotVisible = (tabId, action, state) =>
-  waitForElementNotVisible(tabId, action, state)
+var elementIsNotVisible = (tabId, frameStack, action, state) =>
+  waitForElementNotVisible(tabId, frameStack, action, state)
     .then((result) => {
 
       if (!result) return {
@@ -305,102 +336,102 @@ var elementIsNotVisible = (tabId, action, state) =>
 
     });
 
-var back = (tabId, action, state) => executeScript(`window.triggerBack(${JSON.stringify(action)})`, tabId).then(() => ({ success: true }));
+var back = (tabId, frameStack, action, state) => executeScript(`window.triggerBack(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true }));
 
-var forward = (tabId, action, state) => executeScript(`window.triggerForward(${JSON.stringify(action)})`, tabId).then(() => ({ success: true }));
+var forward = (tabId, frameStack, action, state) => executeScript(`window.triggerForward(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true }));
 
-var refresh = (tabId, action, state) => executeScript(`window.triggerRefresh(${JSON.stringify(action)})`, tabId).then(() => ({ success: true }));
+var refresh = (tabId, frameStack, action, state) => executeScript(`window.triggerRefresh(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true }));
 
-var clearCookies = (tabId, action, state) => clearCookiesByUrl(action.value);
+var clearCookies = (tabId, frameStack, action, state) => clearCookiesByUrl(action.value);
 
-var clearCaches = (tabId, action, state) =>
+var clearCaches = (tabId, frameStack, action, state) =>
   clearCookiesByUrl(action.cookieDomain)
-    .then(() => executeScript(`window.clearCaches(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+    .then(() => executeScript(`window.clearCaches(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var dynamicVar = (tabId, action, state, subroutine, derivedVariables, dynamicVars) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.getInnerHtml(${JSON.stringify(action)})`, tabId)
+var dynamicVar = (tabId, frameStack, action, state, subroutine, derivedVariables, dynamicVars) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.getInnerHtml(${JSON.stringify(action)})`, tabId, frameStack, state)
       .then((result) => {
         dynamicVars[action.value] = result.value;
         return {success: true}
       }));
 
-var click = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerClick(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var click = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerClick(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var doubleClick = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerDoubleClick(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var doubleClick = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerDoubleClick(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var focus = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerFocus(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var focus = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerFocus(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var blur = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerBlur(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var blur = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerBlur(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var changeInput = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerChangeInput(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var changeInput = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerChangeInput(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var setDialogs = (tabId, action, state) =>
-  waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) =>  executeScript(`window.setDialogs(${JSON.stringify(action)})`, tabId))
+var setDialogs = (tabId, frameStack, action, state) =>
+  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>  executeScript(`window.setDialogs(${JSON.stringify(action)})`, tabId, frameStack, state))
     .then(() => ({ success: true }));
 
-var pauseTime = (tabId, action, state) => new Promise((resolve, reject) => setTimeout(() => resolve({success: true}), action.value));
+var pauseTime = (tabId, frameStack, action, state) => new Promise((resolve, reject) => setTimeout(() => resolve({success: true}), action.value));
 
-var submit = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerSubmit(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var submit = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerSubmit(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var executeCustomScript = (tabId, action, state) =>
-  waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) => executeScript(`window.executeScript(${JSON.stringify(action)})`, tabId))
+var executeCustomScript = (tabId, frameStack, action, state) =>
+  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => executeScript(`window.executeScript(${JSON.stringify(action)})`, tabId, frameStack, state))
     .then((result) => {
       if (!result || !result.success) return { success: false, error: result.message };
       else return { success: true };
     });
 
-var scrollWindow = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerScrollWindow(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var scrollWindow = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerScrollWindow(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var scrollElement = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerScrollElement(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var scrollElement = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerScrollElement(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var scrollWindowtoEl = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript(`window.triggerWindowToElement(${JSON.stringify(action)})`, tabId).then(() => ({ success: true })));
+var scrollWindowtoEl = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    executeScript(`window.triggerWindowToElement(${JSON.stringify(action)})`, tabId, frameStack, state).then(() => ({ success: true })));
 
-var textAssert = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) => executeScript(`window.assertText(${JSON.stringify(action)})`, tabId))
+var textAssert = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => executeScript(`window.assertText(${JSON.stringify(action)})`, tabId, frameStack, state))
       .then((result) => {
         if (!result || !result.success) return { success: false, error: `Expected text to be "${action.value}" but was "${result.value}"` };
         else return { success: true };
       }));
 
-var textRegexAssert = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) => executeScript(`window.assertTextRegex(${JSON.stringify(action)})`, tabId))
+var textRegexAssert = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => executeScript(`window.assertTextRegex(${JSON.stringify(action)})`, tabId, frameStack, state))
       .then((result) => {
         if (!result || !result.success) return { success: false, error: `Expected text to match regex "${action.value}" but was "${result.value}"` };
         else return { success: true };
       }));
 
-var valueAssert = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) => executeScript(`window.assertValue(${JSON.stringify(action)})`, tabId))
+var valueAssert = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => executeScript(`window.assertValue(${JSON.stringify(action)})`, tabId, frameStack, state))
       .then((result) => {
         if (!result || !result.success) return { success: false, error: `Expected value to be "${action.value}" but was "${result.value}"` };
         else return { success: true };
       }));
 
-var styleAssert = (tabId, action, state) =>
-  waitForElementPresent(tabId, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) => executeScript(`window.assertStyle(${JSON.stringify(action)})`, tabId))
+var styleAssert = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
+    waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => executeScript(`window.assertStyle(${JSON.stringify(action)})`, tabId, frameStack, state))
       .then((result) => {
         if (!result || !result.success) return { success: false, error: `Expected "${action.style}" style to be "${action.value}" but was "${result.value}"` };
         else return { success: true };
@@ -444,9 +475,9 @@ var evalInIframe = (value, derivedVariables, dynamicVars) => {
 };
 
 
-var evalAmbiguous = (tabId, action, state, subroutine, derivedVariables, dynamicVars) =>
-  waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) =>
-    executeScript(`window.evalValue(${JSON.stringify(action.value)}, ${JSON.stringify(derivedVariables)}, ${JSON.stringify(dynamicVars)})`, tabId))
+var evalAmbiguous = (tabId, frameStack, action, state, subroutine, derivedVariables, dynamicVars) =>
+  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
+    executeScript(`window.evalValue(${JSON.stringify(action.value)}, ${JSON.stringify(derivedVariables)}, ${JSON.stringify(dynamicVars)})`, tabId, frameStack, state))
     .then((result) => {
 
       // Eval succeeded in the target window.
@@ -490,10 +521,10 @@ var evalAmbiguous = (tabId, action, state, subroutine, derivedVariables, dynamic
 
     });
 
-var insertCsvRow = (tabId, action, state, subroutine, derivedVariables, dataVars) => new Promise((resolve, reject) => {
+var insertCsvRow = (tabId, frameStack, action, state, subroutine, derivedVariables, dataVars) => new Promise((resolve, reject) => {
 
-  waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) =>
-    executeScript(`window.getCsvValues(${JSON.stringify(action)})`, tabId))
+  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
+    executeScript(`window.getCsvValues(${JSON.stringify(action)})`, tabId, frameStack, state))
     .then((result) => {
 
       var csvName = action.csvName;
@@ -512,8 +543,8 @@ var insertCsvRow = (tabId, action, state, subroutine, derivedVariables, dataVars
   return resolve({ success: true});
 });
 
-var screenshot = (tabId, action, state) =>
-  waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) => executeScript(callExecuteFunction("hideSnapUI", JSON.stringify(action)), tabId))
+var screenshot = (tabId, frameStack, action, state) =>
+  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => executeScript(callExecuteFunction("hideSnapUI", JSON.stringify(action)), tabId, frameStack, state))
     .then(() => new Promise((resolve, reject) => {
 
       chrome.tabs.captureVisibleTab(state.currentWindowId, { format: 'jpeg', quality: 70 }, (dataURI, error) => {
@@ -526,9 +557,9 @@ var screenshot = (tabId, action, state) =>
         });
       })
 
-  })).then(() => executeScript("window.showSnapUI()", tabId));
+  })).then(() => executeScript("window.showSnapUI()", tabId, frameStack, state));
 
-var request = (tabId, action, state) => new Promise((resolve, reject) => {
+var request = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
 
   // at this point, we can call the request from the background page, or attempt to call it from the context script.
   // let's try both!!!
@@ -564,8 +595,8 @@ var request = (tabId, action, state) => new Promise((resolve, reject) => {
     return resolve({success: true})
   });
 
-  // waitOnExecuteScriptSuccess(tabId, action, state, (tabId, action, state) =>
-  //   executeScript(`window.sendRequest(${JSON.stringify(action)})`, tabId))
+  // waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
+  //   executeScript(`window.sendRequest(${JSON.stringify(action)})`, tabId, frameStack, state))
   //   .then((result) => {
   //     return resolve({success: true})
   //     // return {success: true};
