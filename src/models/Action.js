@@ -314,15 +314,10 @@ export class AutoChangeWindowAction extends Action {
 }
 
 export class EnterFrameAction extends Action {
-
-  value = 'https://www.iframe.url/';
-
-  constructor(value = 'https://www.iframe.url/') {
-    super();
-    this.value = value;
+  constructor(selector) {
+    super(selector);
     this.type = ENTER_FRAME;
   }
-
 }
 
 export class ExitFrameAction extends Action {

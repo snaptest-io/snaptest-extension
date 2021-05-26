@@ -88,6 +88,8 @@ var callExecuteFunction = (name, params) => {
 var checkForElement = (tabId, frameStack, action, state) => executeScript(callExecuteFunction("checkElement", JSON.stringify(action)), tabId, frameStack, state, state.frameStack);
 var checkForElementVisible = (tabId, frameStack, action, state) => executeScript(callExecuteFunction("checkElementVisible", JSON.stringify(action)), tabId, frameStack, state);
 
+var checkForIframe = (tabId, frameStack, action, state) => executeScript(callExecuteFunction("checkIframe", JSON.stringify(action)), tabId, frameStack, state);
+
 var waitForElementPresent = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
 
   var timeout = action.timeout || state.userSettings.globalTimeout;
@@ -242,17 +244,29 @@ var enterFrame = (tabId, frameStack, action, state) => new Promise((resolve, rej
   var currentAttempt = 0;
 
   function _getFrameIdBySrc() {
-    chrome.webNavigation.getAllFrames({tabId}, (frames) => {
-      const frame = frames.find((frame) => frame.url === action.value)
-      if (frame && frame.frameId) {
-        frameStack.push(frame.frameId)
-        resolve({success: true});
-      } else if (currentAttempt < attempts) {
+
+    // use selectors to grab the url from the page, then grab that url from the frames list.
+    checkForIframe(tabId, frameStack, action, state).then((element) => {
+      if (element && element.success && element.src) {
+        chrome.webNavigation.getAllFrames({tabId}, (frames) => {
+          const frame = frames.find((frame) => frame.url === element.src)
+          if (!frame) {
+            currentAttempt++;
+            setTimeout(() => _getFrameIdBySrc(), POLLING_INTERVAL)
+          } else {
+            frameStack.push(frame.frameId)
+            resolve({success: true});
+          }
+        })
+      }
+      else if (currentAttempt < attempts) {
         currentAttempt++;
         setTimeout(() => _getFrameIdBySrc(), POLLING_INTERVAL)
       } else {
-        resolve({ success: false, error: `No iframe found with a src of '${action.value}'`});
+        resolve({ success: false, error: `Couldn't find iframe at '${action.selector}' using method '${action.selectorType}'.`});
       }
+    }).catch((e) => {
+      reject(e)
     });
   }
 

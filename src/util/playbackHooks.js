@@ -8,6 +8,12 @@ window.checkElement = function(action) {
   else return {success: false};
 };
 
+window.checkIframe = function(action) {
+  var element = getElement(action);
+  if (element) return {success: true, src: element.src};
+  else return {success: false};
+}
+
 window.checkElementVisible = function(action) {
 
   var elem = getElement(action);
