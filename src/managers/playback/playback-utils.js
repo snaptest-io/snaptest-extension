@@ -81,7 +81,7 @@ export const fullScreenshot = (windowId, tabId) => {
         
         var promises = scrollOffsets.map((offset) => () => {
           return executeScript(`window.triggerScrollWindow({x: ${offset.x}, y: ${offset.y}})`, tabId)
-            .then(() => pauseTime(50))
+            .then(() => pauseTime(575)) // Can't be lower than 500 due to MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND
             .then(() =>  executeScript("window.getOffsets()", tabId))
             .then((realOffsets) => {
 
