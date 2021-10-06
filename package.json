@@ -61,7 +61,7 @@
     "react-sortable-hoc": "^0.8.3",
     "react-ui-tree": "^2.6.0",
     "simple-react-tooltip": "^3.2.3",
-    "url-parse": "^1.1.8",
+    "url-parse": "^1.5.2",
     "uuid": "^3.3.2"
   },
   "dependencies": {
