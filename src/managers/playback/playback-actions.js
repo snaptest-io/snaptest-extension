@@ -285,9 +285,13 @@ var mostRecentTab = (tabId, frameStack, action, state) => new Promise((resolve, 
 })
 
 var closeTab = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-  state.activeTabs.pop();
-  chrome.tabs.remove(tabId);
-  resolve({success: true});
+  // Only close if there are 2 tabs open, to prevent closing the last tab.
+  if (state.activeTabs.length - 1 > 0) {
+    state.activeTabs.pop();
+    state.currentTabId = state.activeTabs[state.activeTabs.length - 1]
+    chrome.tabs.remove(tabId);
+  }
+  setTimeout(resolve({success: true}), 50) // Give time for Chrome to call chrome.tabs.onActivated
 })
 
 var pageLoad = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {

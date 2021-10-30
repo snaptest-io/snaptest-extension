@@ -1394,13 +1394,25 @@ Message.onMessageFor(Message.SESSION, function(message, sender, sendResponse) {
 // on new tab opened
 chrome.tabs.onActivated.addListener((data) => {
   if ((state.isPlayingBack || state.isRecording) && data.windowId !== state.appWindowId) {
-    state.activeTabs.push(data.tabId);
+    // Only entered when there are multiple tabs in play, and recording or playing back.
+    if (state.activeTabs.length === 0) {
+      state.activeTabs = [state.currentTabId]
+    }
+    if (state.activeTabs[state.activeTabs.length - 1] !== data.tabId) {
+      state.activeTabs.push(data.tabId);
+    }
     state.currentTabId = data.tabId;
     state.currentWindowId = data.windowId;
     if (state.isRecording) addAction(state, state.activeTest, new Actions.MostRecentTabAction());
     Message.toAll("stateChange", state);
   }
 });
+
+// chrome.tabs.onRemoved.addListener((data) => {
+//   if (state.isPlayingBack && data.windowId !== state.appWindowId) {
+//
+//   }
+// })
 
 // on tab url...
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
