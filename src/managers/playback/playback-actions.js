@@ -40,6 +40,8 @@ export const playbackActions = {
   "REQUEST" : { perform: (tabId, frameStack, action, state) =>                         request(tabId, frameStack, action, state)},
   "ENTER_FRAME" : { perform: (tabId, frameStack, action, state) =>                     enterFrame(tabId, frameStack, action, state)},
   "EXIT_FRAME" : { perform: (tabId, frameStack, action, state) =>                      exitFrame(tabId, frameStack, action, state)},
+  "MOST_RECENT_TAB" : { perform: (tabId, frameStack, action, state) =>                 mostRecentTab(tabId, frameStack, action, state)},
+  "CLOSE_TAB" : { perform: (tabId, frameStack, action, state) =>                       closeTab(tabId, frameStack, action, state)},
   "EVAL" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
     evalAmbiguous(tabId, frameStack, action, state, subroutine, other.derivedVariables, other.dynamicVars)},
   "CSV_INSERT" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
@@ -276,6 +278,20 @@ var enterFrame = (tabId, frameStack, action, state) => new Promise((resolve, rej
 var exitFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
   frameStack.pop()
   resolve({success: true});
+})
+
+var mostRecentTab = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
+  resolve({success: true});
+})
+
+var closeTab = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
+  // Only close if there are 2 tabs open, to prevent closing the last tab.
+  if (state.activeTabs.length - 1 > 0) {
+    state.activeTabs.pop();
+    state.currentTabId = state.activeTabs[state.activeTabs.length - 1]
+    chrome.tabs.remove(tabId);
+  }
+  setTimeout(resolve({success: true}), 50) // Give time for Chrome to call chrome.tabs.onActivated
 })
 
 var pageLoad = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
