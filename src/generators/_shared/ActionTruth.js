@@ -160,6 +160,34 @@ const Actions = [
     "reportResult": true
   },
   {
+    "name" : "Switch to most recent tab",
+    "constant" : "MOST_RECENT_TAB",
+    "category" : CATEGORIES.WINDOW,
+    "description" :null,
+    "supportedBy" :[
+      "snaptest",
+      "nightwatch"
+    ],
+    "tags": ["switch", "change", "tab"],
+    "params" :[],
+    "autodescribe" : "Switches to the most recent tab opened.",
+    "reportResult": true
+  },
+  {
+    "name" : "Close tab",
+    "constant" : "CLOSE_TAB",
+    "category" : CATEGORIES.WINDOW,
+    "description" :null,
+    "supportedBy" :[
+      "snaptest",
+      "nightwatch"
+    ],
+    "tags": ["close", "tab", "exit", "pop", "back"],
+    "params" :[],
+    "autodescribe" : "Close the current tab and return to the previous active tab.",
+    "reportResult": true
+  },
+  {
     "name" : "Click element",
     "constant" : "MOUSEDOWN",
     "category" : CATEGORIES.MOUSE_KEYBOARD,

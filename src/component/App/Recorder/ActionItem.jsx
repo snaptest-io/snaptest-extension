@@ -70,6 +70,8 @@ class ActionItem extends React.Component {
         action.type === Actions.FORWARD ||
         action.type === Actions.SCREENSHOT ||
         action.type === Actions.EXIT_FRAME ||
+        action.type === Actions.MOST_RECENT_TAB ||
+        action.type === Actions.CLOSE_TAB ||
         action.type === Actions.REFRESH ) ? (<BackActionItem {...this.props} />)
       : ( action.type === Actions.CHANGE_WINDOW) ? (<ActionWithNumberValue {...this.props} />)
       : ( action.type === Actions.INPUT  ) ? (<InputChangeActionItem {...this.props} />)
