@@ -1391,11 +1391,13 @@ Message.onMessageFor(Message.SESSION, function(message, sender, sendResponse) {
 
 });
 
+// on new tab opened
 chrome.tabs.onActivated.addListener((data) => {
   if ((state.isPlayingBack || state.isRecording) && data.windowId !== state.appWindowId) {
-    if (state.activeTabs.indexOf(data.tabId) !== -1) state.activeTabs.push(data.tabId);
+    state.activeTabs.push(data.tabId);
     state.currentTabId = data.tabId;
     state.currentWindowId = data.windowId;
+    if (state.isRecording) addAction(state, state.activeTest, new Actions.MostRecentTabAction());
     Message.toAll("stateChange", state);
   }
 });

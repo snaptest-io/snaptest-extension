@@ -26,7 +26,6 @@ export function playbackEngine(state, events, options) {
   var forceOneToPlay;
   var stackErrorSnapshot;
   var initialTabId;
-  var tabIdx = 0;
   var frameStack = [];
 
   events = _.extend({
@@ -456,7 +455,6 @@ export function playbackEngine(state, events, options) {
     globalVariables = _generateGlobalVars();
     dynamicVars = {};
     dataVars = {};
-    tabIdx = 0;
     initialTabId = state.currentTabId;
   }
 
@@ -553,10 +551,10 @@ export function playbackEngine(state, events, options) {
   }
 
   function _getCurrentTabId() {
-    if (tabIdx === 0) {
+    if (state.activeTabs.length > 0) {
+      return state.activeTabs[state.activeTabs.length - 1]
+    } else {
       return initialTabId;
-    } else if (state.activeTabs[tabIdx]) {
-      return state.activeTabs[tabIdx];
     }
   }
 

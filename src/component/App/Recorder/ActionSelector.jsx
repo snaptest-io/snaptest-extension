@@ -230,6 +230,12 @@ class ActionSelector extends React.PureComponent {
       case Actions.EXIT_FRAME:
         newAction = new Actions.ExitFrameAction();
         break;
+      case Actions.MOST_RECENT_TAB:
+        newAction = new Actions.MostRecentTabAction();
+        break;
+      case Actions.CLOSE_TAB:
+        newAction = new Actions.CloseTabAction();
+        break;
     }
 
     newAction.id = action.id;

@@ -15,6 +15,8 @@ export const CHANGE_WINDOW = "CHANGE_WINDOW";
 export const CHANGE_WINDOW_AUTO = "CHANGE_WINDOW_AUTO";
 export const ENTER_FRAME = "ENTER_FRAME";
 export const EXIT_FRAME = "EXIT_FRAME";
+export const MOST_RECENT_TAB = "MOST_RECENT_TAB";
+export const CLOSE_TAB = "CLOSE_TAB";
 export const PAGELOAD = "PAGELOAD";
 export const TEXT_ASSERT = "TEXT_ASSERT";
 export const PATH_ASSERT = "PATH_ASSERT";
@@ -324,6 +326,20 @@ export class ExitFrameAction extends Action {
   constructor() {
     super();
     this.type = EXIT_FRAME;
+  }
+}
+
+export class MostRecentTabAction extends Action {
+  constructor() {
+    super();
+    this.type = MOST_RECENT_TAB;
+  }
+}
+
+export class CloseTabAction extends Action {
+  constructor() {
+    super();
+    this.type = CLOSE_TAB;
   }
 }
 
