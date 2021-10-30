@@ -1408,12 +1408,6 @@ chrome.tabs.onActivated.addListener((data) => {
   }
 });
 
-// chrome.tabs.onRemoved.addListener((data) => {
-//   if (state.isPlayingBack && data.windowId !== state.appWindowId) {
-//
-//   }
-// })
-
 // on tab url...
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (tabId === state.currentTabId && state.isRecording && changeInfo.status === "loading") {
