@@ -51,7 +51,7 @@
     "chart.js": "^2.7.2",
     "csvjson": "^5.0.0",
     "json-format": "^1.0.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "promise.series": "^0.2.0",
     "query-string": "^6.1.0",
     "react-dates": "^19.0.3",
