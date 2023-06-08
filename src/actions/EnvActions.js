@@ -12,6 +12,7 @@ export const copyEnvToAccount = (params, state) => {
   var newId = copiedEnv.profileId = generateId();
   copiedEnv.id = newId;
   copiedEnv.profileId = newId;
+  copiedEnv.name = 'Copy of ' + copiedEnv.name;
 
   return saveInBatches(state.user.apikey, contextType, contextId, [{...copiedEnv, type: "dataProfile"}]);
 
