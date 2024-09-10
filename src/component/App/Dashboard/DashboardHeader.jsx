@@ -112,7 +112,7 @@ class DashboardHeader extends React.Component {
               <div className="workspace-button">
                 <div className="workspace-label">
                   <div className={"env" + (!environment ? " default-env" : "")}>{environment ? environment.name : 'No Environment'}</div>
-                  <img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick.png")} />
+                  <img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick.png")} />
                 </div>
               </div>
               }>

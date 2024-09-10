@@ -22,12 +22,12 @@ class SelectorSelector extends React.Component {
             {selectingForActionId === action.id ? (
               <div className="quick-button" onClick={() => Message.to(Message.SESSION, "cancelSelection") }>
                 <img className="selection-icon"
-                     src={chrome.extension.getURL("assets/target.png")}/>
+                     src={chrome.runtime.getURL("assets/target.png")}/>
               </div>
             ) : (
               <div className="quick-button" onClick={() => Message.to(Message.SESSION, "startSelection", { action, parentAction }) }>
                 <img className="selection-icon"
-                     src={chrome.extension.getURL("assets/target.png")}/>
+                     src={chrome.runtime.getURL("assets/target.png")}/>
               </div>
             )}
           </div>
@@ -35,7 +35,7 @@ class SelectorSelector extends React.Component {
           <div className="action-quick-buttons">
             <div className="quick-button">
               <img className="selection-icon disabled"
-                   src={chrome.extension.getURL("assets/target.png")}/>
+                   src={chrome.runtime.getURL("assets/target.png")}/>
             </div>
           </div>
         )}

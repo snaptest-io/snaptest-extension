@@ -26,12 +26,15 @@ import {autoSave, removeItemFromDB, repairDirectory} from './util/statePersistan
 import {findNode, findNodeById, getParent, removeNodeFromTree, walkThroughTreeNodes} from './util/treeUtils';
 import deepClone from 'deep-clone'
 import * as Tut from './models/tutconsts';
+
 import * as LocalActions from './actions/LocalActions';
 import * as TestActions from './actions/TestActions';
 import * as UserActions from './actions/UserActions';
+
 import {processAction} from './actions';
 import {setUserSetting} from './actions/SettingsActions'
 import {buildTagMap} from './actions/TagActions'
+
 import {onPageChange} from './util/ModeManager'
 import {getDefaultTree, getInitialMultiplaybackResults, getInitialState} from "./initialState";
 import {switchDraftContexts} from "./managers/DraftManager";

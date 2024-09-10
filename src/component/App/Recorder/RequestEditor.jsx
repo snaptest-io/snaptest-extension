@@ -105,7 +105,7 @@ class RequestEditor extends React.Component {
               <Dropdown classNames=""
                         onClick={(e) => e.stopPropagation()}
                         button={
-                          <img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick-white.png")} />
+                          <img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick-white.png")} />
                         }>
                 <div>
                   <div className="dd-item grid-row" onClick={() => Message.to(Message.SESSION, "setPlaybackInterval", null)}>

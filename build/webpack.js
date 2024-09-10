@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 
 module.exports = {
+  target: 'web',
   watch: process.env.WEBPACK_WATCH === "True",
   mode:  process.env.WEBPACK_MODE || "development",
   optimization: {
@@ -14,7 +15,7 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: {
     tab: paths.srcPath + '/tab.jsx',
-    background: paths.srcPath + '/session.jsx',
+    background: paths.srcPath + '/background.js',
     popup: paths.srcPath + '/popup.jsx',
     window: paths.srcPath + '/window.jsx',
     devtool: paths.srcPath + '/devtool.jsx',

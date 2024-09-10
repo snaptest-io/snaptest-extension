@@ -34,7 +34,7 @@ class ComponentActionItem extends React.PureComponent {
             </div>
           ) : component ? (
             <div className="quick-button component-edit" onClick={() => this.onEditComponentClick(component) }>
-              <img src={chrome.extension.getURL("assets/edit_2.png")} />
+              <img src={chrome.runtime.getURL("assets/edit_2.png")} />
             </div>
           ) : null}
           {(component && component.variables.length > 0) ? (

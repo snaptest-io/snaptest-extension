@@ -23,7 +23,7 @@ class MoveEnvDropdown extends React.Component {
         <button className="quick-button"
                 title="Copy/move test to..."
                 data-tip="Move/copy test to...">
-          <img src={chrome.extension.getURL("assets/move.png")} />
+          <img src={chrome.runtime.getURL("assets/move.png")} />
         </button>
       }>
         <div>

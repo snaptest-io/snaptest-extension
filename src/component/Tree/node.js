@@ -1,5 +1,3 @@
-'use strict';
-
 var cx = require('classnames');
 var React = require('react');
 var ReactDOM = require('react-dom');

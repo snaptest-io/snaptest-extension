@@ -468,38 +468,40 @@ var styleAssert = (tabId, frameStack, action, state) =>
       }));
 
 // Iframe for safe evalling.
-var evalIframe = document.createElement('iframe');
-evalIframe.style.display = "none";
-evalIframe.src = "eval.html";
-document.body.appendChild(evalIframe);
+// var evalIframe = document.createElement('iframe');
+// evalIframe.style.display = "none";
+// evalIframe.src = "eval.html";
+// document.body.appendChild(evalIframe);
 
 var evalInIframe = (value, derivedVariables, dynamicVars) => {
   return new Promise((resolve, reject) => {
 
-    var result;
-    var currentPoll = 0;
+    return value;
 
-    var response = (e) => {
-      result = e.data;
-    };
-
-    window.addEventListener('message', response);
-
-    evalIframe.contentWindow.postMessage({value, variables: derivedVariables, dynamicVars}, '*');
-
-    function pollForResponse() {
-      if (!result && currentPoll < 5) {
-        setTimeout(pollForResponse, 1000)
-      } else if (result) {
-        window.removeEventListener('message', response);
-        resolve(result);
-      } else {
-        window.removeEventListener('message', response);
-        resolve({success: false})
-      }
-    }
-
-    setTimeout(pollForResponse, 5);
+    // var result;
+    // var currentPoll = 0;
+    //
+    // var response = (e) => {
+    //   result = e.data;
+    // };
+    //
+    // window.addEventListener('message', response);
+    //
+    // evalIframe.contentWindow.postMessage({value, variables: derivedVariables, dynamicVars}, '*');
+    //
+    // function pollForResponse() {
+    //   if (!result && currentPoll < 5) {
+    //     setTimeout(pollForResponse, 1000)
+    //   } else if (result) {
+    //     window.removeEventListener('message', response);
+    //     resolve(result);
+    //   } else {
+    //     window.removeEventListener('message', response);
+    //     resolve({success: false})
+    //   }
+    // }
+    //
+    // setTimeout(pollForResponse, 5);
 
   })
 };

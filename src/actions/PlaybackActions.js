@@ -4,6 +4,7 @@ import Message from '../util/Message'
 import * as ResultActions from './ResultActions'
 import {generate as generateId} from 'shortid'
 import deepClone from 'deep-clone'
+
 import {countActions} from '../util/TestUtils';
 import { findNodeById, walkThroughTreeNodes } from '../util/treeUtils';
 import { getFilteredTestsInfo } from '../util/TestFilterUtils';

@@ -38,7 +38,7 @@ class AccountDropdown extends React.PureComponent {
           {localmode ? (
             <div className="project">
               <div className="current grid-row v-align">
-                <img src={chrome.extension.getURL("assets/local.png")} />
+                <img src={chrome.runtime.getURL("assets/local.png")} />
                 <div className="grid-item">Local</div>
               </div>
               {dropdownArrow}
@@ -58,7 +58,7 @@ class AccountDropdown extends React.PureComponent {
           ) : (
             <div className="project">
               <div className="current grid-row v-align">
-                <img src={chrome.extension.getURL("assets/cloud.png")} />
+                <img src={chrome.runtime.getURL("assets/cloud.png")} />
                 <div className="grid-item">{user.email}</div>
               </div>
               {dropdownArrow}
@@ -96,12 +96,12 @@ class AccountDropdown extends React.PureComponent {
         <div className="account-list">
           {(mode === "user") ? (null) : (user) ? (
             <div className="dd-item" onClick={(e) => Message.promise("switchToCloud")}>
-              <img src={chrome.extension.getURL("assets/cloud.png")} />
+              <img src={chrome.runtime.getURL("assets/cloud.png")} />
               {user ? user.email : "Cloud"}
             </div>
           ) : (
             <div className="dd-item" onClick={(e) => Message.to(Message.SESSION, "pushRoute", new Route("auth"))}>
-              <img src={chrome.extension.getURL("assets/cloud.png")} />
+              <img src={chrome.runtime.getURL("assets/cloud.png")} />
               <div className="grid-item">
                 Cloud
               </div>
@@ -110,7 +110,7 @@ class AccountDropdown extends React.PureComponent {
           )}
           {(mode !== "local") && (
             <div className={"dd-item"} onClick={() => this.onSetPrivateMode() }>
-              <img src={chrome.extension.getURL("assets/local.png")} />
+              <img src={chrome.runtime.getURL("assets/local.png")} />
               Local
             </div>
           )}

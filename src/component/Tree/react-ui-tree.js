@@ -1,5 +1,3 @@
-'use strict';
-
 var React = require('react');
 var Tree = require('./tree');
 var Node = require('./node');

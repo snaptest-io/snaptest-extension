@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "SnapTest",
   "description": "Selenium IDE substitute. Create, maintain, and auto-generate hand-crafted QA automation code in a variety of frameworks. ",
   "version": "<%= htmlWebpackPlugin.options.title %>",
@@ -7,25 +7,33 @@
     "128": "assets/icons/icon_128_v2.png"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "service_worker": "background.js",
+    "type": "module"
   },
   "offline_enabled": true,
   "devtools_page": "devtool-background.html",
-  "browser_action": {
+  "action": {
     "default_icon": "assets/icons/icon_256_v1.png",
     "default_popup": "popup.html"
   },
   "permissions": [
-    "<all_urls>",
     "storage",
     "cookies",
     "webNavigation"
   ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "web_accessible_resources": [
-    "injected.js",
-    "assets/*"
+    {
+      "resources": [
+        "injected.js",
+        "assets/*"
+      ],
+      "matches": [
+        "*://*/*"
+      ]
+    }
   ],
   "content_scripts": [
     {

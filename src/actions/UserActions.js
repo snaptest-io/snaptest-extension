@@ -119,6 +119,8 @@ export const switchToCloud = (params = {}, state) => {
 
 
 export const getUser = (params, state) => {
+  if (!state.user) return;
+
   return API.getMyUser(state.user.apikey, {includesetting: 1, checkpremium: 1})
     .then((result) => {
       state.user = result.user;

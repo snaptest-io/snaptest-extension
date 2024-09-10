@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import axios from 'axios'
+// import axios from 'axios'
 
 export function uploadScreenshots(apikey, ownerType, ownerId, screenshots, resultId, MAX_SS_UPLOAD_COUNT = 3, onProgress = _.noop, onComplete = _.noop) {
 

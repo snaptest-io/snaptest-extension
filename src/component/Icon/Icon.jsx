@@ -13,7 +13,7 @@ class Icon extends React.PureComponent {
     if (name === "remove") {
       return (
         <div className={"icon" + (classNames ? " " + classNames : "")}>
-          <img className="icon-remove" src={chrome.extension.getURL("assets/xbutton.png")} />
+          <img className="icon-remove" src={chrome.runtime.getURL("assets/xbutton.png")} />
         </div>
       )
     } else {

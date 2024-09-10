@@ -18,15 +18,15 @@ class AccountDropdown extends React.PureComponent {
         <div className="workspace-button">
           <div className="workspace-label">
             <span className="current">Some project..</span>
-            <img src={chrome.extension.getURL(`assets/${localmode ? "local" : "cloud"}.png`)} />
-            <img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick.png")} />
+            <img src={chrome.runtime.getURL(`assets/${localmode ? "local" : "cloud"}.png`)} />
+            <img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick.png")} />
           </div>
         </div>
       }>
         <div className="dd-header">Projects</div>
         {projects.map((project, idx) => (
           <div className="dd-item" onClick={(e) => Message.promise("switchToProject", {proId: project.id}) } >
-            <img src={chrome.extension.getURL("assets/cloud.png")} />
+            <img src={chrome.runtime.getURL("assets/cloud.png")} />
             Project ({project.name})
           </div>
         ))}

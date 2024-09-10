@@ -149,7 +149,7 @@ class DashboardContent extends React.Component {
           ) : (this.props.tests.length === 0 && this.props.components.length === 0 && this.props.directory.tree.children.length === 0) ? (
             <div className="EmptyState">
               <svg viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 9c0-.55-.45-1-1-1H5c-.43 0-.79.27-.93.65h-.01l-3 8h.01c-.04.11-.07.23-.07.35 0 .55.45 1 1 1h14c.43 0 .79-.27.93-.65h.01l3-8h-.01c.04-.11.07-.23.07-.35zM3.07 7.63C3.22 7.26 3.58 7 4 7h14V5c0-.55-.45-1-1-1H8.41l-1.7-1.71C6.53 2.11 6.28 2 6 2H1c-.55 0-1 .45-1 1v12.31l3.07-7.68z" id="folder_open_1_"/></svg>
-              <div className="ni-header">You haven't created any tests yet.</div>
+              <div className="ni-header">You haven't created any tests yet!</div>
               <div className="ni-cta-buttons">
                 <button className="btn recording-btn" onClick={() => this.onStartTutorial()}>Start tutorial</button>
                 {localmode && (

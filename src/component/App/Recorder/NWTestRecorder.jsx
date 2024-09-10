@@ -195,7 +195,7 @@ class NWTestRecorder extends React.Component {
                 <Dropdown classNames=""
                           onClick={(e) => e.stopPropagation()}
                           button={
-                            <img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick-white.png")} />
+                            <img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick-white.png")} />
                           }>
                   <div>
                     {(playbackInterval || playbackLoopAmount || selectedRows.length > 0) && ([
@@ -296,7 +296,7 @@ class NWTestRecorder extends React.Component {
                   {playbackBreakpoints.length > 0 && (
                     <div className="amount-count">({playbackBreakpoints.length})</div>
                   )}
-                  <img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick.png")} />
+                  <img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick.png")} />
                 </button>}>
                 <div>
                   <div className="dd-header">breakpoints</div>
@@ -324,7 +324,7 @@ class NWTestRecorder extends React.Component {
                 <button className={"btn btn-empty" + (selectedRows.length > 0 ? "" : " btn-disabled")} onClick={() => this.onIndentSelected()}>
                   Indent
                 </button>,
-                <Dropdown button={<button className={"btn btn-empty"}>actions<img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick.png")} /></button>}>
+                <Dropdown button={<button className={"btn btn-empty"}>actions<img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick.png")} /></button>}>
                   <div onClick={(e) => e.stopPropagation()}>
                     <div className="dd-header">actions</div>
                     <div className="dd-item" onClick={() => this.onRollup() }>

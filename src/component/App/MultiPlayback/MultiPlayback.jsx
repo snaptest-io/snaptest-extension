@@ -124,7 +124,7 @@ class MultiPlayback extends React.PureComponent {
                 <Dropdown classNames=""
                           onClick={(e) => e.stopPropagation()}
                           button={
-                            <img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick-white.png")} />
+                            <img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick-white.png")} />
                           }>
                   <div>
                     {(playbackInterval || playbackLoopAmount) && ([

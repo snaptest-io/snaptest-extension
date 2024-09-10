@@ -31,7 +31,7 @@ class Tutorial extends React.Component {
               <div className="grid-item padded-modal">
                 <h4>Before we begin, organize your windows like this:</h4>
               <div>(Note the ACTIVE TAB)</div>
-                <img className="screen_layout_sug" src={chrome.extension.getURL("assets/screen_layout_suggestion.png")} />
+                <img className="screen_layout_sug" src={chrome.runtime.getURL("assets/screen_layout_suggestion.png")} />
                 <a className="next-step-prompt" onClick={(e) => this.goToNextStep()}>I've configured my windows.</a>
               </div>
             )}
@@ -89,24 +89,24 @@ class Tutorial extends React.Component {
                 </div>
               ) : tutorialStep === Tut.FIRSTTEST_SIMULATE2 ? (
                   <div className="grid-item grid-row v-align h-align grid-column tut-content">
-                      <h3>Try adding breakpoints <img className="tut-img-openaction" src={chrome.extension.getURL("assets/breakpoint2.png")}/> and use the <button className="btn play-btns">step over</button> function. </h3>
+                      <h3>Try adding breakpoints <img className="tut-img-openaction" src={chrome.runtime.getURL("assets/breakpoint2.png")}/> and use the <button className="btn play-btns">step over</button> function. </h3>
                   </div>
               ) : tutorialStep === Tut.FIRSTTEST_NAMESTEP ? (
                   <div className="grid-item grid-row v-align h-align grid-column tut-content">
                     <h6>After recording, it's a good idea to give your steps more human readable descriptions. </h6>
-                    <h5 className="tut-content-section grid-row v-align">Open a step with <img className="tut-img-openaction" src={chrome.extension.getURL("assets/openaction.png")}/>.</h5>
+                    <h5 className="tut-content-section grid-row v-align">Open a step with <img className="tut-img-openaction" src={chrome.runtime.getURL("assets/openaction.png")}/>.</h5>
                     <h6 className="tut-content-section">Give it a good description from the perspective of a user, like: "clicked on the blog button in the main menu".</h6>
                   </div>
               ) : tutorialStep === Tut.FIRSTTEST_ADJUSTSELECTOR ? (
                   <div className="grid-item grid-row v-align h-align grid-column tut-content">
                     <h6>Sometimes you need to add/change the way SnapTest finds the element (the selector).</h6>
-                    <h5 className="tut-content-section">Click on a step's <img className="selection-icon" src={chrome.extension.getURL("assets/target.png")}/> icon.</h5>
-                    <h6 className="tut-content-section">It will change to <img className="tut-img-openaction" src={chrome.extension.getURL("assets/selectormode.png")}/> which indicates quick selector mode. Find and click desired target element in active tab. </h6>
+                    <h5 className="tut-content-section">Click on a step's <img className="selection-icon" src={chrome.runtime.getURL("assets/target.png")}/> icon.</h5>
+                    <h6 className="tut-content-section">It will change to <img className="tut-img-openaction" src={chrome.runtime.getURL("assets/selectormode.png")}/> which indicates quick selector mode. Find and click desired target element in active tab. </h6>
                   </div>
               ) : tutorialStep === Tut.FIRSTTEST_MANUALADD ? (
                   <div className="grid-item grid-row v-align h-align grid-column tut-content">
                     <h5>Manually adding steps is easy... click: </h5>
-                    <img className="tut-img-openaction" src={chrome.extension.getURL("assets/manual_add.png")}/>
+                    <img className="tut-img-openaction" src={chrome.runtime.getURL("assets/manual_add.png")}/>
                     <h4 className="tut-content-section">Try adding an action manually, maybe a 'pause' step...</h4>
                   </div>
               ) : tutorialStep === Tut.FIRSTTEST_MANAGE ? (

@@ -29,7 +29,7 @@ class RequestActionItem extends React.PureComponent {
           <ActionSelector {...this.props} actionName={request.name} />
           { request ? (
             <div className="quick-button component-edit" onClick={() => this.onEditClick(request) }>
-              <img src={chrome.extension.getURL("assets/edit_2.png")} />
+              <img src={chrome.runtime.getURL("assets/edit_2.png")} />
             </div>
           ) : null}
           {(request && request.variables.length > 0) ? (

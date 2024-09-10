@@ -110,7 +110,7 @@ function initState(state) {
 
 // inject some js into the page itself to handle the assertion blocking.
 var s = document.createElement('script');
-s.src = chrome.extension.getURL('injected.js');
+s.src = chrome.runtime.getURL('injected.js');
 s.onload = function() {
   this.remove();
 };

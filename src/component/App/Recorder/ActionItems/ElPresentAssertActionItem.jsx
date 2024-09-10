@@ -37,7 +37,7 @@ class ElPresentAssertActionItem extends React.PureComponent {
                            onChange={(newValue) => this.onSelectorChange(newValue, "selector")}/>
           </div>
           { action.warnings.length > 0 && (
-              <img className="warning-icon" src={chrome.extension.getURL("assets/warning.png")} onClick={() => this.onSelectorWarningClick()}/>
+              <img className="warning-icon" src={chrome.runtime.getURL("assets/warning.png")} onClick={() => this.onSelectorWarningClick()}/>
           )}
         </div>
         {(isViewingMore && action.warnings.length > 0) && (

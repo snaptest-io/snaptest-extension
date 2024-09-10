@@ -39,13 +39,13 @@ class MetaScanActionItem extends React.PureComponent {
           ])}
           <div className="action-quick-buttons">
             <a className="quick-button" onClick={() => Message.to(Message.SESSION, "duplicateNWAction", action.id) }>
-              <img src={chrome.extension.getURL("assets/duplicate.png")} />
+              <img src={chrome.runtime.getURL("assets/duplicate.png")} />
             </a>
             <div className="quick-button" onClick={() => Message.to(Message.SESSION, "removeNWAction", action.id) }>
-              <img src={chrome.extension.getURL("assets/trash.png")} />
+              <img src={chrome.runtime.getURL("assets/trash.png")} />
             </div>
             <div className="quick-button" onClick={() => Message.to(Message.SESSION, "toggleActionExpanded", action.id) }>
-              <img src={chrome.extension.getURL(isExpanded ? "assets/info_cancel.png" : "assets/info.png")}/>
+              <img src={chrome.runtime.getURL(isExpanded ? "assets/info_cancel.png" : "assets/info.png")}/>
             </div>
           </div>
         </div>

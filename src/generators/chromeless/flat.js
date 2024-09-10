@@ -2,7 +2,6 @@ var beautify = require('js-beautify').js_beautify
 var varname = require('varname');
 var util = require("../_shared/util");
 var generateActionList = require('../_shared/chromeless/generateActionList').generateActionList;
-var shimTemplate = require("ejs-loader!../_shared/chromeless/assets/chromeless-shims.ejs");
 
 /* entry point from the extension */
 export function generate(test, components) {
@@ -54,9 +53,10 @@ export function generate(test, components) {
       const random2 = "" + parseInt(Math.random() * 1000000);
       const random3 = "" + parseInt(Math.random() * 1000000);
       
-      ${shimTemplate({ extension: true, cli: false })}
-      
 `;
+
+  // removed:
+  // ${shimTemplate({ extension: true, cli: false })}
 
   return beautify(code, { indent_size: 2 });
 

@@ -15,7 +15,7 @@ class ProjectOptionsDropdown extends React.Component {
 
     return (
       <Dropdown classNames="quick-buttons quick-button-dd quick-button-left"
-                button={<button className={"btn btn-empty"}>edit<img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick.png")} /></button>}>
+                button={<button className={"btn btn-empty"}>edit<img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick.png")} /></button>}>
         <div>
           <div className="dd-header">Move to group:</div>
           {projectGroups.filter((pG) => node.type !== "projectGroup" || node.id !== pG.id).map((projectGroup) => (

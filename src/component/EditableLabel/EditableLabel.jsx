@@ -69,7 +69,7 @@ class EditableLabel extends React.Component {
             {showEditButton && (
               <button className="edit"
                       onClick={(e) => {onEnter(); e.stopPropagation(); this.setState({isEditing : true, newValue: value})}}>
-                <img src={chrome.extension.getURL("assets/edit.png")} />
+                <img src={chrome.runtime.getURL("assets/edit.png")} />
               </button>
             )}
           </span>

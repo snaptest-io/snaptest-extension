@@ -69,7 +69,7 @@ class NWCodeViewer extends React.PureComponent {
           <div className="grid-item-2">
             <div className="generator-overview" >
               {style.definition.beta && (
-                  <div className="beta-tag"><img className="beta-img" src={chrome.extension.getURL("assets/beta.png")} /></div>
+                  <div className="beta-tag"><img className="beta-img" src={chrome.runtime.getURL("assets/beta.png")} /></div>
               )}
               <div className="header">{style.definition.name}</div>
               <p>{style.definition.description}</p>

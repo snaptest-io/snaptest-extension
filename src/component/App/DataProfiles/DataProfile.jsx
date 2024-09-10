@@ -67,7 +67,7 @@ class DataProfile extends React.Component {
                         onClick={(e) => this.onProfileRemove(profile)}
                         data-tip="Delete environment"
                         data-for="profile-tip">
-                  <img src={chrome.extension.getURL("assets/trash.png")} />
+                  <img src={chrome.runtime.getURL("assets/trash.png")} />
                 </button>
               </div>
             ) : (

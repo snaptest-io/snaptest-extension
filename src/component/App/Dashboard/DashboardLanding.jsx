@@ -28,7 +28,7 @@ class DashboardLanding extends React.Component {
         {localmode ? (
           <div className="floating-content">
             <div className="context-info">
-              <img src={chrome.extension.getURL("assets/local.png")} />
+              <img src={chrome.runtime.getURL("assets/local.png")} />
             </div>
           </div>
         ) : selectedProject ? (

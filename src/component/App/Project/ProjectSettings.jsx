@@ -323,10 +323,10 @@ class AccountContent extends React.Component {
                         <input type="checkbox" checked={selector.enabled} onChange={(e) => this.onToggleSelector(idx, e)} />
                       </div>
                       <a className="s-promote" onClick={() => this.onPromoteSelector(idx)}>
-                        <img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick.png")} />
+                        <img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick.png")} />
                       </a>
                       <a className="s-demote" onClick={() => this.onDemoteSelector(idx)}>
-                        <img className="down-arrow" src={chrome.extension.getURL("assets/darrow-thick.png")} />
+                        <img className="down-arrow" src={chrome.runtime.getURL("assets/darrow-thick.png")} />
                       </a>
                       <div className="s-type value-type">
                         {selector.type}

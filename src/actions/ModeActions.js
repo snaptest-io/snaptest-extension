@@ -2,7 +2,7 @@ import {resetModes} from '../util/ModeManager'
 import {addRecordedAction} from '../util/ActionManager';
 import {autoSave} from '../util/statePersistance'
 import * as Actions from '../models/Action';
-import {upsertDraft} from '../session'
+import {upsertDraft} from '../background'
 
 export const startRecording = (params, state) => {
   return new Promise((resolve, reject) => {

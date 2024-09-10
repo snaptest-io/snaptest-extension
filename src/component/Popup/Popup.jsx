@@ -49,15 +49,15 @@ class App extends React.Component {
   }
 
   onExecuteRun(runId) {
-    chrome.tabs.getSelected(null, function(tab) {
+    chrome.tabs.query({active: true}, function(tab) {
       Message.promise("setCurrentTab", {currentTabId: tab.id, currentWindowId: tab.windowId});
       Message.promise("pushRoute", {route: new Route("executerun", {runId})}).then(() => Message.promise("executeRun", {runId}))
     });
   }
 
   onOpenTool() {
-    chrome.tabs.getSelected(null, function(tab) {
-      Message.promise("setCurrentTab", {currentTabId: tab.id, currentWindowId: tab.windowId});
+    chrome.tabs.query({active: true}, function(tab) {
+      Message.promise("setCurrentTab", {currentTabId: tab[0].id, currentWindowId: tab[0].windowId});
       Message.to(Message.SESSION, "openWindow", true);
     });
   }
