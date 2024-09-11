@@ -73,12 +73,14 @@ export const setCurrentTab = (params, state) => {
 
 export function ensureActiveTab(state) {
   return new Promise((resolve, reject) => {
-    chrome.tabs.getSelected(state.currentWindowId, (tab) => {
-      chrome.tabs.executeScript(tab.id, {code: "window.snaptest_loaded_ping()"}, (result, error) => {
+    chrome.tabs.query({windowId: state.currentWindowId, active: true}, (tabs) => {
+      const tab = tabs[0]
+
+      chrome.scripting.executeScript(tab.id, {code: "window.snaptest_loaded_ping()"}, (result, error) => {
         if (typeof result === "undefined" || error) return reject("Can't record at this url.");
         else if (!result[0]) {
           state.currentTabId = tab.id;
-          chrome.tabs.executeScript(tab.id, {code: "window.location.reload();"}, (result, error) => {
+          chrome.scripting.executeScript(tab.id, {code: "window.location.reload();"}, (result, error) => {
             return resolve(tab);
           })
         }
@@ -96,8 +98,9 @@ export function setCurrentAsActiveTab(state) {
     if (!state.currentWindowId) {
       return reject(`No testing tab selected.  Click "Start Testing" in the extension popup to play this test.`)
     }
-    chrome.tabs.getSelected(state.currentWindowId, (tab) => {
-      if (tab.windowId !== state.appWindowId) {
+    chrome.tabs.query({windowId: state.currentWindowId, active: true}, (tabs) => {
+      const tab = tabs[0]
+      if (tab && tab.windowId !== state.appWindowId) {
         state.currentTabId = tab.id;
         state.currentWindowId = tab.windowId;
         resolve(tab);

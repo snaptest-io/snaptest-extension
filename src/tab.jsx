@@ -116,3 +116,6 @@ s.onload = function() {
 };
 (document.head || document.documentElement).appendChild(s);
 
+function changeBackgroundColor() {
+  document.body.style.backgroundColor = 'red'
+}

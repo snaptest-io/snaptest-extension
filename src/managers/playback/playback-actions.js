@@ -52,9 +52,44 @@ export const playbackActions = {
   Helper methods:
 */
 
+function executeFunction(name, params) {
+  if (typeof window[name] !== 'undefined') {
+    const result = window[name](params)
+    console.log(result)
+    return result
+  } else {
+    console.log("none")
+    return {success: false}
+  }
+}
+
+var executeScript2 = (tabId, frameStack, playbackFnName, playbackFnParams) => new Promise((resolve, reject) => {
+  const frameId = frameStack.length > 0 ? frameStack[frameStack.length - 1] : 0
+
+  chrome.scripting.executeScript({
+    target: {
+      tabId, frameIds: [frameId]},
+    func: executeFunction,
+    args : [ playbackFnName, playbackFnParams ]
+  }, (results, error) => {
+    const result = results[0]
+
+    if (typeof result === "undefined") return resolve({success: false});
+    else if (error) return reject(error);
+    else return resolve(...result);
+  });
+});
+
 var executeScript = (code, tabId, frameStack, state) => new Promise((resolve, reject) => {
   const frameId = frameStack.length > 0 ? frameStack[frameStack.length - 1] : 0
-  chrome.tabs.executeScript(tabId, { code, frameId }, (result, error) => {
+
+  console.log(code)
+
+  chrome.scripting.executeScript({
+    target: {
+      tabId, frameIds: [frameId]},
+      func: injectedFunction,
+    }, (result, error) => {
     if (typeof result === "undefined") return resolve({success: false});
     else if (error) return reject(error);
     else return resolve(...result);
@@ -87,7 +122,11 @@ var callExecuteFunction = (name, params) => {
   return `if (typeof window.${name} !== "undefined") window.${name}(${params})`;
 }
 
-var checkForElement = (tabId, frameStack, action, state) => executeScript(callExecuteFunction("checkElement", JSON.stringify(action)), tabId, frameStack, state, state.frameStack);
+var checkForElement = (tabId, frameStack, action, state) => {
+  console.log("checkForElement")
+  return executeScript2(tabId, frameStack, 'checkElement', action)
+  // return executeScript(callExecuteFunction("checkElement", JSON.stringify(action)), tabId, frameStack, state, state.frameStack)
+};
 var checkForElementVisible = (tabId, frameStack, action, state) => executeScript(callExecuteFunction("checkElementVisible", JSON.stringify(action)), tabId, frameStack, state);
 
 var checkForIframe = (tabId, frameStack, action, state) => executeScript(callExecuteFunction("checkIframe", JSON.stringify(action)), tabId, frameStack, state);
