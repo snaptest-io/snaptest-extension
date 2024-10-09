@@ -21,10 +21,28 @@ class SnapTest extends React.Component {
 
   componentWillMount() {
 
+    Message.onMessageForAsync(Message.PANEL, (message, payload) => {
+      return new Promise(resolve => {
+        if (message.action === "eval") {
+          return performEval(payload).then(result => {
+            resolve(result)
+            Message.to("eval-response", 'response', result)
+          })
+        }
+
+      })
+      // return new Promise(resolve) {
+      //
+      // }
+      // console.log(message)
+      // console.log(payload)
+    })
+
+
+
     var backgroundPageConnection = chrome.runtime.connect({ name: "devtools-page"});
 
-    backgroundPageConnection.onMessage.addListener(function (message) {
-
+    backgroundPageConnection.onMessage.addListener(function (message, cb) {
       if (message.payload.cause === "setHoverIndicator") return;
 
       switch(message.action) {
@@ -38,6 +56,16 @@ class SnapTest extends React.Component {
         case "onActionResult":
           this.setState({playbackCursor: message.payload.playbackCursor});
           break;
+        case "eval":
+          console.log("EVALLING")
+          performEval(message).then(result => {
+            console.log(result)
+          })
+          // window.addEventListener('message', (m) => {
+          //
+          // });
+          // document.getElementById('sandbox').contentWindow.postMessage(message, '*');
+          break;
       }
     }.bind(this));
 
@@ -50,6 +78,36 @@ class SnapTest extends React.Component {
     return <App {...this.state} {...this.props}/>
   }
 
+}
+
+function performEval(message) {
+  return new Promise((resolve) => {
+    var result;
+    var currentPoll = 0;
+
+    var response = (e) => {
+      result = e.data;
+    };
+
+    window.addEventListener('message', response);
+
+    document.getElementById('sandbox').contentWindow.postMessage(message, '*');
+    // evalIframe.contentWindow.postMessage({value, variables: derivedVariables, dynamicVars}, '*');
+
+    function pollForResponse() {
+      if (!result && currentPoll < 5) {
+        setTimeout(pollForResponse, 1000)
+      } else if (result) {
+        window.removeEventListener('message', response);
+        resolve(result);
+      } else {
+        window.removeEventListener('message', response);
+        resolve({success: false})
+      }
+    }
+
+    setTimeout(pollForResponse, 5);
+  })
 }
 
 export default SnapTest;

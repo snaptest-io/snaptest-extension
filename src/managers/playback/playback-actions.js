@@ -543,73 +543,41 @@ var styleAssert = (tabId, frameStack, action, state) =>
         else return { success: true };
       }));
 
-// Iframe for safe evalling.
-// var evalIframe = document.createElement('iframe');
-// evalIframe.style.display = "none";
-// evalIframe.src = "eval.html";
-// document.body.appendChild(evalIframe);
-
-var evalInIframe = (value, derivedVariables, dynamicVars) => {
+var evalInIframe = (value, derivedVariables, dynamicVars, appWindowId) => {
   return new Promise((resolve, reject) => {
-
-    return value;
-
-    // var result;
-    // var currentPoll = 0;
-    //
-    // var response = (e) => {
-    //   result = e.data;
-    // };
-    //
-    // window.addEventListener('message', response);
-    //
-    // evalIframe.contentWindow.postMessage({value, variables: derivedVariables, dynamicVars}, '*');
-    //
-    // function pollForResponse() {
-    //   if (!result && currentPoll < 5) {
-    //     setTimeout(pollForResponse, 1000)
-    //   } else if (result) {
-    //     window.removeEventListener('message', response);
-    //     resolve(result);
-    //   } else {
-    //     window.removeEventListener('message', response);
-    //     resolve({success: false})
-    //   }
-    // }
-    //
-    // setTimeout(pollForResponse, 5);
-
+    Message.onMessageFor('eval-response', (response) => {
+      resolve(response.payload)
+    })
+    Message.to(Message.PANEL, "eval", {value, variables: derivedVariables, dynamicVars});
   })
 };
 
-
 var evalAmbiguous = (tabId, frameStack, action, state, subroutine, derivedVariables, dynamicVars) =>
-  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-    executeScript2(tabId, frameStack, 'evalValue', action))
+  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => {
+    // executeScript2(tabId, frameStack, 'evalValue', action))
     // executeScript(`window.evalValue(${JSON.stringify(action.value)}, ${JSON.stringify(derivedVariables)}, ${JSON.stringify(dynamicVars)})`, tabId, frameStack, state))
-    .then((result) => {
-
-      // Eval succeeded in the target window.
-      if (result && result.result) {
-
-        if (result.dynamicVars) Object.assign(dynamicVars, result.dynamicVars);
-
-        if (!result.success)
-          return {
-            success: false,
-            error: `Eval returned an error: "${result.result}" `
-        };
-
-        if (result.result === "false") {
-          return { success: false, error: `Eval returned false` };
-        } else {
-          return { success: true};
-        }
-
-      }
+    // .then((result) => {
+      // Eval succeeded in the target window.  (impossible now)
+      // if (result && result.result) {
+      //
+      //   if (result.dynamicVars) Object.assign(dynamicVars, result.dynamicVars);
+      //
+      //   if (!result.success)
+      //     return {
+      //       success: false,
+      //       error: `Eval returned an error: "${result.result}" `
+      //   };
+      //
+      //   if (result.result === "false") {
+      //     return { success: false, error: `Eval returned false` };
+      //   } else {
+      //     return { success: true};
+      //   }
+      //
+      // }
 
       // Eval didn't run in target window, and needs to be evalled in an iframe.
-      return evalInIframe(action.value, derivedVariables, dynamicVars).then((result) => {
+      return evalInIframe(action.value, derivedVariables, dynamicVars, state.appWindowId).then((result) => {
 
         if (result.dynamicVars) Object.assign(dynamicVars, result.dynamicVars);
 
