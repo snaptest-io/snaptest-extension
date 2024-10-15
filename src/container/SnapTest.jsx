@@ -31,11 +31,6 @@ class SnapTest extends React.Component {
         }
 
       })
-      // return new Promise(resolve) {
-      //
-      // }
-      // console.log(message)
-      // console.log(payload)
     })
 
 
@@ -57,14 +52,9 @@ class SnapTest extends React.Component {
           this.setState({playbackCursor: message.payload.playbackCursor});
           break;
         case "eval":
-          console.log("EVALLING")
           performEval(message).then(result => {
             console.log(result)
           })
-          // window.addEventListener('message', (m) => {
-          //
-          // });
-          // document.getElementById('sandbox').contentWindow.postMessage(message, '*');
           break;
       }
     }.bind(this));

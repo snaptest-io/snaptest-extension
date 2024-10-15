@@ -80,22 +80,6 @@ var executeScript2 = (tabId, frameStack, playbackFnName, playbackFnParams) => ne
   });
 });
 
-var executeScript = (code, tabId, frameStack, state) => new Promise((resolve, reject) => {
-  const frameId = frameStack.length > 0 ? frameStack[frameStack.length - 1] : 0
-
-  console.log(code)
-
-  chrome.scripting.executeScript({
-    target: {
-      tabId, frameIds: [frameId]},
-      func: injectedFunction,
-    }, (result, error) => {
-    if (typeof result === "undefined") return resolve({success: false});
-    else if (error) return reject(error);
-    else return resolve(...result);
-  });
-});
-
 var waitOnExecuteScriptSuccess = (tabId, frameStack, action, state, execute) => new Promise((resolve, reject) => {
 
   var timeout = action.timeout || state.userSettings.globalTimeout;

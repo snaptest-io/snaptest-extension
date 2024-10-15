@@ -53,6 +53,10 @@ const generators = {
 
 var state = getInitialState();
 
+const keepAlive = () => setInterval(chrome.runtime.getPlatformInfo, 20e3);
+chrome.runtime.onStartup.addListener(keepAlive);
+keepAlive();
+
 chrome.storage.sync.get(['user'], function(data) {
   if (data.user) {
     state.user = data.user;

@@ -175,7 +175,6 @@ window.getOffsets = function() {
 };
 
 window.getPageInfo = function() {
-
   const body = document.body;
 
   const widths = [

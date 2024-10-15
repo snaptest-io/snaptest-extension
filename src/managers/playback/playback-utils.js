@@ -1,17 +1,45 @@
 import {dataURItoBlob} from "../../util/util";
 
-var executeScript = (code, tabId) => new Promise((resolve, reject) => {
-  chrome.tabs.executeScript(tabId, {code}, (result, error) => {
+function executeFunction(name, params) {
+  if (typeof window[name] !== 'undefined') {
+    const result = window[name](params)
+    console.log(result)
+    return result
+  } else {
+    console.log("none")
+    return {success: false}
+  }
+}
+
+var executeScript2 = (tabId, playbackFnName, playbackFnParams) => new Promise((resolve, reject) => {
+  chrome.scripting.executeScript({
+    target: {
+      tabId
+    },
+    func: executeFunction,
+    args : [ playbackFnName, playbackFnParams || {} ]
+  }, (results, error) => {
+    const result = results[0]
+
     if (typeof result === "undefined") return resolve({success: false});
     else if (error) return reject(error);
-    else return resolve(...result);
+    else return resolve(result.result);
   });
 });
+// var executeScript = (code, tabId) => new Promise((resolve, reject) => {
+//   chrome.tabs.executeScript(tabId, {code}, (result, error) => {
+//     if (typeof result === "undefined") return resolve({success: false});
+//     else if (error) return reject(error);
+//     else return resolve(...result);
+//   });
+// });
 
 function createCanvas (width, height, pixelRatio = 1) {
-  const canvas = document.createElement('canvas');
-  canvas.width  = width * pixelRatio;
-  canvas.height = height * pixelRatio;
+  const canvas = new OffscreenCanvas(width * pixelRatio, height * pixelRatio);
+
+  // const canvas = document.createElement('canvas');
+  // canvas.width  = width * pixelRatio;
+  // canvas.height = height * pixelRatio;
   return canvas
 }
 
@@ -65,8 +93,10 @@ export const partialScreenshot = (windowId) => {
 
 export const fullScreenshot = (windowId, tabId) => {
   return new Promise((resolve, reject) => {
-    executeScript("window.hideSnapUI()", tabId)
-      .then(() => executeScript("window.getPageInfo()", tabId)
+    // executeScript("window.hideSnapUI()", tabId)
+    executeScript2(tabId, 'hideSnapUI')
+    //   .then(() => executeScript("window.getPageInfo()", tabId)
+      .then(() => executeScript2(tabId, 'getPageInfo')
       .then((result) => {
 
         if (!result || !result.success) return reject("Couldn't take screenshot.");
@@ -78,11 +108,13 @@ export const fullScreenshot = (windowId, tabId) => {
         pageInfo.pageHeight = Math.min(maxSide, pageInfo.pageHeight);
         const scrollOffsets = getAllScrollOffsets(pageInfo);
         var canvas = createCanvas(pageInfo.pageWidth, pageInfo.pageHeight, devicePixelRatio);
-        
+
         var promises = scrollOffsets.map((offset) => () => {
-          return executeScript(`window.triggerScrollWindow({x: ${offset.x}, y: ${offset.y}})`, tabId)
+          // return executeScript(`window.triggerScrollWindow({x: ${offset.x}, y: ${offset.y}})`, tabId)
+          return executeScript2(tabId, 'triggerScrollWindow', {offset})
             .then(() => pauseTime(575)) // Can't be lower than 500 due to MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND
-            .then(() =>  executeScript("window.getOffsets()", tabId))
+            // .then(() =>  executeScript("window.getOffsets()", tabId))
+            .then(() =>  executeScript2(tabId, 'getOffsets'))
             .then((realOffsets) => {
 
               if (!realOffsets) return;
@@ -102,7 +134,8 @@ export const fullScreenshot = (windowId, tabId) => {
         return pSeries(promises).then(() => {resolve(canvas.toDataURL());});
 
       }))
-    .then(() => executeScript("window.showSnapUI()", tabId))
+    .then(() => executeScript2(tabId, 'showSnapUI'))
+    resolve()
   })
 };
 
