@@ -1,8 +1,6 @@
 import {statusErrorFilter, apiErrorFilter, headers} from './common/apicommons';
 import queryString from 'query-string';
 
-console.log(API_URL)
-
 export function getMyUser(apikey, options) {
   return fetch(`${API_URL}/user/me?${queryString.stringify(options)}`, {
     method: 'get',

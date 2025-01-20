@@ -1,12 +1,8 @@
-import {dataURItoBlob} from "../../util/util";
-
 function executeFunction(name, params) {
   if (typeof window[name] !== 'undefined') {
     const result = window[name](params)
-    console.log(result)
     return result
   } else {
-    console.log("none")
     return {success: false}
   }
 }
@@ -26,13 +22,6 @@ var executeScript2 = (tabId, playbackFnName, playbackFnParams) => new Promise((r
     else return resolve(result.result);
   });
 });
-// var executeScript = (code, tabId) => new Promise((resolve, reject) => {
-//   chrome.tabs.executeScript(tabId, {code}, (result, error) => {
-//     if (typeof result === "undefined") return resolve({success: false});
-//     else if (error) return reject(error);
-//     else return resolve(...result);
-//   });
-// });
 
 function createCanvas (width, height, pixelRatio = 1) {
   const canvas = new OffscreenCanvas(width * pixelRatio, height * pixelRatio);
@@ -93,9 +82,7 @@ export const partialScreenshot = (windowId) => {
 
 export const fullScreenshot = (windowId, tabId) => {
   return new Promise((resolve, reject) => {
-    // executeScript("window.hideSnapUI()", tabId)
     executeScript2(tabId, 'hideSnapUI')
-    //   .then(() => executeScript("window.getPageInfo()", tabId)
       .then(() => executeScript2(tabId, 'getPageInfo')
       .then((result) => {
 

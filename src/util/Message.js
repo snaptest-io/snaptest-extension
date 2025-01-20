@@ -93,7 +93,6 @@ var Message = {
       if (request.destination === destination || request.destination === "all") {
 
         if (cb) cb(request, sender).then((r) => {
-          console.log(r)
           sendResponse(r)
         })
       }
