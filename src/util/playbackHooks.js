@@ -244,16 +244,28 @@ window.triggerChangeInput = function (action) {
 };
 
 window.setDialogs = function (action) {
-  var scriptContent = `
-  ${action.alert ? "window.alert = function() {};" : ""}
-  ${_.isBoolean(action.confirm) ? "window.confirm = function() { return " + (action.confirm ? "true" : false) + ";};" : ""}
-  ${action.prompt ? "window.prompt = function() { return \"" + action.promptResponse + "\";};" : ""}
-`;
+  let element = document.getElementById('snpt-dialogs');
+  if (!element) {
+    element = document.createElement('div');
+    element.style.display = 'none';
+    element.setAttribute('id', 'snpt-dialogs');
+  }
 
-  var script = document.constructor.prototype.createElement.call(document, 'script');
-  script.setAttribute('type', 'text/javascript');
-  script.text = scriptContent;
-  document.documentElement.appendChild(script);
+  if (action.alert)
+    element.setAttribute('data-alert', 'true');
+  else element.removeAttribute('data-alert');
+
+  if (_.isBoolean(action.confirm))
+    element.setAttribute('data-confirm', action.confirm ? 'true' : 'false');
+  else element.removeAttribute('data-confirm');
+
+  if (action.prompt)
+    element.setAttribute('data-prompt', action.promptResponse);
+  else element.removeAttribute('data-prompt');
+
+  // Inject into the DOM
+  document.documentElement.appendChild(element);
+
   return { success: true }
 };
 

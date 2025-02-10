@@ -54,10 +54,8 @@ export const playbackActions = {
 function executeFunction(name, params) {
   if (typeof window[name] !== 'undefined') {
     const result = window[name](params)
-    console.log(result)
     return result
   } else {
-    console.log("none")
     return {success: false}
   }
 }
@@ -431,9 +429,32 @@ var changeInput = (tabId, frameStack, action, state) =>
   waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
     executeScript2(tabId, frameStack, 'triggerChangeInput', action).then(() => ({ success: true })));
 
-var setDialogs = (tabId, frameStack, action, state) =>
-  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-    executeScript2(tabId, frameStack, 'setDialogs', action).then(() => ({ success: true })));
+var waitForPageLoad = (tabId, frameStack, action, state) => {
+  return new Promise((resolve) => {
+    chrome.tabs.onUpdated.addListener(function (tabId , info, tab) {
+      if (tabId === tab.id && state.isPlayingBack && info.status === 'complete') {
+        resolve({success: true});
+      }
+    });
+
+    chrome.tabs.get(tabId, (tab) => {
+      if (tab.status === 'complete') {
+        resolve({ success: true });
+      }
+    });
+  })
+}
+
+var setDialogs = (tabId, frameStack, action, state) => {
+  // First wait for the page to load, then execute the script when the page is ready.
+  return waitForPageLoad(tabId, frameStack, action, state)
+    .then(() =>
+      waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
+        executeScript2(tabId, frameStack, 'setDialogs', action)
+          .then(() => ({ success: true }))
+      )
+    );
+}
 
 var pauseTime = (tabId, frameStack, action, state) => new Promise((resolve, reject) => setTimeout(() => resolve({success: true}), action.value));
 

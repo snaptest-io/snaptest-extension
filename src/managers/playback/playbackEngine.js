@@ -595,7 +595,7 @@ export function playbackEngine(state, events, options) {
 
       var code =
         `if (typeof window.evalActionValues !== "undefined") window.evalActionValues(${JSON.stringify(action)}, ${JSON.stringify(variables)}, ${JSON.stringify(dynamicVars)})`;
-      chrome.tabs.executeScript(_getCurrentTabId(), {code}, (result, error) => {
+      chrome.scripting.executeScript(_getCurrentTabId(), {code}, (result, error) => {
         if (!error && !result) return resolve(action);
         if (error) return reject(error);
         if (!result || !result[0]) return resolve(action);

@@ -30,14 +30,14 @@ class ActionSelector extends React.PureComponent {
     return (
       <div className="ActionSelector grid-row v-align">
         {actionSelectorId === action.id ? ([
-          <div className="selected-action as-toggle active">{actionName}</div>,
+          <div className="selected-action as-toggle active" onClick={(e) => this.onClick(e)}>{actionName}</div>,
           <ActionSelectorDD action={action}
                             components={components}
                             tests={tests}
                             tree={tree}
                             onActionSelected={(newActionType, componentId) => this.onActionTypeChange(action, newActionType, componentId)} />
         ]) : (
-          <div className="selected-action" onClick={(e) => this.onClick(e)} >
+          <div className="selected-action" onClick={(e) => this.onClick(e)}>
             {actionName}
           </div>
         )}
@@ -46,9 +46,10 @@ class ActionSelector extends React.PureComponent {
   }
 
   onClick(e) {
-    const { action } = this.props;
+    const { action, actionSelectorId } = this.props;
     e.stopPropagation();
-    Message.to(Message.SESSION, "setActionSelectorId", action.id)
+    if (action.id === actionSelectorId) Message.to(Message.SESSION, "setActionSelectorId", null)
+    else Message.to(Message.SESSION, "setActionSelectorId", action.id)
   }
 
   getActionName() {
