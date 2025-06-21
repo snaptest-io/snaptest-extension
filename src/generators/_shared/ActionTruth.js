@@ -364,7 +364,7 @@ const Actions = [
     "reportResult": true
   },
   {
-    "name" : "Eval",
+    "name" : "Eval (Nightwatch only)",
     "constant" : "EVAL",
     "category" : CATEGORIES.GENERAL,
     "description" :null,
@@ -408,7 +408,7 @@ const Actions = [
     "reportResult": true
   },
   {
-    "name" : "Execute script",
+    "name" : "Execute script (Nightwatch only)",
     "constant" : "EXECUTE_SCRIPT",
     "category" : CATEGORIES.GENERAL,
     "description" :null,

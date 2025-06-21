@@ -102,6 +102,21 @@ class ActionItemLine extends React.PureComponent {
                 <ActionItem {...actionProps} />
               </div>
             </div>
+            {(action.type === "EVAL" || action.type === "EXECUTE_SCRIPT") && (
+              <div className="playback-paused-indicator">
+                <div style={{
+                    fontSize: '10px',
+                    backgroundColor: '#fff3cd',
+                    color: '#856404',
+                    padding: '1px 4px',
+                    borderRadius: '3px',
+                    fontWeight: 'bold',
+                    border: '1px solid #ffeaa7'
+                  }}>
+                    ⚠ Nightwatch-only action. Please remove, replace, or manually perform to run in the extension.
+                  </div>
+              </div>
+            )}
             {resultClasses.error && (
               <div className={"playback-error-status grid-row v-align" + (resultClasses.skipped ? " error-warning" : "")}>
                 <div className="grid-item">
@@ -308,6 +323,23 @@ class ActionItemLine extends React.PureComponent {
   isRowSelected() {
     if (!this.props.selectedRows) return false;
     return this.props.selectedRows.indexOf(this.props.action.id) !== -1;
+  }
+
+  isPlaybackPaused() {
+    const { isPlayingBack, action, playbackCursor, instigatorId } = this.props;
+    
+    // Check if playback is active and paused on this action
+    if (!isPlayingBack || !playbackCursor) return false;
+    
+    // Check if this action is the current playback cursor
+    if (!instigatorId) {
+      console.log("playbackCursor", playbackCursor);
+      console.log("action.id", action.id);
+      return playbackCursor === action.id;
+    } else {
+      var tokens = playbackCursor.split("COMPONENT");
+      return action.id === tokens[1] && instigatorId === tokens[0];
+    }
   }
 
 }

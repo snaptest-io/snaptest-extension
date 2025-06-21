@@ -26,6 +26,7 @@ import {autoSave, removeItemFromDB, repairDirectory} from './util/statePersistan
 import {findNode, findNodeById, getParent, removeNodeFromTree, walkThroughTreeNodes} from './util/treeUtils';
 import deepClone from 'deep-clone'
 import * as Tut from './models/tutconsts';
+import {updateEvalActionFieldToTestsAndComponents} from './util/TestUtils';
 
 import * as LocalActions from './actions/LocalActions';
 import * as TestActions from './actions/TestActions';
@@ -80,7 +81,6 @@ chrome.storage.sync.get(['user'], function(data) {
 
 // Dispatcher
 Message.onMessageFor(Message.SESSION, function(message, sender, sendResponse) {
-
   // PROMISE IPC PATTERN
   if (message.payload && message.payload.type === "PROMISEACTION") return processAction(message, state, sendResponse);
 
@@ -1392,6 +1392,7 @@ Message.onMessageFor(Message.SESSION, function(message, sender, sendResponse) {
     Message.toAll("stateChange", {...state, tests: [], cause: message.action, testsExcluded: true});
     sendResponse({...state, ...tempResponse, tests: []});
   } else {
+    updateEvalActionFieldToTestsAndComponents(state);
     Message.toAll("stateChange", {...state, cause: message.action});
     sendResponse({...state, ...tempResponse});
   }

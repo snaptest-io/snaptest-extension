@@ -130,3 +130,57 @@ export function findAction(test, identifier) {
 
   return result;
 };
+
+export function hasEvalAction(test) {
+  if (!test || !test.actions) return false;
+  
+  return test.actions.some(action => isEvalAction(action));
+}
+
+export function isEvalAction(action) {
+  return action.type === "EVAL" || action.type === "EXECUTE_SCRIPT"
+}
+
+export function updateEvalActionFieldToTestsAndComponents(state) {
+  console.log("UPDATING")
+
+  const components = state.components;
+  const tests = state.tests;
+
+  // First, scan all components to build a map of which ones have EVAL actions
+  const componentEvalMap = {};
+  if (components) {
+    components.forEach(component => {
+      componentEvalMap[component.id] = hasEvalAction(component);
+    });
+  }
+  
+  // Helper function to check if a test has EVAL actions, including through components
+  function hasEvalActionIncludingComponents(test) {
+    if (!test || !test.actions) return false;
+    
+    return test.actions.some(action => {
+      if (isEvalAction(action)) {
+        return true;
+      } else if (action.type === "COMPONENT" && action.componentId) {
+        // Check if the referenced component has EVAL actions
+        return componentEvalMap[action.componentId] || false;
+      }
+      return false;
+    });
+  }
+  
+  // Update tests in place
+  if (tests) {
+    tests.forEach(test => {
+      test.hasEvalAction = hasEvalActionIncludingComponents(test);
+    });
+  }
+  
+  // Update components in place
+  if (components) {
+    components.forEach(component => {
+      component.hasEvalAction = componentEvalMap[component.id]
+    });
+  }
+}

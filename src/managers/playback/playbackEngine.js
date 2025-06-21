@@ -88,7 +88,10 @@ export function playbackEngine(state, events, options) {
       if ((
           state.playbackBreakpoints.indexOf(action.id) !== -1
             || status === "PAUSING"
-            || status === "STEPPING")
+            || status === "STEPPING"
+            || action.type === "EVAL"
+            || action.type === "EXECUTE_SCRIPT"
+          )
           && !forceOneToPlay
           && !action.disablePause // this is mainly set when being executed within a conditional
           && !action.result // don't pause when looping back to a completed action

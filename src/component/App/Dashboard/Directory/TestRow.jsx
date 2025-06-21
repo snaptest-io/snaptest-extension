@@ -36,10 +36,24 @@ class TestRow extends React.Component {
           {connectDragSource(
             <div className={clickHandleClassnames} onClick={() => this.onViewTest(test)}>
               <div className="square handle">{test.type === "request" ? test.method + " " : ""}{test.type}</div>
-              <EditableLabel value={test.name} size={test.name.length}
-                             onChange={(newValue) => this.onTestNameChange(newValue, test)} doubleClickEdit={false}
-                             link />
-              <div className="grid-item"></div>
+              <div className="grid-item">
+                <EditableLabel value={test.name} size={test.name.length}
+                               onChange={(newValue) => this.onTestNameChange(newValue, test)} doubleClickEdit={false}
+                               link />
+                {test.hasEvalAction && (
+                  <div style={{
+                    fontSize: '10px',
+                    backgroundColor: '#fff3cd',
+                    color: '#856404',
+                    padding: '1px 4px',
+                    borderRadius: '3px',
+                    fontWeight: 'bold',
+                    border: '1px solid #ffeaa7'
+                  }}>
+                    ⚠ Includes Nightwatch-only Action.
+                  </div>
+                )}
+              </div>
             </div>
           )}
           <div className="dir-row-buttons quick-button-dd" onClick={(e) => e.stopPropagation()}>
@@ -52,7 +66,7 @@ class TestRow extends React.Component {
                 <div className="dd-header">Test options:</div>
                 <div className="dd-item"
                      onClick={(e) => {this.onDuplicateTest(test)}}>
-                  <svg className="svg-icon" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M15 4H1c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 14H2V6h12v12zm5-18H5c-.55 0-1 .45-1 1v2h2V2h12v12h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"/></svg>
+                  <svg className="svg-icon" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M15 4H1c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 14H2V6h12v12zm5-18H5c-.55 0-1 .45-1 1v2h2V2h12v12h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1zm.5 3h-15c-.28 0-.5.22-.5.5s.22.5.5.5H3v14c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V5h.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5zM7 16c0 .55-.45 1-1 1s-1-.45-1-1V8c0-.55.45-1 1-1s1 .45 1 1v8zm4 0c0 .55-.45 1-1 1s-1-.45-1-1V8c0-.55.45-1 1-1s1 .45 1 1v8zm4 0c0 .55-.45 1-1 1s-1-.45-1-1V8c0-.55.45-1 1-1s1 .45 1 1v8z"/></svg>
                   Duplicate
                 </div>
                 {premium && (
