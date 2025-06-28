@@ -465,9 +465,8 @@ var submit = (tabId, frameStack, action, state) =>
 var executeCustomScript = (tabId, frameStack, action, state) =>
   waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
     executeScript2(tabId, frameStack, 'executeScript', action))
-    .then((result) => {
-      if (!result || !result.success) return { success: false, error: result.message };
-      else return { success: true };
+    .then(() => {
+      return { success: true }
     });
 
 var scrollWindow = (tabId, frameStack, action, state) =>

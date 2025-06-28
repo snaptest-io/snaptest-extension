@@ -50,7 +50,7 @@ class TestRow extends React.Component {
                     fontWeight: 'bold',
                     border: '1px solid #ffeaa7'
                   }}>
-                    ⚠ Includes Nightwatch-only Action.
+                    Includes Nightwatch-only Action.
                   </div>
                 )}
               </div>

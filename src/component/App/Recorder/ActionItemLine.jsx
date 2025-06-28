@@ -113,7 +113,7 @@ class ActionItemLine extends React.PureComponent {
                     fontWeight: 'bold',
                     border: '1px solid #ffeaa7'
                   }}>
-                    ⚠ Nightwatch-only action. Please remove, replace, or manually perform to run in the extension.
+                    Nightwatch-only action. Please remove, replace, or manually perform to run in the extension.
                   </div>
               </div>
             )}
