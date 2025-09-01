@@ -1,6 +1,6 @@
 {
   "name": "snaptest-extension",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "main": "index.js",
   "author": "SnapTest Team",
   "license": "MIT",
