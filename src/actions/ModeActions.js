@@ -71,16 +71,37 @@ export const setCurrentTab = (params, state) => {
   });
 };
 
+// Functions to be executed in the target context
+function snaptestLoadedPing() {
+  if (typeof window.snaptestLoadedPing === 'function') {
+    return window.snaptestLoadedPing();
+  }
+  return false;
+}
+
+function reloadPage() {
+  if (typeof window.reloadPage === 'function') {
+    return window.reloadPage();
+  }
+  return false;
+}
+
 export function ensureActiveTab(state) {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({windowId: state.currentWindowId, active: true}, (tabs) => {
       const tab = tabs[0]
 
-      chrome.scripting.executeScript(tab.id, {code: "window.snaptest_loaded_ping()"}, (result, error) => {
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: snaptestLoadedPing
+      }, (result, error) => {
         if (typeof result === "undefined" || error) return reject("Can't record at this url.");
-        else if (!result[0]) {
+        else if (!result[0] || !result[0].result) {
           state.currentTabId = tab.id;
-          chrome.scripting.executeScript(tab.id, {code: "window.location.reload();"}, (result, error) => {
+          chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            func: reloadPage
+          }, (result, error) => {
             return resolve(tab);
           })
         }

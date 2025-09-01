@@ -414,3 +414,15 @@ window.showSnapUI = function() {
     success: true
   };
 };
+
+window.snaptestLoadedPing = function() {
+  if (typeof window.snaptest_loaded_ping === 'function') {
+    return window.snaptest_loaded_ping();
+  }
+  return false;
+};
+
+window.reloadPage = function() {
+  window.location.reload();
+  return { success: true };
+};
