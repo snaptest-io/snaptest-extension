@@ -1,26 +1,26 @@
-var Actions = require('../../_shared/ActionConsts');
-var util = require('../../_shared/util');
-var _ = require('lodash');
-var varname = require('varname');
+var Actions = require("../../_shared/ActionConsts");
+var util = require("../../_shared/util");
+var _ = require("lodash");
+var varname = require("varname");
 
 function generateActionList(actions, components) {
-
   var generatedCode = "";
 
   actions.forEach((action, idx) => {
-
     var selector = action.selector;
     var description = action.description || util.buildActionDescription(action);
 
     if (action.type === Actions.COMPONENT) {
-
-      var component = _.find(components, {id: action.componentId});
+      var component = _.find(components, { id: action.componentId });
       if (!component) return;
 
       var actionListCode = generateActionList(component.actions, components);
 
       component.variables.forEach((variable) => {
-        actionListCode = actionListCode.replace("${" + variable.name + "}", variable.defaultValue)
+        actionListCode = actionListCode.replace(
+          "${" + variable.name + "}",
+          variable.defaultValue
+        );
       });
 
       generatedCode += `${actionListCode}`;
@@ -88,26 +88,35 @@ function generateActionList(actions, components) {
       // // .scrollWindowToElement("${action.selector}", \`${description}\`${action.timeout ? ", " + action.timeout : ""})`;
     }
 
-    if (action.type === Actions.PAGELOAD && (idx === 0 || Actions.PAGELOAD && idx === 1)) {
+    if (
+      action.type === Actions.PAGELOAD &&
+      (idx === 0 || (Actions.PAGELOAD && idx === 1))
+    ) {
       generatedCode += `
       .goto("${action.value}")
       // .viewport(${action.width}, ${action.height})`;
-    }
-    else if (action.type === Actions.PAGELOAD) {
+    } else if (action.type === Actions.PAGELOAD) {
       generatedCode += `
-      // .pathIs("${action.value}", \`${description}\`${action.timeout ? ", " + action.timeout : ""})`;
+      // .pathIs("${action.value}", \`${description}\`${
+        action.timeout ? ", " + action.timeout : ""
+      })`;
     }
 
-    if (action.type === Actions.FULL_PAGELOAD && (idx === 0 || Actions.PAGELOAD && idx === 1)) {
+    if (
+      action.type === Actions.FULL_PAGELOAD &&
+      (idx === 0 || (Actions.PAGELOAD && idx === 1))
+    ) {
+      generatedCode += `
+      .goto("${action.value}")`;
+    } else if (action.type === Actions.FULL_PAGELOAD) {
       generatedCode += `
       .goto("${action.value}")`;
     }
-    else if (action.type === Actions.FULL_PAGELOAD) {
-      generatedCode += `
-      .goto("${action.value}")`;
-    }
 
-    if (action.type === Actions.CHANGE_WINDOW || action.type === Actions.CHANGE_WINDOW_AUTO) {
+    if (
+      action.type === Actions.CHANGE_WINDOW ||
+      action.type === Actions.CHANGE_WINDOW_AUTO
+    ) {
       // generatedCode += `
       // // .switchToWindow(${action.value}, \`${description}\`) TODO: Forward not yet implementable in Chromeless.`;
     }
@@ -152,15 +161,45 @@ function generateActionList(actions, components) {
       // // .inputValueAssert("${selector}", \`${action.value}\`, \`${description}\`${action.timeout ? ", " + action.timeout : ""})`;
     }
 
+    if (action.type === Actions.VAR_ASSERT_CONDITION) {
+      const conditionalType = action.conditionalType || "equals";
+      let operator = "==";
+
+      switch (conditionalType) {
+        case "equals":
+          operator = "==";
+          break;
+        case "notEquals":
+          operator = "!=";
+          break;
+        case "lessThan":
+          operator = "<";
+          break;
+        case "greaterThan":
+          operator = ">";
+          break;
+        case "lessThanOrEqual":
+          operator = "<=";
+          break;
+        case "greaterThanOrEqual":
+          operator = ">=";
+          break;
+        case "matchRegex":
+          operator = "~= (regex)";
+          break;
+      }
+
+      // generatedCode += `
+      // // assert variable ${action.selector} ${operator} \`${action.value}\``;
+    }
+
     if (action.type === Actions.INPUT) {
       generatedCode += `
-      .type(\`${action.value}\`, \`${selector}\`)`
-    };
-
+      .type(\`${action.value}\`, \`${selector}\`)`;
+    }
   });
 
   return generatedCode;
-
-};
+}
 
 module.exports.generateActionList = generateActionList;

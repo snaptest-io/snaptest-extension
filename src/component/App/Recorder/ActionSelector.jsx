@@ -1,71 +1,85 @@
-import React from 'react'
-import _ from 'lodash'
-import * as ActionDefs from '../../../generators/_shared/ActionTruth'
-import * as Actions from '../../../models/Action'
-import Message from '../../../util/Message'
+import React from "react";
+import _ from "lodash";
+import * as ActionDefs from "../../../generators/_shared/ActionTruth";
+import * as Actions from "../../../models/Action";
+import Message from "../../../util/Message";
 import ActionSelectorDD from "./ActionSelectorDD";
-import deepClone from 'deep-clone'
+import deepClone from "deep-clone";
 
 class ActionSelector extends React.PureComponent {
-
   constructor(props) {
     super(props);
   }
 
   render() {
-
-    const { action, actionSelectorId = null, components, tests, tree } = this.props;
+    const {
+      action,
+      actionSelectorId = null,
+      components,
+      tests,
+      tree,
+    } = this.props;
     const actionName = this.props.actionName || this.getActionName();
 
     if (this.props.isInComponentAction) {
       return (
         <div className="ActionSelector disabled grid-row v-align">
-          <div className="selected-action">
-            {actionName}
-          </div>
+          <div className="selected-action">{actionName}</div>
         </div>
-      )
+      );
     }
 
     return (
       <div className="ActionSelector grid-row v-align">
-        {actionSelectorId === action.id ? ([
-          <div className="selected-action as-toggle active" onClick={(e) => this.onClick(e)}>{actionName}</div>,
-          <ActionSelectorDD action={action}
-                            components={components}
-                            tests={tests}
-                            tree={tree}
-                            onActionSelected={(newActionType, componentId) => this.onActionTypeChange(action, newActionType, componentId)} />
-        ]) : (
+        {actionSelectorId === action.id ? (
+          [
+            <div
+              className="selected-action as-toggle active"
+              onClick={(e) => this.onClick(e)}
+            >
+              {actionName}
+            </div>,
+            <ActionSelectorDD
+              action={action}
+              components={components}
+              tests={tests}
+              tree={tree}
+              onActionSelected={(newActionType, componentId) =>
+                this.onActionTypeChange(action, newActionType, componentId)
+              }
+            />,
+          ]
+        ) : (
           <div className="selected-action" onClick={(e) => this.onClick(e)}>
             {actionName}
           </div>
         )}
       </div>
-    )
+    );
   }
 
   onClick(e) {
     const { action, actionSelectorId } = this.props;
     e.stopPropagation();
-    if (action.id === actionSelectorId) Message.to(Message.SESSION, "setActionSelectorId", null)
-    else Message.to(Message.SESSION, "setActionSelectorId", action.id)
+    if (action.id === actionSelectorId)
+      Message.to(Message.SESSION, "setActionSelectorId", null);
+    else Message.to(Message.SESSION, "setActionSelectorId", action.id);
   }
 
   getActionName() {
     const { action, components } = this.props;
     if (action.type === "COMPONENT") {
-      var component = _.find(components, {id: action.componentId});
+      var component = _.find(components, { id: action.componentId });
       if (component) return component.name;
       else return "none";
     } else {
-      if (ActionDefs.ActionsByConstant[action.type]) return ActionDefs.ActionsByConstant[action.type].name;
+      if (ActionDefs.ActionsByConstant[action.type])
+        return ActionDefs.ActionsByConstant[action.type].name;
       else "none";
     }
   }
 
   onActionTypeChange(action, newActionType, componentId) {
-
     const { parentAction } = this.props;
 
     Message.to(Message.SESSION, "setActionSelectorId", null);
@@ -188,6 +202,15 @@ class ActionSelector extends React.PureComponent {
       case Actions.DYNAMIC_VAR:
         newAction = new Actions.DynamicVarAction();
         break;
+      case Actions.DYNAMIC_VAR_COUNT:
+        newAction = new Actions.DynamicVarCountAction();
+        break;
+      case Actions.DYNAMIC_VAR_ATTR:
+        newAction = new Actions.DynamicVarAttrAction();
+        break;
+      case Actions.VAR_ASSERT_CONDITION:
+        newAction = new Actions.VarAssertConditionAction();
+        break;
       case Actions.IF:
         newAction = new Actions.IfAction();
         if (_.isObject(action.value)) newAction.value = deepClone(action.value);
@@ -244,10 +267,17 @@ class ActionSelector extends React.PureComponent {
     newAction.timeout = action.timeout;
     newAction.indent = action.indent;
 
-    if (_.isString(newAction.value) && _.isString(action.value)) newAction.value = action.value;
-    if (_.isBoolean(newAction.continueOnFail) && _.isBoolean(action.continueOnFail)) newAction.continueOnFail = action.continueOnFail;
-    if (_.isString(newAction.selector) && _.isString(action.selector)) newAction.selector = action.selector;
-    if (_.isString(newAction.selectorType) && _.isString(action.selectorType)) newAction.selectorType = action.selectorType;
+    if (_.isString(newAction.value) && _.isString(action.value))
+      newAction.value = action.value;
+    if (
+      _.isBoolean(newAction.continueOnFail) &&
+      _.isBoolean(action.continueOnFail)
+    )
+      newAction.continueOnFail = action.continueOnFail;
+    if (_.isString(newAction.selector) && _.isString(action.selector))
+      newAction.selector = action.selector;
+    if (_.isString(newAction.selectorType) && _.isString(action.selectorType))
+      newAction.selectorType = action.selectorType;
 
     if (parentAction) {
       parentAction.value = newAction;
@@ -255,9 +285,7 @@ class ActionSelector extends React.PureComponent {
     } else {
       Message.to(Message.SESSION, "updateNWAction", newAction);
     }
-
   }
-
 }
 
 export default ActionSelector;
