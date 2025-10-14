@@ -1,6 +1,6 @@
-import {generate as generateId} from 'shortid'
-import _ from 'lodash'
-import * as ActionDefs from '../generators/_shared/ActionTruth'
+import { generate as generateId } from "shortid";
+import _ from "lodash";
+import * as ActionDefs from "../generators/_shared/ActionTruth";
 
 export const BLANK = "BLANK";
 export const KEYDOWN = "KEYDOWN";
@@ -47,6 +47,9 @@ export const CLEAR_COOKIES = "CLEAR_COOKIES";
 export const DIALOG = "DIALOG";
 export const CLEAR_CACHES = "CLEAR_CACHES";
 export const DYNAMIC_VAR = "DYNAMIC_VAR";
+export const DYNAMIC_VAR_COUNT = "DYNAMIC_VAR_COUNT";
+export const DYNAMIC_VAR_ATTR = "DYNAMIC_VAR_ATTR";
+export const VAR_ASSERT_CONDITION = "VAR_ASSERT_CONDITION";
 export const IF = "IF";
 export const ELSEIF = "ELSEIF";
 export const ELSE = "ELSE";
@@ -68,11 +71,15 @@ export const SEL_ATTR = "ATTR";
 export const SEL_TEXT = "TEXT";
 
 export const SELECTOR_TYPES = [
-  SEL_CSS, SEL_XPATH, SEL_ID, SEL_NAME, SEL_ATTR, SEL_TEXT
+  SEL_CSS,
+  SEL_XPATH,
+  SEL_ID,
+  SEL_NAME,
+  SEL_ATTR,
+  SEL_TEXT,
 ];
 
 export class Action {
-
   type = null;
   selector = "";
   selectorType = SEL_CSS;
@@ -89,11 +96,9 @@ export class Action {
     if (warnings) this.warnings = warnings;
     if (suggestions) this.suggestions = suggestions;
   }
-
 }
 
 export class KeydownAction extends Action {
-
   keyValue = "";
   keyCode = "";
   inputValue = "";
@@ -105,20 +110,16 @@ export class KeydownAction extends Action {
     this.keyCode = keyCode;
     this.inputValue = inputValue;
   }
-
 }
 
 export class SubmitAction extends Action {
-
   constructor(selector, warnings, suggestions) {
     super(selector, warnings, suggestions);
     this.type = SUBMIT;
   }
-
 }
 
 export class MousedownAction extends Action {
-
   textContent = null;
   textAsserted = false;
   x = null;
@@ -134,18 +135,15 @@ export class MousedownAction extends Action {
 }
 
 export class DoubleclickAction extends Action {
-
   type = DOUBLECLICK;
 
   constructor(selector) {
     super(selector);
     this.type = DOUBLECLICK;
   }
-
 }
 
 export class ClearCachesAction extends Action {
-
   cookieDomain = "${baseUrl}";
   sessionstorage = true;
   localstorage = true;
@@ -158,12 +156,9 @@ export class ClearCachesAction extends Action {
     if (cookieDomain) this.cookieDomain = cookieDomain;
     this.type = CLEAR_CACHES;
   }
-
 }
 
-
 export class DialogAction extends Action {
-
   alert = true;
   confirm = true;
   prompt = true;
@@ -173,42 +168,41 @@ export class DialogAction extends Action {
     super(selector);
     this.type = DIALOG;
   }
-
 }
 
 export class MouseoverAction extends Action {
-
   constructor(selector, warnings, suggestions) {
     super(selector, warnings, suggestions);
     this.type = MOUSEOVER;
   }
-
 }
 
 export class FocusAction extends Action {
-
   constructor(selector, warnings, suggestions) {
     super(selector, warnings, suggestions);
     this.type = FOCUS;
   }
-
 }
 
 export class BlurAction extends Action {
-
   constructor(selector, warnings, suggestions) {
     super(selector, warnings, suggestions);
     this.type = BLUR;
   }
-
 }
 
 export class InputAction extends Action {
-
   value = null;
   inputType = null;
 
-  constructor(selector, inputType, value, isContentEditable, warnings, suggestions) {
+  constructor(
+    selector,
+    inputType,
+    value,
+    isContentEditable,
+    warnings,
+    suggestions
+  ) {
     super(selector, warnings, suggestions);
     this.type = INPUT;
     this.inputType = inputType;
@@ -218,7 +212,6 @@ export class InputAction extends Action {
 }
 
 export class ExecuteScriptAction extends Action {
-
   script = null;
   description = "";
 
@@ -231,7 +224,6 @@ export class ExecuteScriptAction extends Action {
 }
 
 export class ScrollWindow extends Action {
-
   x = 0;
   y = 0;
 
@@ -244,7 +236,6 @@ export class ScrollWindow extends Action {
 }
 
 export class ScrollWindowToElement extends Action {
-
   constructor(selector, warnings, suggestions) {
     super(selector, warnings, suggestions);
     this.type = SCROLL_WINDOW_ELEMENT;
@@ -252,7 +243,6 @@ export class ScrollWindowToElement extends Action {
 }
 
 export class ScrollElement extends Action {
-
   x = 0;
   y = 0;
 
@@ -265,7 +255,6 @@ export class ScrollElement extends Action {
 }
 
 export class PopstateAction extends Action {
-
   value = "";
   index = null;
 
@@ -275,11 +264,9 @@ export class PopstateAction extends Action {
     if (value) this.value = value;
     this.index = index;
   }
-
 }
 
 export class PushstateAction extends Action {
-
   value = "";
   index = null;
 
@@ -292,7 +279,6 @@ export class PushstateAction extends Action {
 }
 
 export class ChangeWindowAction extends Action {
-
   value = 0;
 
   constructor(windowIndex) {
@@ -300,11 +286,9 @@ export class ChangeWindowAction extends Action {
     this.value = windowIndex;
     this.type = CHANGE_WINDOW;
   }
-
 }
 
 export class AutoChangeWindowAction extends Action {
-
   value = 0;
 
   constructor(windowIndex) {
@@ -312,7 +296,6 @@ export class AutoChangeWindowAction extends Action {
     this.value = windowIndex;
     this.type = CHANGE_WINDOW_AUTO;
   }
-
 }
 
 export class EnterFrameAction extends Action {
@@ -344,7 +327,6 @@ export class CloseTabAction extends Action {
 }
 
 export class FullPageloadAction extends Action {
-
   value = "";
   width = 500;
   height = 500;
@@ -361,7 +343,6 @@ export class FullPageloadAction extends Action {
 }
 
 export class PageloadAction extends Action {
-
   value = "";
 
   constructor(value) {
@@ -372,7 +353,6 @@ export class PageloadAction extends Action {
 }
 
 export class ComponentAction extends Action {
-
   componentId = null;
   variables = [];
 
@@ -384,7 +364,6 @@ export class ComponentAction extends Action {
 }
 
 export class UrlChangeIndicatorAction extends Action {
-
   value = "";
   index = null;
 
@@ -396,7 +375,6 @@ export class UrlChangeIndicatorAction extends Action {
 }
 
 export class TextAssertAction extends Action {
-
   value = "";
   regex = false;
 
@@ -408,7 +386,6 @@ export class TextAssertAction extends Action {
 }
 
 export class StyleAssertAction extends Action {
-
   value = "";
   regex = false;
   style = "";
@@ -422,7 +399,6 @@ export class StyleAssertAction extends Action {
 
 // @deprecating
 export class TextRegexAssertAction extends Action {
-
   value = ".+";
 
   constructor(selector, value, warnings, suggestions) {
@@ -430,11 +406,9 @@ export class TextRegexAssertAction extends Action {
     this.type = TEXT_REGEX_ASSERT;
     if (value) this.value = value;
   }
-
 }
 
 export class ValueAssertAction extends Action {
-
   value = "";
   regex = false;
 
@@ -446,7 +420,6 @@ export class ValueAssertAction extends Action {
 }
 
 export class PathAssertAction extends Action {
-
   value = "";
   regex = false;
   type = PATH_ASSERT;
@@ -455,11 +428,9 @@ export class PathAssertAction extends Action {
     super();
     if (value) this.value = value;
   }
-
 }
 
 export class EvalAssertAction extends Action {
-
   value = "";
   type = EVAL_ASSERT;
 
@@ -467,11 +438,9 @@ export class EvalAssertAction extends Action {
     super();
     if (value) this.value = value;
   }
-
 }
 
 export class EvalAction extends Action {
-
   value = "";
   type = EVAL;
 
@@ -479,10 +448,8 @@ export class EvalAction extends Action {
     super();
     if (value) this.value = value;
   }
-
 }
 export class DynamicVarAction extends Action {
-
   value = "";
   type = DYNAMIC_VAR;
 
@@ -490,7 +457,42 @@ export class DynamicVarAction extends Action {
     super();
     if (value) this.value = value;
   }
+}
 
+export class DynamicVarCountAction extends Action {
+  value = "";
+  type = DYNAMIC_VAR_COUNT;
+
+  constructor(value) {
+    super();
+    if (value) this.value = value;
+  }
+}
+
+export class DynamicVarAttrAction extends Action {
+  value = "";
+  attribute = "href";
+  type = DYNAMIC_VAR_ATTR;
+
+  constructor(value, attribute) {
+    super();
+    if (value) this.value = value;
+    if (attribute) this.attribute = attribute;
+  }
+}
+
+export class VarAssertConditionAction extends Action {
+  selector = "";
+  value = "";
+  conditionalType = "equals";
+  type = VAR_ASSERT_CONDITION;
+
+  constructor(selector, value, conditionalType = "equals") {
+    super();
+    if (selector) this.selector = selector;
+    if (value) this.value = value;
+    this.conditionalType = conditionalType;
+  }
 }
 
 export class ElPresentAssertAction extends Action {
@@ -532,53 +534,42 @@ export class ElNotVisibleAssertAction extends Action {
 }
 
 export class BlankAction extends Action {
-
   constructor() {
     super();
     this.type = BLANK;
   }
-
 }
 
 export class BackAction extends Action {
-
   constructor() {
     super();
     this.type = BACK;
   }
-
 }
 
 export class ForwardAction extends Action {
-
   constructor() {
     super();
     this.type = FORWARD;
   }
-
 }
 
 export class RefreshAction extends Action {
-
   constructor() {
     super();
     this.type = REFRESH;
   }
-
 }
 
 export class ClearCookiesAction extends Action {
-
   constructor() {
     super();
     this.value = "${baseUrl}";
     this.type = CLEAR_COOKIES;
   }
-
 }
 
 export class PauseAction extends Action {
-
   value = 2000;
 
   constructor(value) {
@@ -586,40 +577,32 @@ export class PauseAction extends Action {
     this.type = PAUSE;
     if (value) this.value = value;
   }
-
 }
 
 export class IfAction extends Action {
-
   constructor() {
     super();
     this.type = IF;
     this.value = new BlankAction();
   }
-
 }
 
 export class IfElseAction extends Action {
-
   constructor() {
     super();
     this.type = ELSEIF;
     this.value = new BlankAction();
   }
-
 }
 
 export class ElseAction extends Action {
-
   constructor() {
     super();
     this.type = ELSE;
   }
-
 }
 
 export class ScreenshotAction extends Action {
-
   value = "filename.png";
 
   constructor(value) {
@@ -627,7 +610,6 @@ export class ScreenshotAction extends Action {
     this.type = SCREENSHOT;
     if (value) this.value = value;
   }
-
 }
 
 export class TryAction extends Action {
@@ -676,8 +658,8 @@ export class CsvInsertAction extends Action {
     this.type = CSV_INSERT;
     this.csvName = "my-csv";
     this.columns = [
-      {columnName: "colA", selector: ".data", select: "innerHTML"},
-      {columnName: "colB", selector: ".data", select: "innerHTML"}
+      { columnName: "colA", selector: ".data", select: "innerHTML" },
+      { columnName: "colB", selector: ".data", select: "innerHTML" },
     ];
   }
 }
@@ -690,7 +672,6 @@ export class BreakAction extends Action {
 }
 
 export class MetaScanAction extends Action {
-
   pTitle = null;
   pDescription = null;
 
@@ -698,11 +679,9 @@ export class MetaScanAction extends Action {
     super();
     this.type = META_SCAN;
   }
-
 }
 
 export class RequestAction extends Action {
-
   reqId = null;
   variables = [];
 
@@ -711,18 +690,15 @@ export class RequestAction extends Action {
     this.type = REQUEST;
     this.reqId = reqId;
   }
-
 }
 
 export function generateDescription(state, action) {
-
   var description = null;
   var customAutoDescription = _.find(state.userSettings.descriptions);
 
   if (customAutoDescription) {
     description = customAutoDescription.description;
-  } else if (ActionDefs.ActionsByConstant[action.type].autodescribe){
-
+  } else if (ActionDefs.ActionsByConstant[action.type].autodescribe) {
     description = ActionDefs.ActionsByConstant[action.type].autodescribe;
 
     if (action.value) {
@@ -778,9 +754,7 @@ export function generateDescription(state, action) {
     } else {
       description = description.replace("%type", "EL_TYPE");
     }
-
   }
 
   return description;
-
 }

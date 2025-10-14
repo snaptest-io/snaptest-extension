@@ -1,0 +1,117 @@
+import React from "react";
+import Message from "../../../../util/Message";
+import * as Actions from "../../../../models/Action";
+import QuickActions from "../QuickActions";
+import DetailsSectionWrapper from "../DetailsSectionWrapper";
+import ActionSelector from "../ActionSelector";
+import SelectorSelector from "../SelectorSelector";
+import ValueSelector from "../ValueSelector";
+import DescriptionSelector from "../DescriptionSelector";
+import ActDesToggle from "../ActDesToggle";
+import { EditableLabel } from "../../../../component";
+
+class DynamicVarAttrActionItem extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { action, isExpanded, activeTest, showComment, userSettings } =
+      this.props;
+    const variableNames = activeTest
+      ? activeTest.variables.map((variable) => "${" + variable.name + "}")
+      : [];
+
+    return (
+      <div className="grid-item grid-row nw-action-con grid-column">
+        <div className="action-info">
+          <ActDesToggle {...this.props} showWarnings={userSettings.warnings} />
+          {showComment ? (
+            <DescriptionSelector {...this.props} />
+          ) : (
+            [
+              <ActionSelector {...this.props} />,
+              <ValueSelector
+                {...this.props}
+                variableNames={variableNames}
+                prefix="${"
+                postfix="}"
+              />,
+              <SelectorSelector
+                {...this.props}
+                variableNames={variableNames}
+              />,
+              <div className="joiner-phrase">attr:</div>,
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="value-selector"
+              >
+                <div className="value-tag">
+                  <EditableLabel
+                    value={action.attribute}
+                    onChange={(newValue) => this.onAttributeChange(newValue)}
+                    size={false}
+                    variableNames={variableNames}
+                  />
+                </div>
+              </div>,
+              <div className="grid-item"></div>,
+            ]
+          )}
+          <QuickActions
+            {...this.props}
+            isHovered={this.state.isHovered}
+            isSelectingForEl={this.props.selectingForActionId === action.id}
+          />
+        </div>
+        {isExpanded && (
+          <DetailsSectionWrapper {...this.props} userSettings={userSettings}>
+            <div className="details-row">
+              <div className="details-row-title">Variable name:</div>
+              <ValueSelector
+                {...this.props}
+                variableNames={variableNames}
+                prefix="${"
+                postfix="}"
+              />
+            </div>
+            <div className="details-row">
+              <div className="details-row-title">Selector:</div>
+              <SelectorSelector {...this.props} variableNames={variableNames} />
+            </div>
+            <div className="details-row">
+              <div className="details-row-title">Attribute:</div>
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="value-selector"
+              >
+                <div className="value-tag">
+                  <EditableLabel
+                    value={action.attribute}
+                    onChange={(newValue) => this.onAttributeChange(newValue)}
+                    size={false}
+                    variableNames={variableNames}
+                  />
+                </div>
+              </div>
+            </div>
+          </DetailsSectionWrapper>
+        )}
+      </div>
+    );
+  }
+
+  onAttributeChange(newAttribute) {
+    const { action, parentAction } = this.props;
+    action.attribute = newAttribute;
+
+    if (parentAction) {
+      parentAction.value = action;
+      Message.to(Message.SESSION, "updateNWAction", parentAction);
+    } else {
+      Message.to(Message.SESSION, "updateNWAction", action);
+    }
+  }
+}
+
+export default DynamicVarAttrActionItem;

@@ -1,50 +1,218 @@
 const POLLING_INTERVAL = 300;
-var URL = require('url-parse');
-import Message from '../../util/Message'
-import {saveScreenshot} from "../ScreenshotManager";
-const uuidv4 = require('uuid/v4');
+var URL = require("url-parse");
+import Message from "../../util/Message";
+import { saveScreenshot } from "../ScreenshotManager";
+const uuidv4 = require("uuid/v4");
 
 export const playbackActions = {
-  "FULL_PAGELOAD" : { perform: (tabId, frameStack, action, state) =>                   pageLoad(tabId, frameStack, action, state)},
-  "PAGELOAD" : { perform: (tabId, frameStack, action, state) =>                        pageLoad(tabId, frameStack, action, state)},
-  "PATH_ASSERT" : { perform: (tabId, frameStack, action, state) =>                     pathAssert(tabId, frameStack, action, state)},
-  "BACK" : { perform: (tabId, frameStack, action, state) =>                            back(tabId, frameStack, action, state)},
-  "REFRESH" : { perform: (tabId, frameStack, action, state) =>                         refresh(tabId, frameStack, action, state)},
-  "FORWARD" : { perform: (tabId, frameStack, action, state) =>                         forward(tabId, frameStack, action, state)},
-  "CLEAR_COOKIES" : { perform: (tabId, frameStack, action, state) =>                   clearCookies(tabId, frameStack, action, state)},
-  "CLEAR_CACHES" : { perform: (tabId, frameStack, action, state) =>                    clearCaches(tabId, frameStack, action, state)},
-  "DYNAMIC_VAR" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
-    dynamicVar(tabId, frameStack, action, state, subroutine, other.derivedVariables, other.dynamicVars)},
-  "INPUT" : { perform: (tabId, frameStack, action, state) =>                           changeInput(tabId, frameStack, action, state)},
-  "DIALOG" : { perform: (tabId, frameStack, action, state) =>                          setDialogs(tabId, frameStack, action, state)},
-  "MOUSEDOWN" : { perform: (tabId, frameStack, action, state) =>                       click(tabId, frameStack, action, state)},
-  "DOUBLECLICK" : { perform: (tabId, frameStack, action, state) =>                     doubleClick(tabId, frameStack, action, state)},
-  "FOCUS" : { perform: (tabId, frameStack, action, state) =>                           focus(tabId, frameStack, action, state)},
-  "BLUR" : { perform: (tabId, frameStack, action, state) =>                            blur(tabId, frameStack, action, state)},
-  "PAUSE" : { perform: (tabId, frameStack, action, state) =>                           pauseTime(tabId, frameStack, action, state)},
-  "SUBMIT" : { perform: (tabId, frameStack, action, state) =>                          submit(tabId, frameStack, action, state)},
-  "EXECUTE_SCRIPT" : { perform: (tabId, frameStack, action, state) =>                  executeCustomScript(tabId, frameStack, action, state)},
-  "SCROLL_WINDOW" : { perform: (tabId, frameStack, action, state) =>                   scrollWindow(tabId, frameStack, action, state)},
-  "SCROLL_ELEMENT" : { perform: (tabId, frameStack, action, state) =>                  scrollElement(tabId, frameStack, action, state)},
-  "SCROLL_WINDOW_ELEMENT" : { perform: (tabId, frameStack, action, state) =>           scrollWindowtoEl(tabId, frameStack, action, state)},
-  "EL_PRESENT_ASSERT" : { perform: (tabId, frameStack, action, state) =>               elementIsPresent(tabId, frameStack, action, state)},
-  "EL_NOT_PRESENT_ASSERT" : { perform: (tabId, frameStack, action, state) =>           elementIsNotPresent(tabId, frameStack, action, state)},
-  "EL_VISIBLE_ASSERT" : { perform: (tabId, frameStack, action, state) =>               elementIsVisible(tabId, frameStack, action, state)},
-  "EL_NOT_VISIBLE_ASSERT" : { perform: (tabId, frameStack, action, state) =>           elementIsNotVisible(tabId, frameStack, action, state)},
-  "TEXT_ASSERT" : { perform: (tabId, frameStack, action, state) =>                     textAssert(tabId, frameStack, action, state)},
-  "TEXT_REGEX_ASSERT" : { perform: (tabId, frameStack, action, state) =>               textRegexAssert(tabId, frameStack, action, state)},
-  "VALUE_ASSERT" : { perform: (tabId, frameStack, action, state) =>                    valueAssert(tabId, frameStack, action, state)},
-  "STYLE_ASSERT" : { perform: (tabId, frameStack, action, state) =>                    styleAssert(tabId, frameStack, action, state)},
-  "SCREENSHOT" : { perform: (tabId, frameStack, action, state) =>                      screenshot(tabId, frameStack, action, state)},
-  "REQUEST" : { perform: (tabId, frameStack, action, state) =>                         request(tabId, frameStack, action, state)},
-  "ENTER_FRAME" : { perform: (tabId, frameStack, action, state) =>                     enterFrame(tabId, frameStack, action, state)},
-  "EXIT_FRAME" : { perform: (tabId, frameStack, action, state) =>                      exitFrame(tabId, frameStack, action, state)},
-  "MOST_RECENT_TAB" : { perform: (tabId, frameStack, action, state) =>                 mostRecentTab(tabId, frameStack, action, state)},
-  "CLOSE_TAB" : { perform: (tabId, frameStack, action, state) =>                       closeTab(tabId, frameStack, action, state)},
-  "EVAL" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
-    evalAmbiguous(tabId, frameStack, action, state, subroutine, other.derivedVariables, other.dynamicVars)},
-  "CSV_INSERT" : { perform: (tabId, frameStack, action, state, subroutine, other) =>
-    insertCsvRow(tabId, frameStack, action, state, subroutine, other.derivedVariables, other.dataVars)},
+  FULL_PAGELOAD: {
+    perform: (tabId, frameStack, action, state) =>
+      pageLoad(tabId, frameStack, action, state),
+  },
+  PAGELOAD: {
+    perform: (tabId, frameStack, action, state) =>
+      pageLoad(tabId, frameStack, action, state),
+  },
+  PATH_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      pathAssert(tabId, frameStack, action, state),
+  },
+  BACK: {
+    perform: (tabId, frameStack, action, state) =>
+      back(tabId, frameStack, action, state),
+  },
+  REFRESH: {
+    perform: (tabId, frameStack, action, state) =>
+      refresh(tabId, frameStack, action, state),
+  },
+  FORWARD: {
+    perform: (tabId, frameStack, action, state) =>
+      forward(tabId, frameStack, action, state),
+  },
+  CLEAR_COOKIES: {
+    perform: (tabId, frameStack, action, state) =>
+      clearCookies(tabId, frameStack, action, state),
+  },
+  CLEAR_CACHES: {
+    perform: (tabId, frameStack, action, state) =>
+      clearCaches(tabId, frameStack, action, state),
+  },
+  DYNAMIC_VAR: {
+    perform: (tabId, frameStack, action, state, subroutine, other) =>
+      dynamicVar(
+        tabId,
+        frameStack,
+        action,
+        state,
+        subroutine,
+        other.derivedVariables,
+        other.dynamicVars
+      ),
+  },
+  DYNAMIC_VAR_COUNT: {
+    perform: (tabId, frameStack, action, state, subroutine, other) =>
+      dynamicVarCount(
+        tabId,
+        frameStack,
+        action,
+        state,
+        subroutine,
+        other.derivedVariables,
+        other.dynamicVars
+      ),
+  },
+  DYNAMIC_VAR_ATTR: {
+    perform: (tabId, frameStack, action, state, subroutine, other) =>
+      dynamicVarAttr(
+        tabId,
+        frameStack,
+        action,
+        state,
+        subroutine,
+        other.derivedVariables,
+        other.dynamicVars
+      ),
+  },
+  VAR_ASSERT_CONDITION: {
+    perform: (tabId, frameStack, action, state, subroutine, other) =>
+      varAssertCondition(
+        tabId,
+        frameStack,
+        action,
+        state,
+        subroutine,
+        other.derivedVariables,
+        other.dynamicVars
+      ),
+  },
+  INPUT: {
+    perform: (tabId, frameStack, action, state) =>
+      changeInput(tabId, frameStack, action, state),
+  },
+  DIALOG: {
+    perform: (tabId, frameStack, action, state) =>
+      setDialogs(tabId, frameStack, action, state),
+  },
+  MOUSEDOWN: {
+    perform: (tabId, frameStack, action, state) =>
+      click(tabId, frameStack, action, state),
+  },
+  DOUBLECLICK: {
+    perform: (tabId, frameStack, action, state) =>
+      doubleClick(tabId, frameStack, action, state),
+  },
+  FOCUS: {
+    perform: (tabId, frameStack, action, state) =>
+      focus(tabId, frameStack, action, state),
+  },
+  BLUR: {
+    perform: (tabId, frameStack, action, state) =>
+      blur(tabId, frameStack, action, state),
+  },
+  PAUSE: {
+    perform: (tabId, frameStack, action, state) =>
+      pauseTime(tabId, frameStack, action, state),
+  },
+  SUBMIT: {
+    perform: (tabId, frameStack, action, state) =>
+      submit(tabId, frameStack, action, state),
+  },
+  EXECUTE_SCRIPT: {
+    perform: (tabId, frameStack, action, state) =>
+      executeCustomScript(tabId, frameStack, action, state),
+  },
+  SCROLL_WINDOW: {
+    perform: (tabId, frameStack, action, state) =>
+      scrollWindow(tabId, frameStack, action, state),
+  },
+  SCROLL_ELEMENT: {
+    perform: (tabId, frameStack, action, state) =>
+      scrollElement(tabId, frameStack, action, state),
+  },
+  SCROLL_WINDOW_ELEMENT: {
+    perform: (tabId, frameStack, action, state) =>
+      scrollWindowtoEl(tabId, frameStack, action, state),
+  },
+  EL_PRESENT_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      elementIsPresent(tabId, frameStack, action, state),
+  },
+  EL_NOT_PRESENT_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      elementIsNotPresent(tabId, frameStack, action, state),
+  },
+  EL_VISIBLE_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      elementIsVisible(tabId, frameStack, action, state),
+  },
+  EL_NOT_VISIBLE_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      elementIsNotVisible(tabId, frameStack, action, state),
+  },
+  TEXT_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      textAssert(tabId, frameStack, action, state),
+  },
+  TEXT_REGEX_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      textRegexAssert(tabId, frameStack, action, state),
+  },
+  VALUE_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      valueAssert(tabId, frameStack, action, state),
+  },
+  STYLE_ASSERT: {
+    perform: (tabId, frameStack, action, state) =>
+      styleAssert(tabId, frameStack, action, state),
+  },
+  SCREENSHOT: {
+    perform: (tabId, frameStack, action, state) =>
+      screenshot(tabId, frameStack, action, state),
+  },
+  REQUEST: {
+    perform: (tabId, frameStack, action, state) =>
+      request(tabId, frameStack, action, state),
+  },
+  ENTER_FRAME: {
+    perform: (tabId, frameStack, action, state) =>
+      enterFrame(tabId, frameStack, action, state),
+  },
+  EXIT_FRAME: {
+    perform: (tabId, frameStack, action, state) =>
+      exitFrame(tabId, frameStack, action, state),
+  },
+  MOST_RECENT_TAB: {
+    perform: (tabId, frameStack, action, state) =>
+      mostRecentTab(tabId, frameStack, action, state),
+  },
+  CLOSE_TAB: {
+    perform: (tabId, frameStack, action, state) =>
+      closeTab(tabId, frameStack, action, state),
+  },
+  EVAL: {
+    perform: (tabId, frameStack, action, state, subroutine, other) =>
+      evalAmbiguous(
+        tabId,
+        frameStack,
+        action,
+        state,
+        subroutine,
+        other.derivedVariables,
+        other.dynamicVars
+      ),
+  },
+  CSV_INSERT: {
+    perform: (tabId, frameStack, action, state, subroutine, other) =>
+      insertCsvRow(
+        tabId,
+        frameStack,
+        action,
+        state,
+        subroutine,
+        other.derivedVariables,
+        other.dataVars
+      ),
+  },
 };
 
 /*
@@ -52,572 +220,910 @@ export const playbackActions = {
 */
 
 function executeFunction(name, params) {
-  if (typeof window[name] !== 'undefined') {
-    const result = window[name](params)
-    return result
+  if (typeof window[name] !== "undefined") {
+    const result = window[name](params);
+    return result;
   } else {
-    return {success: false}
+    return { success: false };
   }
 }
 
-var executeScript2 = (tabId, frameStack, playbackFnName, playbackFnParams) => new Promise((resolve, reject) => {
-  const frameId = frameStack.length > 0 ? frameStack[frameStack.length - 1] : 0
+var executeScript2 = (tabId, frameStack, playbackFnName, playbackFnParams) =>
+  new Promise((resolve, reject) => {
+    const frameId =
+      frameStack.length > 0 ? frameStack[frameStack.length - 1] : 0;
 
-  chrome.scripting.executeScript({
-    target: {
-      tabId, frameIds: [frameId]},
-    func: executeFunction,
-    args : [ playbackFnName, playbackFnParams ]
-  }, (results, error) => {
-    const result = results[0]
+    chrome.scripting.executeScript(
+      {
+        target: {
+          tabId,
+          frameIds: [frameId],
+        },
+        func: executeFunction,
+        args: [playbackFnName, playbackFnParams],
+      },
+      (results, error) => {
+        const result = results[0];
 
-    if (typeof result === "undefined") return resolve({success: false});
-    else if (error) return reject(error);
-    else return resolve(result.result);
-  });
-});
-
-var waitOnExecuteScriptSuccess = (tabId, frameStack, action, state, execute) => new Promise((resolve, reject) => {
-
-  var timeout = action.timeout || state.userSettings.globalTimeout;
-  var attempts = parseInt(timeout / POLLING_INTERVAL);
-  var currentAttempt = 0;
-
-  function _execute() {
-    execute(tabId, frameStack, action, state).then((result) => {
-      if (result && result.success) resolve(result);
-      else if (currentAttempt < attempts) {
-        currentAttempt++;
-        setTimeout(() => _execute(tabId, frameStack, action, state), POLLING_INTERVAL)
-      } else {
-        resolve(result);
+        if (typeof result === "undefined") return resolve({ success: false });
+        else if (error) return reject(error);
+        else return resolve(result.result);
       }
-    }).catch((e) => reject(e));
-  }
+    );
+  });
 
-  _execute();
+var waitOnExecuteScriptSuccess = (tabId, frameStack, action, state, execute) =>
+  new Promise((resolve, reject) => {
+    var timeout = action.timeout || state.userSettings.globalTimeout;
+    var attempts = parseInt(timeout / POLLING_INTERVAL);
+    var currentAttempt = 0;
 
-});
+    function _execute() {
+      execute(tabId, frameStack, action, state)
+        .then((result) => {
+          if (result && result.success) resolve(result);
+          else if (currentAttempt < attempts) {
+            currentAttempt++;
+            setTimeout(
+              () => _execute(tabId, frameStack, action, state),
+              POLLING_INTERVAL
+            );
+          } else {
+            resolve(result);
+          }
+        })
+        .catch((e) => reject(e));
+    }
+
+    _execute();
+  });
 
 var checkForElement = (tabId, frameStack, action, state) => {
-  return executeScript2(tabId, frameStack, 'checkElement', action)
+  return executeScript2(tabId, frameStack, "checkElement", action);
 };
 
 var checkForElementVisible = (tabId, frameStack, action, state) =>
-  executeScript2(tabId, frameStack, 'checkElementVisible', action);
+  executeScript2(tabId, frameStack, "checkElementVisible", action);
 
 var checkForIframe = (tabId, frameStack, action, state) =>
-  executeScript2(tabId, frameStack, 'checkIframe', action);
+  executeScript2(tabId, frameStack, "checkIframe", action);
 
-var waitForElementPresent = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
+var waitForElementPresent = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    var timeout = action.timeout || state.userSettings.globalTimeout;
+    var attempts = parseInt(timeout / POLLING_INTERVAL);
+    var currentAttempt = 0;
 
-  var timeout = action.timeout || state.userSettings.globalTimeout;
-  var attempts = parseInt(timeout / POLLING_INTERVAL);
-  var currentAttempt = 0;
+    function _checkElementPresent() {
+      checkForElement(tabId, frameStack, action, state)
+        .then((element) => {
+          if (element && element.success) resolve(true);
+          else if (currentAttempt < attempts) {
+            currentAttempt++;
+            setTimeout(() => _checkElementPresent(), POLLING_INTERVAL);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    }
 
-  function _checkElementPresent() {
-
-    checkForElement(tabId, frameStack, action, state).then((element) => {
-      if (element && element.success) resolve(true);
-      else if (currentAttempt < attempts) {
-        currentAttempt++;
-        setTimeout(() => _checkElementPresent(), POLLING_INTERVAL)
-      } else {
-        resolve(false);
-      }
-    }).catch((e) => {
-      reject(e)
-    });
-
-  }
-
-  _checkElementPresent();
-
-});
-
-var waitForElementNotPresent = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-
-  var timeout = action.timeout || state.userSettings.globalTimeout;
-  var attempts = parseInt(timeout / POLLING_INTERVAL);
-  var currentAttempt = 0;
-
-  function _checkElementNotPresent() {
-
-    checkForElement(tabId, frameStack, action, state).then((result) => {
-
-      if (!result || !result.success) {
-        resolve(true);
-      } else if (currentAttempt < attempts) {
-        currentAttempt++;
-        setTimeout(() => _checkElementNotPresent(), POLLING_INTERVAL)
-      } else {
-        resolve(false);
-      }
-
-    }).catch((e) => {
-      reject(e)
-    });
-
-  }
-
-  _checkElementNotPresent();
-
-});
-
-var waitForElementVisible = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-
-  var timeout = action.timeout || state.userSettings.globalTimeout;
-  var attempts = parseInt(timeout / POLLING_INTERVAL);
-  var currentAttempt = 0;
-
-  function _checkElementVisible() {
-
-    checkForElementVisible(tabId, frameStack, action, state).then((element) => {
-      if (element && element.success) resolve(true);
-      else if (currentAttempt < attempts) {
-        currentAttempt++;
-        setTimeout(() => _checkElementVisible(), POLLING_INTERVAL)
-      } else {
-        resolve(false);
-      }
-    }).catch((e) => {
-      reject(e)
-    });
-
-  }
-
-  _checkElementVisible();
-
-});
-
-var waitForElementNotVisible = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-
-  var timeout = action.timeout || state.userSettings.globalTimeout;
-  var attempts = parseInt(timeout / POLLING_INTERVAL);
-  var currentAttempt = 0;
-
-  function _checkElementNotVisible() {
-
-    checkForElementVisible(tabId, frameStack, action, state).then((result) => {
-      if (result && !result.success) {
-        resolve(true);
-      } else if  (currentAttempt < attempts) {
-        currentAttempt++;
-        setTimeout(() => _checkElementNotVisible(), POLLING_INTERVAL)
-      } else {
-        resolve(false);
-      }
-    }).catch((e) => {
-      reject(e)
-    });
-
-  }
-
-  _checkElementNotVisible();
-
-});
-
-var clearCookiesByUrl = (_url) => new Promise((resolve, reject) => {
-  var url = new URL(_url);
-  var domain = "";
-
-  if (url.hostname !== "localhost") {
-    var hostTokens = url.hostname.split(".");
-    domain = hostTokens[hostTokens.length - 2] + "." + hostTokens[hostTokens.length - 1];
-  } else {
-    domain = url.hostname;
-  }
-
-  function extrapolateUrlFromCookie(cookie) {
-    var prefix = cookie.secure ? "https://" : "http://";
-    if (cookie.domain.charAt(0) == ".")
-      prefix += "www";
-
-    return prefix + cookie.domain + cookie.path;
-  }
-
-  chrome.cookies.getAllCookieStores((stores) => {
-    stores.forEach((store) => {
-
-      chrome.cookies.getAll({domain, storeId: store.id}, function(cookies) {
-        for(var i=0; i<cookies.length;i++) {
-          chrome.cookies.remove({url: extrapolateUrlFromCookie(cookies[i]), name: cookies[i].name, storeId: store.id});
-        }
-      });
-
-      setTimeout(() => resolve({success: true}), 10)
-
-    })
+    _checkElementPresent();
   });
-});
 
-var elementNotFoundMessage = (action) => `Couldn't find element '${action.selector}' using method '${action.selectorType}'.`;
+var waitForElementNotPresent = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    var timeout = action.timeout || state.userSettings.globalTimeout;
+    var attempts = parseInt(timeout / POLLING_INTERVAL);
+    var currentAttempt = 0;
+
+    function _checkElementNotPresent() {
+      checkForElement(tabId, frameStack, action, state)
+        .then((result) => {
+          if (!result || !result.success) {
+            resolve(true);
+          } else if (currentAttempt < attempts) {
+            currentAttempt++;
+            setTimeout(() => _checkElementNotPresent(), POLLING_INTERVAL);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    }
+
+    _checkElementNotPresent();
+  });
+
+var waitForElementVisible = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    var timeout = action.timeout || state.userSettings.globalTimeout;
+    var attempts = parseInt(timeout / POLLING_INTERVAL);
+    var currentAttempt = 0;
+
+    function _checkElementVisible() {
+      checkForElementVisible(tabId, frameStack, action, state)
+        .then((element) => {
+          if (element && element.success) resolve(true);
+          else if (currentAttempt < attempts) {
+            currentAttempt++;
+            setTimeout(() => _checkElementVisible(), POLLING_INTERVAL);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    }
+
+    _checkElementVisible();
+  });
+
+var waitForElementNotVisible = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    var timeout = action.timeout || state.userSettings.globalTimeout;
+    var attempts = parseInt(timeout / POLLING_INTERVAL);
+    var currentAttempt = 0;
+
+    function _checkElementNotVisible() {
+      checkForElementVisible(tabId, frameStack, action, state)
+        .then((result) => {
+          if (result && !result.success) {
+            resolve(true);
+          } else if (currentAttempt < attempts) {
+            currentAttempt++;
+            setTimeout(() => _checkElementNotVisible(), POLLING_INTERVAL);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    }
+
+    _checkElementNotVisible();
+  });
+
+var clearCookiesByUrl = (_url) =>
+  new Promise((resolve, reject) => {
+    var url = new URL(_url);
+    var domain = "";
+
+    if (url.hostname !== "localhost") {
+      var hostTokens = url.hostname.split(".");
+      domain =
+        hostTokens[hostTokens.length - 2] +
+        "." +
+        hostTokens[hostTokens.length - 1];
+    } else {
+      domain = url.hostname;
+    }
+
+    function extrapolateUrlFromCookie(cookie) {
+      var prefix = cookie.secure ? "https://" : "http://";
+      if (cookie.domain.charAt(0) == ".") prefix += "www";
+
+      return prefix + cookie.domain + cookie.path;
+    }
+
+    chrome.cookies.getAllCookieStores((stores) => {
+      stores.forEach((store) => {
+        chrome.cookies.getAll(
+          { domain, storeId: store.id },
+          function (cookies) {
+            for (var i = 0; i < cookies.length; i++) {
+              chrome.cookies.remove({
+                url: extrapolateUrlFromCookie(cookies[i]),
+                name: cookies[i].name,
+                storeId: store.id,
+              });
+            }
+          }
+        );
+
+        setTimeout(() => resolve({ success: true }), 10);
+      });
+    });
+  });
+
+var elementNotFoundMessage = (action) =>
+  `Couldn't find element '${action.selector}' using method '${action.selectorType}'.`;
 
 /*
   Actions:
 */
 
-var enterFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-  var timeout = action.timeout || state.userSettings.globalTimeout;
-  var attempts = parseInt(timeout / POLLING_INTERVAL);
-  var currentAttempt = 0;
+var enterFrame = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    var timeout = action.timeout || state.userSettings.globalTimeout;
+    var attempts = parseInt(timeout / POLLING_INTERVAL);
+    var currentAttempt = 0;
 
-  function _getFrameIdBySrc() {
-
-    // use selectors to grab the url from the page, then grab that url from the frames list.
-    checkForIframe(tabId, frameStack, action, state).then((element) => {
-      if (element && element.success && element.src) {
-        chrome.webNavigation.getAllFrames({tabId}, (frames) => {
-          const frame = frames.find((frame) => frame.url === element.src)
-          if (!frame) {
+    function _getFrameIdBySrc() {
+      // use selectors to grab the url from the page, then grab that url from the frames list.
+      checkForIframe(tabId, frameStack, action, state)
+        .then((element) => {
+          if (element && element.success && element.src) {
+            chrome.webNavigation.getAllFrames({ tabId }, (frames) => {
+              const frame = frames.find((frame) => frame.url === element.src);
+              if (!frame) {
+                currentAttempt++;
+                setTimeout(() => _getFrameIdBySrc(), POLLING_INTERVAL);
+              } else {
+                frameStack.push(frame.frameId);
+                resolve({ success: true });
+              }
+            });
+          } else if (currentAttempt < attempts) {
             currentAttempt++;
-            setTimeout(() => _getFrameIdBySrc(), POLLING_INTERVAL)
+            setTimeout(() => _getFrameIdBySrc(), POLLING_INTERVAL);
           } else {
-            frameStack.push(frame.frameId)
-            resolve({success: true});
+            resolve({
+              success: false,
+              error: `Couldn't find iframe at '${action.selector}' using method '${action.selectorType}'.`,
+            });
           }
         })
-      }
-      else if (currentAttempt < attempts) {
-        currentAttempt++;
-        setTimeout(() => _getFrameIdBySrc(), POLLING_INTERVAL)
-      } else {
-        resolve({ success: false, error: `Couldn't find iframe at '${action.selector}' using method '${action.selectorType}'.`});
-      }
-    }).catch((e) => {
-      reject(e)
-    });
-  }
-
-  _getFrameIdBySrc();
-})
-
-var exitFrame = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-  frameStack.pop()
-  resolve({success: true});
-})
-
-var mostRecentTab = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-  resolve({success: true});
-})
-
-var closeTab = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-  // Only close if there are 2 tabs open, to prevent closing the last tab.
-  if (state.activeTabs.length - 1 > 0) {
-    state.activeTabs.pop();
-    state.currentTabId = state.activeTabs[state.activeTabs.length - 1]
-    chrome.tabs.remove(tabId);
-  }
-  setTimeout(resolve({success: true}), 50) // Give time for Chrome to call chrome.tabs.onActivated
-})
-
-var pageLoad = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-
-  var loaded = false;
-
-  chrome.tabs.onUpdated.addListener(function (tabId , info, tab) {
-    if (tabId === tab.id && state.isPlayingBack && !loaded && ( !action.complete || info.status === 'complete')) {
-      loaded = true;
-      state.playbackResult[action.id] = {processing: false, success: true };
-      if (action.resize) {
-        chrome.windows.update(state.currentWindowId, {width: action.width, height: action.height, state: "normal"}, () => {
-          Message.toAll("stateChange", {...state, tests: [], testsExcluded: true});
-          resolve({success: true});
+        .catch((e) => {
+          reject(e);
         });
-      } else {
-        Message.toAll("stateChange", {...state, tests: [], testsExcluded: true});
-        resolve({success: true});
-      }
-    }
-  });
-
-  chrome.tabs.get(tabId, (tab) => {
-
-    var tabUrl = new URL(tab.url);
-    var targetUrl = new URL(action.value);
-
-    // check actions value.  in case of a relative path,  it'll show "chrome-extension:" as protocol.  In this case, add the proper baseUrl
-    if (targetUrl.protocol === "chrome-extension:") {
-      targetUrl = new URL(action.value, tabUrl.origin);
     }
 
-    chrome.tabs.update(tabId, {url: targetUrl.href});
-
+    _getFrameIdBySrc();
   });
-})
 
-var pathAssert = (tabId, frameStack, action, state) =>
-  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-    executeScript2(tabId, frameStack, 'pathAssert', action))
-    // executeScript(callExecuteFunction("pathAssert", JSON.stringify(action)), tabId, frameStack, state))
-    .then((result) => {
-      if (!result || !result.success) return { success: false, error: `Expected path to be "${action.value}" but was "${result.value}"` };
-      else return { success: true };
-    });
+var exitFrame = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    frameStack.pop();
+    resolve({ success: true });
+  });
 
-var elementIsPresent = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action)} : { success : true });
+var mostRecentTab = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    resolve({ success: true });
+  });
 
-var elementIsNotPresent = (tabId, frameStack, action, state) =>
-  waitForElementNotPresent(tabId, frameStack, action, state).then((result) => !result ? { success: false, error: "Element was found." } : { success: true });
+var closeTab = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    // Only close if there are 2 tabs open, to prevent closing the last tab.
+    if (state.activeTabs.length - 1 > 0) {
+      state.activeTabs.pop();
+      state.currentTabId = state.activeTabs[state.activeTabs.length - 1];
+      chrome.tabs.remove(tabId);
+    }
+    setTimeout(resolve({ success: true }), 50); // Give time for Chrome to call chrome.tabs.onActivated
+  });
 
-var elementIsVisible = (tabId, frameStack, action, state) =>
-  waitForElementVisible(tabId, frameStack, action, state)
-    .then((result) => {
+var pageLoad = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    var loaded = false;
 
-      if (!result) return {
-        success: false, error: `Element was not visible for the duration of the timeout.`
-      };
-
-      else return { success: true };
-
-    });
-
-var elementIsNotVisible = (tabId, frameStack, action, state) =>
-  waitForElementNotVisible(tabId, frameStack, action, state)
-    .then((result) => {
-
-      if (!result) return {
-        success: false, error: `Element was visible for the duration of the timeout.`
-      };
-
-      else return { success: true };
-
-    });
-
-var back = (tabId, frameStack, action, state) =>
-  executeScript2(tabId, frameStack, 'triggerBack', action).then(() => ({ success: true }))
-
-var forward = (tabId, frameStack, action, state) =>
-  executeScript2(tabId, frameStack, 'triggerForward', action).then(() => ({ success: true }))
-
-var refresh = (tabId, frameStack, action, state) =>
-  executeScript2(tabId, frameStack, 'triggerRefresh', action).then(() => ({ success: true }))
-
-var clearCookies = (tabId, frameStack, action, state) => clearCookiesByUrl(action.value);
-
-var clearCaches = (tabId, frameStack, action, state) =>
-  clearCookiesByUrl(action.cookieDomain)
-    .then(() =>
-      executeScript2(tabId, frameStack, 'clearCaches', action).then(() => ({ success: true }))
-    );
-
-var dynamicVar = (tabId, frameStack, action, state, subroutine, derivedVariables, dynamicVars) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'getInnerHtml', action).then((result) => {
-      dynamicVars[action.value] = result.value;
-      return {success: true}
-    }));
-
-var click = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerClick', action).then(() => ({ success: true })));
-
-var doubleClick = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerDoubleClick', action).then(() => ({ success: true })))
-
-var focus = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerFocus', action).then(() => ({ success: true })))
-
-var blur = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerBlur', action).then(() => ({ success: true })));
-
-var changeInput = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerChangeInput', action).then(() => ({ success: true })));
-
-var waitForPageLoad = (tabId, frameStack, action, state) => {
-  return new Promise((resolve) => {
-    chrome.tabs.onUpdated.addListener(function (tabId , info, tab) {
-      if (tabId === tab.id && state.isPlayingBack && info.status === 'complete') {
-        resolve({success: true});
+    chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+      if (
+        tabId === tab.id &&
+        state.isPlayingBack &&
+        !loaded &&
+        (!action.complete || info.status === "complete")
+      ) {
+        loaded = true;
+        state.playbackResult[action.id] = { processing: false, success: true };
+        if (action.resize) {
+          chrome.windows.update(
+            state.currentWindowId,
+            { width: action.width, height: action.height, state: "normal" },
+            () => {
+              Message.toAll("stateChange", {
+                ...state,
+                tests: [],
+                testsExcluded: true,
+              });
+              resolve({ success: true });
+            }
+          );
+        } else {
+          Message.toAll("stateChange", {
+            ...state,
+            tests: [],
+            testsExcluded: true,
+          });
+          resolve({ success: true });
+        }
       }
     });
 
     chrome.tabs.get(tabId, (tab) => {
-      if (tab.status === 'complete') {
+      var tabUrl = new URL(tab.url);
+      var targetUrl = new URL(action.value);
+
+      // check actions value.  in case of a relative path,  it'll show "chrome-extension:" as protocol.  In this case, add the proper baseUrl
+      if (targetUrl.protocol === "chrome-extension:") {
+        targetUrl = new URL(action.value, tabUrl.origin);
+      }
+
+      chrome.tabs.update(tabId, { url: targetUrl.href });
+    });
+  });
+
+var pathAssert = (tabId, frameStack, action, state) =>
+  waitOnExecuteScriptSuccess(
+    tabId,
+    frameStack,
+    action,
+    state,
+    (tabId, frameStack, action, state) =>
+      executeScript2(tabId, frameStack, "pathAssert", action)
+  )
+    // executeScript(callExecuteFunction("pathAssert", JSON.stringify(action)), tabId, frameStack, state))
+    .then((result) => {
+      if (!result || !result.success)
+        return {
+          success: false,
+          error: `Expected path to be "${action.value}" but was "${result.value}"`,
+        };
+      else return { success: true };
+    });
+
+var elementIsPresent = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : { success: true }
+  );
+
+var elementIsNotPresent = (tabId, frameStack, action, state) =>
+  waitForElementNotPresent(tabId, frameStack, action, state).then((result) =>
+    !result
+      ? { success: false, error: "Element was found." }
+      : { success: true }
+  );
+
+var elementIsVisible = (tabId, frameStack, action, state) =>
+  waitForElementVisible(tabId, frameStack, action, state).then((result) => {
+    if (!result)
+      return {
+        success: false,
+        error: `Element was not visible for the duration of the timeout.`,
+      };
+    else return { success: true };
+  });
+
+var elementIsNotVisible = (tabId, frameStack, action, state) =>
+  waitForElementNotVisible(tabId, frameStack, action, state).then((result) => {
+    if (!result)
+      return {
+        success: false,
+        error: `Element was visible for the duration of the timeout.`,
+      };
+    else return { success: true };
+  });
+
+var back = (tabId, frameStack, action, state) =>
+  executeScript2(tabId, frameStack, "triggerBack", action).then(() => ({
+    success: true,
+  }));
+
+var forward = (tabId, frameStack, action, state) =>
+  executeScript2(tabId, frameStack, "triggerForward", action).then(() => ({
+    success: true,
+  }));
+
+var refresh = (tabId, frameStack, action, state) =>
+  executeScript2(tabId, frameStack, "triggerRefresh", action).then(() => ({
+    success: true,
+  }));
+
+var clearCookies = (tabId, frameStack, action, state) =>
+  clearCookiesByUrl(action.value);
+
+var clearCaches = (tabId, frameStack, action, state) =>
+  clearCookiesByUrl(action.cookieDomain).then(() =>
+    executeScript2(tabId, frameStack, "clearCaches", action).then(() => ({
+      success: true,
+    }))
+  );
+
+var dynamicVar = (
+  tabId,
+  frameStack,
+  action,
+  state,
+  subroutine,
+  derivedVariables,
+  dynamicVars
+) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : executeScript2(tabId, frameStack, "getInnerHtml", action).then(
+          (result) => {
+            dynamicVars[action.value] = result.value;
+            return { success: true };
+          }
+        )
+  );
+
+var dynamicVarCount = (
+  tabId,
+  frameStack,
+  action,
+  state,
+  subroutine,
+  derivedVariables,
+  dynamicVars
+) =>
+  executeScript2(tabId, frameStack, "getElementCount", action).then(
+    (result) => {
+      dynamicVars[action.value] = result.value;
+      return { success: true };
+    }
+  );
+
+var dynamicVarAttr = (
+  tabId,
+  frameStack,
+  action,
+  state,
+  subroutine,
+  derivedVariables,
+  dynamicVars
+) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : executeScript2(tabId, frameStack, "getElementAttribute", action).then(
+          (result) => {
+            dynamicVars[action.value] = result.value;
+            return { success: true };
+          }
+        )
+  );
+
+var varAssertCondition = (
+  tabId,
+  frameStack,
+  action,
+  state,
+  subroutine,
+  derivedVariables,
+  dynamicVars
+) => {
+  return new Promise((resolve) => {
+    const varName = action.selector;
+    const expectedValue = action.value;
+    const actualValue = dynamicVars[varName];
+    const conditionalType = action.conditionalType || "equals";
+
+    let success = false;
+    let operator = "==";
+
+    switch (conditionalType) {
+      case "equals":
+        success = actualValue == expectedValue;
+        operator = "==";
+        break;
+      case "notEquals":
+        success = actualValue != expectedValue;
+        operator = "!=";
+        break;
+      case "lessThan":
+        success = parseFloat(actualValue) < parseFloat(expectedValue);
+        operator = "<";
+        break;
+      case "greaterThan":
+        success = parseFloat(actualValue) > parseFloat(expectedValue);
+        operator = ">";
+        break;
+      case "lessThanOrEqual":
+        success = parseFloat(actualValue) <= parseFloat(expectedValue);
+        operator = "<=";
+        break;
+      case "greaterThanOrEqual":
+        success = parseFloat(actualValue) >= parseFloat(expectedValue);
+        operator = ">=";
+        break;
+      case "matchRegex":
+        try {
+          const regex = new RegExp(expectedValue);
+          success = regex.test(actualValue);
+          operator = "~=";
+        } catch (e) {
+          success = false;
+          operator = "~=";
+        }
+        break;
+      default:
+        success = actualValue === expectedValue;
+        operator = "==";
+    }
+
+    if (success) {
+      resolve({ success: true });
+    } else {
+      resolve({
+        success: false,
+        error: `Variable "${varName}" expected to be ${operator} "${expectedValue}" but was "${actualValue}"`,
+      });
+    }
+  });
+};
+
+var click = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : executeScript2(tabId, frameStack, "triggerClick", action).then(() => ({
+          success: true,
+        }))
+  );
+
+var doubleClick = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : executeScript2(tabId, frameStack, "triggerDoubleClick", action).then(
+          () => ({ success: true })
+        )
+  );
+
+var focus = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : executeScript2(tabId, frameStack, "triggerFocus", action).then(() => ({
+          success: true,
+        }))
+  );
+
+var blur = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : executeScript2(tabId, frameStack, "triggerBlur", action).then(() => ({
+          success: true,
+        }))
+  );
+
+var changeInput = (tabId, frameStack, action, state) =>
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : executeScript2(tabId, frameStack, "triggerChangeInput", action).then(
+          () => ({ success: true })
+        )
+  );
+
+var waitForPageLoad = (tabId, frameStack, action, state) => {
+  return new Promise((resolve) => {
+    chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+      if (
+        tabId === tab.id &&
+        state.isPlayingBack &&
+        info.status === "complete"
+      ) {
         resolve({ success: true });
       }
     });
-  })
-}
+
+    chrome.tabs.get(tabId, (tab) => {
+      if (tab.status === "complete") {
+        resolve({ success: true });
+      }
+    });
+  });
+};
 
 var setDialogs = (tabId, frameStack, action, state) => {
   // First wait for the page to load, then execute the script when the page is ready.
-  return waitForPageLoad(tabId, frameStack, action, state)
-    .then(() =>
-      waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-        executeScript2(tabId, frameStack, 'setDialogs', action)
-          .then(() => ({ success: true }))
-      )
-    );
-}
+  return waitForPageLoad(tabId, frameStack, action, state).then(() =>
+    waitOnExecuteScriptSuccess(
+      tabId,
+      frameStack,
+      action,
+      state,
+      (tabId, frameStack, action, state) =>
+        executeScript2(tabId, frameStack, "setDialogs", action).then(() => ({
+          success: true,
+        }))
+    )
+  );
+};
 
-var pauseTime = (tabId, frameStack, action, state) => new Promise((resolve, reject) => setTimeout(() => resolve({success: true}), action.value));
+var pauseTime = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) =>
+    setTimeout(() => resolve({ success: true }), action.value)
+  );
 
 var submit = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerSubmit', action).then(() => ({ success: true })));
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : executeScript2(tabId, frameStack, "triggerSubmit", action).then(() => ({
+          success: true,
+        }))
+  );
 
 var executeCustomScript = (tabId, frameStack, action, state) =>
-  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-    executeScript2(tabId, frameStack, 'executeScript', action))
-    .then(() => {
-      return { success: true }
-    });
+  waitOnExecuteScriptSuccess(
+    tabId,
+    frameStack,
+    action,
+    state,
+    (tabId, frameStack, action, state) =>
+      executeScript2(tabId, frameStack, "executeScript", action)
+  ).then(() => {
+    return { success: true };
+  });
 
 var scrollWindow = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerScrollWindow', action)).then(() => ({ success: true }));
+  waitForElementPresent(tabId, frameStack, action, state)
+    .then((el) =>
+      !el
+        ? { success: false, error: elementNotFoundMessage(action) }
+        : executeScript2(tabId, frameStack, "triggerScrollWindow", action)
+    )
+    .then(() => ({ success: true }));
 
 var scrollElement = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerScrollElement', action)).then(() => ({ success: true }));
+  waitForElementPresent(tabId, frameStack, action, state)
+    .then((el) =>
+      !el
+        ? { success: false, error: elementNotFoundMessage(action) }
+        : executeScript2(tabId, frameStack, "triggerScrollElement", action)
+    )
+    .then(() => ({ success: true }));
 
 var scrollWindowtoEl = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    executeScript2(tabId, frameStack, 'triggerWindowToElement', action)).then(() => ({ success: true }));
+  waitForElementPresent(tabId, frameStack, action, state)
+    .then((el) =>
+      !el
+        ? { success: false, error: elementNotFoundMessage(action) }
+        : executeScript2(tabId, frameStack, "triggerWindowToElement", action)
+    )
+    .then(() => ({ success: true }));
 
 var textAssert = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-      executeScript2(tabId, frameStack, 'assertText', action))
-      .then((result) => {
-        if (!result || !result.success) return { success: false, error: `Expected text to be "${action.value}" but was "${result.value}"` };
-        else return { success: true };
-      }));
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : waitOnExecuteScriptSuccess(
+          tabId,
+          frameStack,
+          action,
+          state,
+          (tabId, frameStack, action, state) =>
+            executeScript2(tabId, frameStack, "assertText", action)
+        ).then((result) => {
+          if (!result || !result.success)
+            return {
+              success: false,
+              error: `Expected text to be "${action.value}" but was "${result.value}"`,
+            };
+          else return { success: true };
+        })
+  );
 
 var textRegexAssert = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-      executeScript2(tabId, frameStack, 'assertTextRegex', action))
-      .then((result) => {
-        if (!result || !result.success) return { success: false, error: `Expected text to match regex "${action.value}" but was "${result.value}"` };
-        else return { success: true };
-      }));
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : waitOnExecuteScriptSuccess(
+          tabId,
+          frameStack,
+          action,
+          state,
+          (tabId, frameStack, action, state) =>
+            executeScript2(tabId, frameStack, "assertTextRegex", action)
+        ).then((result) => {
+          if (!result || !result.success)
+            return {
+              success: false,
+              error: `Expected text to match regex "${action.value}" but was "${result.value}"`,
+            };
+          else return { success: true };
+        })
+  );
 
 var valueAssert = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-      executeScript2(tabId, frameStack, 'assertValue', action))
-      // executeScript(`window.assertValue(${JSON.stringify(action)})`, tabId, frameStack, state))
-      .then((result) => {
-        if (!result || !result.success) return { success: false, error: `Expected value to be "${action.value}" but was "${result.value}"` };
-        else return { success: true };
-      }));
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : waitOnExecuteScriptSuccess(
+          tabId,
+          frameStack,
+          action,
+          state,
+          (tabId, frameStack, action, state) =>
+            executeScript2(tabId, frameStack, "assertValue", action)
+        )
+          // executeScript(`window.assertValue(${JSON.stringify(action)})`, tabId, frameStack, state))
+          .then((result) => {
+            if (!result || !result.success)
+              return {
+                success: false,
+                error: `Expected value to be "${action.value}" but was "${result.value}"`,
+              };
+            else return { success: true };
+          })
+  );
 
 var styleAssert = (tabId, frameStack, action, state) =>
-  waitForElementPresent(tabId, frameStack, action, state).then((el) => !el ? { success: false, error: elementNotFoundMessage(action) } :
-    waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-      executeScript2(tabId, frameStack, 'assertStyle', action))
-      // executeScript(`window.assertStyle(${JSON.stringify(action)})`, tabId, frameStack, state))
-      .then((result) => {
-        if (!result || !result.success) return { success: false, error: `Expected "${action.style}" style to be "${action.value}" but was "${result.value}"` };
-        else return { success: true };
-      }));
+  waitForElementPresent(tabId, frameStack, action, state).then((el) =>
+    !el
+      ? { success: false, error: elementNotFoundMessage(action) }
+      : waitOnExecuteScriptSuccess(
+          tabId,
+          frameStack,
+          action,
+          state,
+          (tabId, frameStack, action, state) =>
+            executeScript2(tabId, frameStack, "assertStyle", action)
+        )
+          // executeScript(`window.assertStyle(${JSON.stringify(action)})`, tabId, frameStack, state))
+          .then((result) => {
+            if (!result || !result.success)
+              return {
+                success: false,
+                error: `Expected "${action.style}" style to be "${action.value}" but was "${result.value}"`,
+              };
+            else return { success: true };
+          })
+  );
 
 var evalInIframe = (value, derivedVariables, dynamicVars, appWindowId) => {
   return new Promise((resolve, reject) => {
-    Message.onMessageFor('eval-response', (response) => {
-      resolve(response.payload)
-    })
-    Message.to(Message.PANEL, "eval", {value, variables: derivedVariables, dynamicVars});
-  })
+    Message.onMessageFor("eval-response", (response) => {
+      resolve(response.payload);
+    });
+    Message.to(Message.PANEL, "eval", {
+      value,
+      variables: derivedVariables,
+      dynamicVars,
+    });
+  });
 };
 
-var evalAmbiguous = (tabId, frameStack, action, state, subroutine, derivedVariables, dynamicVars) =>
-  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) => {
-    // Eval didn't run in target window, and needs to be evalled in an iframe.
-    return evalInIframe(action.value, derivedVariables, dynamicVars, state.appWindowId).then((result) => {
+var evalAmbiguous = (
+  tabId,
+  frameStack,
+  action,
+  state,
+  subroutine,
+  derivedVariables,
+  dynamicVars
+) =>
+  waitOnExecuteScriptSuccess(
+    tabId,
+    frameStack,
+    action,
+    state,
+    (tabId, frameStack, action, state) => {
+      // Eval didn't run in target window, and needs to be evalled in an iframe.
+      return evalInIframe(
+        action.value,
+        derivedVariables,
+        dynamicVars,
+        state.appWindowId
+      ).then((result) => {
+        if (result.dynamicVars) Object.assign(dynamicVars, result.dynamicVars);
 
-      if (result.dynamicVars) Object.assign(dynamicVars, result.dynamicVars);
+        if (!result.success)
+          return {
+            success: false,
+            error: `Eval returned an error: "${result.result}" `,
+          };
 
-      if (!result.success)
-        return {
-          success: false,
-          error: `Eval returned an error: "${result.result}" `
-        };
-
-      if (result.result === "false") {
-        return { success: false, error: `Eval returned false` };
-      } else {
-        return { success: true};
-      }
-
-    })
-  });
-
-var insertCsvRow = (tabId, frameStack, action, state, subroutine, derivedVariables, dataVars) => new Promise((resolve, reject) => {
-
-  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-    executeScript2(tabId, frameStack, 'getCsvValues', action))
-    // executeScript(`window.getCsvValues(${JSON.stringify(action)})`, tabId, frameStack, state))
-    .then((result) => {
-
-      var csvName = action.csvName;
-      var columns = action.columns;
-
-      if (!dataVars[csvName]) dataVars[csvName] = [columns.map((column) => column.columnName)];
-
-      if (result) {
-        dataVars[csvName].push(result.results);
-      }
-
-      return {success: true};
-
-    });
-
-  return resolve({ success: true});
-});
-
-var screenshot = (tabId, frameStack, action, state) =>
-  waitOnExecuteScriptSuccess(tabId, frameStack, action, state, (tabId, frameStack, action, state) =>
-    executeScript2(tabId, frameStack, 'hideSnapUI', action))
-    // executeScript(callExecuteFunction("hideSnapUI", JSON.stringify(action)), tabId, frameStack, state))
-    .then(() => new Promise((resolve, reject) => {
-
-      chrome.tabs.captureVisibleTab(state.currentWindowId, { format: 'jpeg', quality: 70 }, (dataURI, error) => {
-
-        var uuid = uuidv4();
-        action.screenshot = uuid;
-
-        saveScreenshot(dataURI, uuid).then(() => {
-          return resolve({ success: true});
-        });
-      })
-
-  })).then(() =>
-    executeScript2(tabId, frameStack, 'showSnapUI', action)
+        if (result.result === "false") {
+          return { success: false, error: `Eval returned false` };
+        } else {
+          return { success: true };
+        }
+      });
+    }
   );
 
-var request = (tabId, frameStack, action, state) => new Promise((resolve, reject) => {
-  var response, headers = {};
+var insertCsvRow = (
+  tabId,
+  frameStack,
+  action,
+  state,
+  subroutine,
+  derivedVariables,
+  dataVars
+) =>
+  new Promise((resolve, reject) => {
+    waitOnExecuteScriptSuccess(
+      tabId,
+      frameStack,
+      action,
+      state,
+      (tabId, frameStack, action, state) =>
+        executeScript2(tabId, frameStack, "getCsvValues", action)
+    )
+      // executeScript(`window.getCsvValues(${JSON.stringify(action)})`, tabId, frameStack, state))
+      .then((result) => {
+        var csvName = action.csvName;
+        var columns = action.columns;
 
-  action.request.headers.forEach((header) => { headers[header.key] = header.value; });
+        if (!dataVars[csvName])
+          dataVars[csvName] = [columns.map((column) => column.columnName)];
 
-  var options = {
-    method: action.request.method,
-    headers,
-    credentials: 'include'
-  };
+        if (result) {
+          dataVars[csvName].push(result.results);
+        }
 
-  if (action.request.body) options.body = action.request.body;
+        return { success: true };
+      });
 
-  return fetch(action.request.url, options).then((r) => {
-    response = r;
-    return response.text();
-  }).then((body) => {
-    if (action.reportResult) {
-      state.recentRequestResult = {status: response.status, body};
-    }
-    return resolve({success: true})
-  }).catch((e) => {
-    if (action.reportResult) {
-      state.recentRequestResult = {status: e.message};
-    }
-    return resolve({success: true})
+    return resolve({ success: true });
   });
-});
+
+var screenshot = (tabId, frameStack, action, state) =>
+  waitOnExecuteScriptSuccess(
+    tabId,
+    frameStack,
+    action,
+    state,
+    (tabId, frameStack, action, state) =>
+      executeScript2(tabId, frameStack, "hideSnapUI", action)
+  )
+    // executeScript(callExecuteFunction("hideSnapUI", JSON.stringify(action)), tabId, frameStack, state))
+    .then(
+      () =>
+        new Promise((resolve, reject) => {
+          chrome.tabs.captureVisibleTab(
+            state.currentWindowId,
+            { format: "jpeg", quality: 70 },
+            (dataURI, error) => {
+              var uuid = uuidv4();
+              action.screenshot = uuid;
+
+              saveScreenshot(dataURI, uuid).then(() => {
+                return resolve({ success: true });
+              });
+            }
+          );
+        })
+    )
+    .then(() => executeScript2(tabId, frameStack, "showSnapUI", action));
+
+var request = (tabId, frameStack, action, state) =>
+  new Promise((resolve, reject) => {
+    var response,
+      headers = {};
+
+    action.request.headers.forEach((header) => {
+      headers[header.key] = header.value;
+    });
+
+    var options = {
+      method: action.request.method,
+      headers,
+      credentials: "include",
+    };
+
+    if (action.request.body) options.body = action.request.body;
+
+    return fetch(action.request.url, options)
+      .then((r) => {
+        response = r;
+        return response.text();
+      })
+      .then((body) => {
+        if (action.reportResult) {
+          state.recentRequestResult = { status: response.status, body };
+        }
+        return resolve({ success: true });
+      })
+      .catch((e) => {
+        if (action.reportResult) {
+          state.recentRequestResult = { status: e.message };
+        }
+        return resolve({ success: true });
+      });
+  });
