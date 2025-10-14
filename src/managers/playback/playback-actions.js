@@ -704,11 +704,11 @@ var varAssertCondition = (
 
     switch (conditionalType) {
       case "equals":
-        success = actualValue === expectedValue;
+        success = actualValue == expectedValue;
         operator = "==";
         break;
       case "notEquals":
-        success = actualValue !== expectedValue;
+        success = actualValue != expectedValue;
         operator = "!=";
         break;
       case "lessThan":

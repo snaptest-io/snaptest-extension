@@ -56,7 +56,7 @@ class VarAssertConditionActionItem extends React.PureComponent {
           <option value="greaterThan">&gt;</option>
           <option value="lessThanOrEqual">&lt;=</option>
           <option value="greaterThanOrEqual">&gt;=</option>
-          <option value="matchRegex">~= (regex)</option>
+          {/* <option value="matchRegex">~= (regex)</option> */}
         </select>
         {/* </div> */}
       </div>
