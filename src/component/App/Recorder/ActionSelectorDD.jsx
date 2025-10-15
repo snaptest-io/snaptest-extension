@@ -255,11 +255,21 @@ class ActionSelectorDD extends React.Component {
     // ActionDefs.Actions
     return ActionDefs.Actions.filter((action) => {
       if (action.name.toLowerCase().indexOf(query) !== -1) return true;
-      if (
-        action.category &&
-        action.category.toLowerCase().indexOf(query) !== -1
-      )
-        return true;
+
+      // Handle both single category strings and arrays of categories
+      if (action.category) {
+        const categories = Array.isArray(action.category)
+          ? action.category
+          : [action.category];
+        if (
+          categories.some(
+            (category) => category.toLowerCase().indexOf(query) !== -1
+          )
+        ) {
+          return true;
+        }
+      }
+
       if (
         action.tags.filter((tag) => tag.toLowerCase().indexOf(query) !== -1)
           .length > 0

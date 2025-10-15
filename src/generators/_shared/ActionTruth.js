@@ -530,7 +530,7 @@ const Actions = [
   {
     name: "Assert variable...",
     constant: "VAR_ASSERT_CONDITION",
-    category: CATEGORIES.VARIABLES,
+    category: [CATEGORIES.VARIABLES, CATEGORIES.ASSERTIONS],
     description: null,
     supportedBy: ["snaptest", "nightwatch"],
     tags: [
@@ -1163,11 +1163,22 @@ for (var i in CATEGORIES) {
 Actions.forEach((action) => {
   if (!action.category) return;
 
-  var category = _.find(_actionsByCategory, { label: action.category });
-  category.actions.push(action);
+  // Handle both single category strings and arrays of categories
+  const categories = Array.isArray(action.category)
+    ? action.category
+    : [action.category];
 
-  var categoryMap = _actionsByCategoryMap[action.category];
-  categoryMap.actions.push(action);
+  categories.forEach((categoryName) => {
+    var category = _.find(_actionsByCategory, { label: categoryName });
+    if (category) {
+      category.actions.push(action);
+    }
+
+    var categoryMap = _actionsByCategoryMap[categoryName];
+    if (categoryMap) {
+      categoryMap.actions.push(action);
+    }
+  });
 });
 
 const ActionsByCategory = _actionsByCategory;
